@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Registrar tienda</title>
+  <link rel="stylesheet" href="">
+</head>
+<body>
+  <h1>Registrar una tienda</h1>
+  <form id="form-registrar-tienda" action="/api/registrar/tiendas" method="POST">
+    <label for="nombre-registro-tienda">Nombre de la tienda</label>
+    <input type="text" name="nombre-registro-tienda" id="nombre-registro-tienda" placeholder="Eje: Mi tiendita" required>
+    <label for="categoria-registro-tienda">Categoria de la tienda</label>
+    <select name="categoria-registro-tienda" id="categoria-registro-tienda">
+    <?php
+        // print_r($params["categorias_tiendas"]);
+        foreach ($params["categorias_tiendas"] as $v) {
+          print_r("<option value=".$v["categoria"].">".$v["categoria"]."</option>");
+          
+        }
+      ?>
+    </select>
+    <label for="nombre-registro-propietario">Nombre del propietario: </label>
+    <input type="text" name="nombre-registro-propietario" id="nombre-registro-propietario" placeholder="Eje: Juan Perez" required>
+    <label for="email-registro-propietario">Email del propietario: </label>
+    <input type="email" name="email-registro-propietario" id="email-registro-propietario" placeholder="Eje: email@tienda.com" required>
+    <?php 
+      // if(isset($params["email-cliente"])){
+      //   echo '<input type="email" name="email-iniciar-sesion-cliente" placeholder="Email" required value="'.$params["email-cliente"].'">';
+      // }else{
+      //   echo '<input type="email" name="email-iniciar-sesion-cliente" placeholder="Email" required>';
+      // }
+    ?>
+    <label for="password-registro-propietario">Password del propietario: </label>
+    <input type="password" name="password-registro-propietario" id="password-registro-propietario" placeholder="Minimo 8 caracteres" required>
+    <label for="password2-registro-propietario">Repita el password del propietario: </label>
+    <input type="password" name="password2-registro-propietario" id="password2-registro-propietario" placeholder="Igual que la primera" required>
+    <input type="submit" value="Registrar la tienda">
+  </form>
+  <a href="/">Regresar a la pagina inicial</a>
+  <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
+  <script>
+    $(document).on("ready", function(){
+      $("#form-registrar-tienda").on("submit", function(e){
+        e.preventDefault();
+        var pass1 = $("#password-registro-propietario").val();
+        var pass2 = $("#password2-registro-propietario").val();
+        if(pass1.length < 8){
+          alert("La contraeña debe tener al menos 8 caracteres");
+        }else{
+          if(pass1 != pass2){
+            alert("Las constraseñas no coinciden");
+          }else{
+            var nombre_tienda = $("#nombre-registro-tienda").val();
+            var categoria_tienda = $("#categoria-registro-tienda").val();
+            var nombre_propietario = $("#nombre-registro-propietario").val();
+            var email = $("#email-registro-propietario").val();
+            console.log("NT: " + nombre_tienda);
+            console.log("CT: " + categoria_tienda);
+            console.log("NP: " + nombre_propietario);
+            console.log("E: " + email);
+            console.log("P: " + pass1);
+            var datos = {
+              "nombre_tienda" : nombre_tienda,
+              "categoria_tienda" : categoria_tienda,
+              "nombre_propietario" : nombre_propietario,
+              "email" : email,
+              "password" : pass1
+            };
+            $.ajax({
+              type: "POST",
+              url: "/api/registrar/tienda",
+              data: datos,
+              success: function(data) {
+                console.log(data);
+              }
+            });
+          }
+        }
+      });
+      // alert("El docuento esta listo");
+    });
+  </script>
+</body>
+</html>

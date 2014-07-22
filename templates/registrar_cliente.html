@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>e-Mall - Registrar cliente</title>
+  <link rel="stylesheet" href="">
+</head>
+<body>
+  <h1>Registrar cliente</h1>
+  <form id="form-registrar-cliente" action="/api/registrar/clientes" method="POST">
+    <label for="email-registro-cliente">Email: </label>
+    <input type="email" name="email-registro-cliente" id="email-registro-cliente" placeholder="Eje: email@cliente.com" required>
+    <label for="password-registro-cliente">Password: </label>
+    <input type="password" name="password-registro-cliente" id="password-registro-cliente" placeholder="Minimo 8 caracteres" required>
+    <label for="password2-registro-cliente">Repita la password: </label>
+    <input type="password" name="password2-registro-cliente" id="password2-registro-cliente" placeholder="Igual que la primera" required>
+    <input type="submit" value="Registrarme como cliente">
+  </form>
+  <a href="/">Regresar a la pagina inicial</a>
+  <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
+  <script>
+    $(document).on("ready", function(){
+      $("#form-registrar-cliente").on("submit", function(e){
+        e.preventDefault();
+        var pass1 = $("#password-registro-cliente").val();
+        var pass2 = $("#password2-registro-cliente").val();
+        if(pass1.length < 8){
+          alert("La contraeña debe tener al menos 8 caracteres");
+        }else{
+          if(pass1 != pass2){
+            alert("Las constraseñas no coinciden");
+          }else{
+            var nombre_cliente = $("#nombre-registro-cliente").val();
+            var email = $("#email-registro-cliente").val();
+            console.log("E: " + email);
+            console.log("P: " + pass1);
+            var datos = {
+              "email" : email,
+              "password" : pass1
+            };
+            $.ajax({
+              type: "POST",
+              url: "/api/registrar/cliente",
+              data: datos,
+              success: function(data) {
+                console.log(data);
+              }
+            });
+          }
+        }
+      });
+      // alert("El docuento esta listo");
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Iniciar sesion</title>
+  <link rel="stylesheet" href="">
+</head>
+<body>
+  <?php if (isset($params['nombre_tienda'])) { ?>
+    <input type="hidden" id="input-nombre-tienda" value="<?php print_r($params['nombre_tienda']) ?>">
+  <?php } ?>  
+
+  <?php if (isset($params['categoria_productos'])) { ?>
+    <input type="hidden" id="input-categoria-productos" value="<?php print_r($params['categoria_productos']) ?>">
+  <?php } ?>
+
+  <h2>Iniciar sesion como comprador</h1>
+  <form id="form-iniciar-sesion-cliente" action="/api/iniciar-sesion/cliente" method="POST">
+    <label for="email-iniciar-sesion-cliente">Email: </label>
+    <?php 
+      if(isset($params["email-cliente"])){
+        echo '<input type="email" id="email-iniciar-sesion-cliente" name="email-iniciar-sesion-cliente" placeholder="Email" required value="'.$params["email-cliente"].'">';
+      }else{
+        echo '<input type="email" id="email-iniciar-sesion-cliente" name="email-iniciar-sesion-cliente" placeholder="Email" required>';
+      }
+    ?>
+    <label for="password-iniciar-sesion-cliente">Password: </label>
+    <input type="password" id="password-iniciar-sesion-cliente" name="password-iniciar-sesion-cliente" placeholder="Password" required>
+    <input type="submit" value="Iniciar sesion">
+  </form>
+  <h2>Iniciar sesion como administrador</h1>
+  <form id="form-iniciar-sesion-admin" action="/api/iniciar-sesion/admins" method="POST">
+    <label for="email-iniciar-sesion-admin">Email: </label>
+    <?php 
+      if(isset($params["email-admin"])){
+        echo '<input type="email" name="email-iniciar-sesion-admin" id="email-iniciar-sesion-admin" placeholder="Email" required value="'.$params["email-admin"].'">';
+      }else{
+        echo '<input type="email" name="email-iniciar-sesion-admin" id="email-iniciar-sesion-admin" placeholder="Email" required>';
+      }
+    ?>
+    <label for="password-iniciar-sesion-admin">Password: </label>
+    <input type="password" name="password-iniciar-sesion-admin" id="password-iniciar-sesion-admin" placeholder="Password" required>
+    <input type="submit" value="Iniciar sesion">
+  </form>
+  <p><a href="/">Volver a la pagina inicial</a></p>
+  <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
+  <script>
+    $(document).on("ready", function(){
+      var nt = $("#input-nombre-tienda").val();
+      var cp = $("#input-categoria-productos").val();
+      console.log(nt);
+      console.log(cp);
+      $("#form-iniciar-sesion-admin").on("submit", function(e){
+        e.preventDefault();
+        var pass = $("#password-iniciar-sesion-admin").val();
+        var email = $("#email-iniciar-sesion-admin").val();
+        console.log("E: " + email);
+        console.log("P: " + pass);
+        var datos = {
+          "email" : email,
+          "password" : pass
+        };
+        $.ajax({
+          type: "POST",
+          url: "/api/iniciar-sesion/admin",
+          data: datos,
+          success: function(data) {
+            data = JSON.parse(data);
+            if(data.info = "sesion_iniciada"){
+              localStorage.clear();
+              localStorage.id_tienda = data.ids.id_tienda;
+              localStorage.id_admin = data.ids.id_admin;
+              window.location.href = '/';
+            }else{
+              console.log(data);
+            }
+          }
+        });
+      });
+
+      $("#form-iniciar-sesion-cliente").on("submit", function(e){
+        e.preventDefault();
+        var pass = $("#password-iniciar-sesion-cliente").val();
+        var email = $("#email-iniciar-sesion-cliente").val();
+        // console.log("E: " + email);
+        // console.log("P: " + pass);
+        var datos = {
+          "email" : email,
+          "password" : pass
+        };
+        console.log(datos);
+        $.ajax({
+          type: "POST",
+          url: "/api/iniciar-sesion/cliente",
+          data: datos,
+          success: function(data) {
+            data = JSON.parse(data);
+            if(data.info = "sesion_iniciada"){
+              localStorage.clear();
+              localStorage.id_cliente = data.ids.id_cliente;
+              if (nt) {
+                var url = "/tiendas/catalogo?nombre-tienda="+nt;
+                // datos["redireccionar_a"]=nt;
+                if(cp){
+                  url = url+"&categoria-productos="+cp;
+                  // datos["categoria_productos"]=cp;
+                }
+                window.location.href = url;
+              }else{
+                window.location.href = "/";
+              }
+            }else{
+              console.log(data);
+            }
+          }
+        });
+      });
+      // alert("El docuento esta listo");
+    });
+  </script>
+</body>
+</html>

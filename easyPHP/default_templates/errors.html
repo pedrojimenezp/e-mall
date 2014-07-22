@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>easyPHP Error</title>
+	<link rel="stylesheet" type="text/css" href="<?php echo easyPHP_STATIC_DIR ;?>bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo easyPHP_STATIC_DIR ;?>bootstrap/css/bootstrap-responsive.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo easyPHP_STATIC_DIR ;?>error.css">
+</head>
+<body>
+
+	<div class="container">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th><h2>Error info</h2></th>	
+					<th><h2>Error description</h2></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="error">
+					<td><h4>Error from url :</h4></td>
+					<td><h5><?php echo $error->get_url_error(); ?></h5></td>
+				</tr>
+				<tr class="error">
+					<td><h4>Error message :</h4></td>
+					<td><h5><?php echo $error->get_error_message(); ?></h5></td>
+				</tr>
+				<tr class="error">
+					<td><h4>The path of the file where the error was found :</4></td>
+					<td><h5><?php echo $error->get_file_error_path(); ?> </h5></td>
+				</tr>
+				<tr class="info">
+					<td><h4>Help :</h4></td>
+					<td><h5><?php echo $error->get_help(); ?> <h5></td>
+				</tr>
+			</tbody>
+			
+		</table>
+	</div>
+</body>
+</html>

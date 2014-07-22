@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>e-Mall - Carrito de compras</title>
+    <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="<?php echo STATIC_DIR; ?>vendors/mimity/css/catalogo.css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+  <style>
+    body{
+      padding-top: 70px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <!-- text logo on mobile view -->
+        <a class="navbar-brand" href="/">e-Mall</a>
+      </div>
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/cliente/mi-carrito-de-compras">Carrito de compras</a></li>
+        </ul>
+        
+        <form class="navbar-form navbar-left" role="search">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Nombre del producto a buscar">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+            </span>
+          </div>
+        </form>
+        
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="/api/cerrar-sesion">Cerrar sesion</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+  <div class="container main-container">
+    <div class="row">
+      <!-- Cart -->
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="col-lg-12 col-sm-12">
+          <span class="title">SHOPPING CART</span>
+          <?php print_r($params["productos"]); ?>
+        </div>
+          <?php
+            $tabla_comenzada = false;
+            $nombre_tienda = "";
+            foreach ($params["productos"] as $producto) {
+              if ($producto["nombre_tienda"] != $nombre_tienda) {
+                if ($tabla_comenzada) {
+                  ?>
+                  <tr>
+                    <td colspan="5" align="right">Total</td>
+                    <td class="total"><b>$ 163.47</b></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="btn-group btns-cart">
+              <button type="button" class="btn btn-primary" onclick="window.location='/tiendas'"><i class="fa fa-arrow-circle-left"></i> Continue Shopping</button>
+              <button type="button" class="btn btn-primary" onclick="window.location='checkout.html'">Checkout <i class="fa fa-arrow-circle-right"></i></button>
+            </div>
+          </div>
+                  <?php
+                  $tabla_comenzada = false;
+                }
+                $nombre_tienda = $producto["nombre_tienda"];
+                ?> 
+        <div class="col-lg-12 col-sm-12 hero-feature">
+          <h3><?php echo "Productos de la tienda ".$producto["nombre_tienda"] ?></h3>
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Precio</th>
+                    <th class="th-qty">Cantidad</th>
+                    <th>Sub Total</th>
+                    <th>Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $tabla_comenzada = true;
+              }  
+            ?>
+                <tr>
+                  <td><a href="#"><img src="/static/usuarios/imagenes/productos/<?php echo $producto['imagen']; ?>" alt="" title="" width="47" height="47" /></a></td>
+                  <td><a href="#"><?php echo $producto["nombre_producto"]; ?></a></td>
+                  <td><a href="#"><?php echo $producto["marca"]; ?></a></td>
+                  <td><a href="#"><?php echo $producto["precio"]; ?></a></td>
+                  <td><a href="#"><?php echo $producto["cantidad"]; ?></a></td>
+                  <td>$<?php echo $producto["precio"]*$producto["cantidad"]; ?></td>
+                  <td class="text-center"><a href="/api/eliminar-producto-del-carrito?id_carrito=<?php echo $producto['id_carro_compra']; ?>&id_cliente=<?php echo $producto['id_cliente']; ?>" class="remove_cart" rel="2"><i class="fa fa-trash-o"></i></a></td>
+                </tr>
+            <?php       
+            }
+          ?>
+                <tr>
+                  <td colspan="5" align="right">Total</td>
+                  <td class="total"><b>$ 163.47</b></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="btn-group btns-cart">
+            <button type="button" class="btn btn-primary" onclick="window.location='/tiendas'"><i class="fa fa-arrow-circle-left"></i> Continue Shopping</button>
+            <button type="button" class="btn btn-primary" onclick="window.location='checkout.html'">Checkout <i class="fa fa-arrow-circle-right"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- End Cart -->
+    </div>
+  </div>
+
+  <footer>
+  </footer>
+  <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
+  <script src="<?php echo STATIC_DIR; ?>vendors/bootstrap/js/bootstrap.min.js"></script>
+  <script src="<?php echo STATIC_DIR; ?>vendors/mimity/js/blImageCenter.js"></script>
+  <script src="<?php echo STATIC_DIR; ?>vendors/mimity/js/mimity.js"></script>
+
+  
+</body>
+</html>

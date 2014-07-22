@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>e-Mal - Configuraciones</title>
+
+    <!-- Core CSS - Include with every page -->
+    <link href="<?php echo STATIC_DIR; ?>dashboard/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo STATIC_DIR; ?>dashboard/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Page-Level Plugin CSS - Dashboard -->
+    <link href="<?php echo STATIC_DIR; ?>dashboard/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="<?php echo STATIC_DIR; ?>dashboard/css/plugins/timeline/timeline.css" rel="stylesheet">
+
+    <!-- SB Admin CSS - Include with every page -->
+    <link href="<?php echo STATIC_DIR; ?>dashboard/css/sb-admin.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"><?php print_r($params["tienda"]["nombre"]) ?></a>
+                <a class="navbar-brand" href="/"><i class="fa fa-cogs"></i> Configuraciones</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <?php require_once "partes/notificaciones.html"; ?>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <!-- <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                            
+                        </li> -->
+                        
+                        <?php require_once "partes/link-pedidos.html"; ?>
+                        <?php require_once "partes/link-productos.html"; ?>
+                        <?php require_once "partes/link-configuraciones.html"; ?>
+                    </ul>
+                    <!-- /#side-menu -->
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs nav-justified" role="tablist" style="margin:10px 0;">
+                      <li class="active" id="tab1"><a href="#informacion" role="tab" data-toggle="tab">Informacion</a></li>
+                      <li id="tab2"><a href="#administradores" role="tab" data-toggle="tab">Administradores</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="informacion">
+                            <div class="row">
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            Inforacion personal
+                                        </div>
+                                        <div class="panel-body">
+                                            <form action="" role="form">
+                                                <div class="form-group">
+                                                    <label for="email-admin">Nombre</label>
+                                                    <input type="text" class="form-control" id="nombre-admin" placeholder="Ej: Juan Perez">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email-admin">Email</label>
+                                                    <input type="email" class="form-control" id="email-admin" placeholder="Ej: p@g.com">
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="input-group">
+                                                        <input type="password" class="form-control" placeholder="Ingrese su contraseña actual">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-primary" type="button">Actualizar</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading">
+                                            Cambiar la contraseña
+                                        </div>
+                                        <div class="panel-body">
+                                            <form action="" role="form">
+                                                <div class="form-group">
+                                                    <label for="password-admin">Nueva contraseña</label>
+                                                    <input type="password" class="form-control" id="password-admin" placeholder="********">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password2-admin">Nueva contraseña de nevo</label>
+                                                    <input type="password" class="form-control" id="password2-admin" placeholder="********">
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="input-group">
+                                                        <input type="password" class="form-control" placeholder="Ingrese su contraseña actual">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-danger" type="button">Cambiar contraseña</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            Informacion de la tienda
+                                        </div>
+                                        <div class="panel-body">
+                                            <form action="" role="form">
+                                                <div class="form-group">
+                                                    <label for="nombre-tienda">Nombre</label>
+                                                    <input type="text" class="form-control" id="nombre-tienda" placeholder="Ej: Tienda tecnologica">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="categoria-tienda">Categoria de la tienda</label>
+                                                    <input type="text" class="form-control" id="categoria-tienda" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="direccion-tienda">Direccion</label>
+                                                    <input type="text" class="form-control" id="direccion-tienda" placeholder="Ej: Calle 1 carrera 1 #1-2">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="barrio-tienda">Barrio</label>
+                                                    <input type="text" class="form-control" id="barrio-tienda" placeholder="Ej: Barrio centro">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="telefonos-tienda">Telefonos (Separados por comas)</label>
+                                                    <input type="text" class="form-control" id="telefonos-tienda" placeholder="Ej: 1112233, 1234567">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="estado-tienda">Estado de la tienda</label>
+                                                    <input type="text" class="form-control" id="estado-tienda" disabled>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="input-group">
+                                                        <input type="password" class="form-control" placeholder="Ingrese su contraseña para actualizar los datos">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-primary" type="button">Actualizar</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="administradores">
+                            <div class="alert alert-info">
+                                <p>Los sub-administradores son administradores que pueden hacer lo mismo que usted pero con algunas restricciones.</p>
+                                <p>Por ejemplo ellos pueden agregar o eliminar productos pero no pueden agregar mas administradores o cambiar datos de la tienda, eso solo lo puede hacer usted como propietario</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="panel panel-danger">
+                                    <div class="panel-heading">
+                                        Agregar sub-administradores
+                                    </div>
+                                    <div class="panel-body">
+                                        <form action="" role="form">
+                                            <div class="form-group">
+                                                <label for="nombre-sub-admin">Nombre</label>
+                                                <input type="text" class="form-control" id="nombre-sub-admin" placeholder="Ej: Fuck yeah">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email-sub-admin">Email</label>
+                                                <input type="email" class="form-control" id="email-sub-admin" placeholder="Ej: j@g.com">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="password-sub-admin">Contraseña</label>
+                                                <input type="password" class="form-control" id="password2-admin" placeholder="********">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" placeholder="Ingrese su contraseña actual">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-danger" type="button">Agregar</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="row" id="">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- /.col-lg-12 -->
+            </div>
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Core Scripts - Include with every page -->
+    <script src="<?php echo STATIC_DIR; ?>dashboard/js/jquery-1.10.2.js"></script>
+    <script src="<?php echo STATIC_DIR; ?>dashboard/js/bootstrap.min.js"></script>
+    <script src="<?php echo STATIC_DIR; ?>dashboard/js/bootstrap-filestyle.min.js"></script>
+    <script src="<?php echo STATIC_DIR; ?>dashboard/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- Page-Level Plugin Scripts - Dashboard 
+    <script src="<?php echo STATIC_DIR; ?>dashboard/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="<?php echo STATIC_DIR; ?>dashboard/js/plugins/morris/morris.js"></script>
+    -->    
+    
+    <!-- SB Admin Scripts - Include with every page 
+    -->
+    <script src="<?php echo STATIC_DIR; ?>dashboard/js/sb-admin.js"></script>
+
+    <!-- Page-Level Demo Scripts - Dashboard - Use for reference
+    <script src="<?php echo STATIC_DIR; ?>dashboard/js/demo/dashboard-demo.js"></script> 
+    -->
+    <script>
+    $(document).on("ready", function(){
+        console.log("documento listo XD");
+        console.log(localStorage);
+        function cargar_info_admin(){
+            $.ajax({
+                type: "GET",
+                url: "/api/obtener-datos-admin?id_admin="+localStorage.id_admin,
+                success: function(data) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    if(data.error ==  null && data.admin){
+                        if(data.admin.nombre){
+                            $("#nombre-admin").val(data.admin.nombre);
+                        }
+                        if(data.admin.email){
+                            $("#email-admin").val(data.admin.email);
+                        }
+                    }else{
+                       
+                    }
+                }
+            });    
+        }
+
+        function cargar_info_tienda(){
+            $.ajax({
+                type: "GET",
+                url: "/api/obtener-datos-tienda?id_tienda="+localStorage.id_tienda,
+                success: function(data) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    if(data.error ==  null && data.tienda){
+                        if(data.tienda.nombre){
+                            $("#nombre-tienda").val(data.tienda.nombre);
+                        }
+                        if(data.tienda.barrio){
+                            $("#barrio-tienda").val(data.tienda.direccion);
+                        }
+                        if(data.tienda.direccion){
+                            $("#direccion-tienda").val(data.tienda.direccion);
+                        }
+                        if(data.tienda.telefonos){
+                            $("#telefonos-tienda").val(data.tienda.telefonos);
+                        }
+                        if(data.tienda.estado){
+                            $("#estado-tienda").val(data.tienda.estado);
+                        }
+                        if(data.tienda.categoria){
+                            $("#categoria-tienda").val(data.tienda.categoria);
+                        }
+                    }else{
+                       
+                    }
+                }
+            });    
+        }
+        cargar_info_admin();
+        cargar_info_tienda();
+
+        $('#tab1 a').click(function (e) {
+            e.preventDefault()
+            console.log("click");
+            cargar_info_admin();
+            cargar_info_tienda();
+            $(this).tab('show');
+        });
+
+        $('#tab2 a').click(function (e) {
+            e.preventDefault()
+            console.log("click");
+            $(this).tab('show');
+        });
+
+
+        $("#form-agregar-producto").on("submit", function(e){
+            e.preventDefault();
+            console.log("Se va a enviar el formularion");
+            console.log("DATOS");
+            var nombre = $("#nombre-producto").val();
+            var descripcion = $("#descripcion-producto").val();
+            var marca = $("#marca-producto").val();
+            var precio = $("#precio-producto").val();
+            var cantidad = $("#cantidad-producto").val();
+            var imagen = $("#imagen-producto")[0].files[0];
+            console.log("Nombre: "+nombre);
+            console.log("Descripcion: "+descripcion);
+            console.log("Marca: "+marca);
+            console.log("Precio: "+precio);
+            console.log("Cantidad: "+cantidad);
+            console.log(imagen);
+            var datos = new FormData();
+            datos.append("nombre", nombre);
+            datos.append("descripcion", descripcion);
+            datos.append("marca", marca);
+            datos.append("precio", precio);
+            datos.append("cantidad", cantidad);
+            datos.append("imagen", imagen);
+            datos.append("id_tienda", localStorage.id_tienda);
+            datos.append("id_admin", localStorage.id_admin);
+            console.log(datos);
+            $.ajax({
+                type: "POST",
+                url: "/api/agregar-a-productos-en-venta",
+                data: datos,
+                contentType: false,
+                processData: false,
+                cache:false,
+                success: function(data) {
+                    console.log(data);
+                    // cargar_productos();
+                }
+            });
+        })
+
+
+    });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>e-Mal - Productos en venta</title>
+
+    <!-- Core CSS - Include with every page -->
+    <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Page-Level Plugin CSS - Dashboard -->
+    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/plugins/timeline/timeline.css" rel="stylesheet">
+
+    <!-- SB Admin CSS - Include with every page -->
+    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/sb-admin.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"><?php print_r($params["tienda"]["nombre"]) ?></a>
+                <a class="navbar-brand" href="/"><i class="fa fa-barcode"></i> Productos en venta</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <?php require_once "partes/notificaciones.html"; ?>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <!-- <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                            
+                        </li> -->
+                        
+                        <?php require_once "partes/link-pedidos.html"; ?>
+                        <?php require_once "partes/link-productos.html"; ?>
+                        <?php require_once "partes/link-configuraciones.html"; ?>
+                    </ul>
+                    <!-- /#side-menu -->
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs nav-justified" role="tablist" style="margin:10px 0;">
+                      <li class="active" id="tab1"><a href="#home" role="tab" data-toggle="tab">Agregar productos</a></li>
+                      <li id="tab2"><a href="#burbujas" role="tab" data-toggle="tab">Ver productos en paneles</a></li>
+                      <li id="tab3"><a href="#tabla" role="tab" data-toggle="tab">Ver productos en tabla</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="home">
+                            <div class="row">
+                                <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2">
+                                    <div class="panel panel-primary ">
+                                        <div class="panel-heading">
+                                            Agregar un producto
+                                        </div>
+                                        <div class="panel-body">
+                                            <form role="form" id="form-agregar-producto">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" id="nombre-producto" placeholder="Nombre del producto" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <textarea class="form-control" rows="3" id="descripcion-producto" placeholder="Descripcion del producto" required></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" id="marca-producto" placeholder="Marca del producto" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="form-control" id="categoria-producto">
+                                                        <option value=0>Seleccione una categoria</option>
+                                                      <?php 
+                                                        foreach ($params["categorias_productos"] as $value) {
+                                                            print_r("<option value='".$value['categoria_producto']."'>".$value['categoria_producto']."</option>");     
+                                                        }
+                                                      ?>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="number" class="form-control" id="precio-producto" placeholder="Precio del producto" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="number" class="form-control" id="cantidad-producto" placeholder="Cantidad en bodega" required>
+                                                </div>
+                                               
+                                                <div class="form-group">
+                                                    <input type="file" class="filestyle" id="imagen-producto" data-buttonText="Cargar imagen" required>
+                                                </div>
+                                                
+                                                <button type="submit" class="btn btn-primary">Agregar producto</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="burbujas">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <ul class="nav nav-pills">
+                                      <li class="active"><a href="#">Home</a></li>
+                                      <li><a href="#">Profile</a></li>
+                                      <li><a href="#">Messages</a></li>
+                                    </ul>
+                                    
+                                </div>
+                            </div>
+                            <div class="row" id="div-mostrar-productos-en-venta">
+                                
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tabla">
+                            <div class="col-lg-12">
+                                <div class="row" id="div-mostrar-tabla-productos-en-venta">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- /.col-lg-12 -->
+            </div>
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Core Scripts - Include with every page -->
+    <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
+    <script src="<?php echo STATIC_DIR; ?>vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/bootstrap-filestyle.min.js"></script>
+    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- Page-Level Plugin Scripts - Dashboard 
+    <script src="<?php echo STATIC_DIR; ?>dashboard/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="<?php echo STATIC_DIR; ?>dashboard/js/plugins/morris/morris.js"></script>
+    -->    
+    
+    <!-- SB Admin Scripts - Include with every page 
+    -->
+    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/sb-admin.js"></script>
+
+    <!-- Page-Level Demo Scripts - Dashboard - Use for reference
+    <script src="<?php echo STATIC_DIR; ?>dashboard/js/demo/dashboard-demo.js"></script> 
+    -->
+    <script>
+    $(document).on("ready", function(){
+        console.log("documento listo XD");
+        console.log(localStorage);
+        function cargar_productos_en_paneles(){
+            $("#div-mostrar-productos-en-venta").html("");
+            $.ajax({
+                type: "GET",
+                url: "/api/obtener-productos-en-venta?id_tienda="+localStorage.id_tienda,
+                success: function(data) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    if(data.error ==  null && data.productos.length == 0){
+                        var s = "<h2>No tiene productos registrados</h2>"
+                        $("#div-mostrar-productos-en-venta").html(s);
+                    }else{
+                        data.productos.forEach(function(producto){
+                            // producto = JSON.stringify(producto);
+                            console.log(producto);
+                            var p = '<div class="col-sm-6 col-md-4">\
+                                <div class="panel panel-default">\
+                                    <div class="panel-heading">\
+                                        '+producto.nombre_producto+'\
+                                    </div>\
+                                    <div class="panel-body">\
+                                        <img src="/static/usuarios/imagenes/productos/'+producto.imagen+'" alt="'+producto.nombre_producto+'" width="100%" height="200px">\
+                                        <p>'+producto.descripcion+'</p>\
+                                        <p>'+producto.marca+'</p>\
+                                        <p>'+producto.precio+'</p>\
+                                        <p>'+producto.stock+'</p>\
+                                    </div>\
+                                    <div class="panel-footer">\
+                                        <div class="row">\
+                                            <div class="col-xs-6">\
+                                                <button class="btn btn-primary">Actualizar</button>\
+                                            </div>\
+                                            <div class="col-xs-6">\
+                                                <button class="btn btn-danger">Eliminar</button>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </div>';
+                            console.log(p);
+                            $("#div-mostrar-productos-en-venta").append(p);
+                            
+                        });
+                    }
+                }
+            });    
+        }
+
+        function cargar_productos_en_tabla(){
+            $.ajax({
+                type: "GET",
+                url: "/api/obtener-productos-en-venta?id_tienda="+localStorage.id_tienda,
+                success: function(data) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    if(data.error ==  null && data.productos.length == 0){
+                        var s = "<h2>No tiene productos registrados</h2>"
+                        $("#div-mostrar-tabla-productos-en-venta").html(s);
+                    }else{
+                        var t = '<div class="table-responsive">\
+                            <table class="table table-bordered table-condensed table-hover">\
+                                <thead>\
+                                    <tr>\
+                                        <th>Imagen</th>\
+                                        <th>Nombre</th>\
+                                        <th>Descripcion</th>\
+                                        <th>Marca</th>\
+                                        <th>Precio</th>\
+                                        <th>Cantidad</th>\
+                                        <th>Guardado por</th>\
+                                        <th colspan="2">Acciones</th>\
+                                    </tr>\
+                                </thead>\
+                                <tbody id="body-tabla-productos-en-venta">\
+                                </tbody>\
+                            </table>\
+                        </div>';
+                        $("#div-mostrar-tabla-productos-en-venta").html(t);
+                        data.productos.forEach(function(producto){
+                            // producto = JSON.stringify(producto);
+                            console.log(producto);
+                            var p = '<tr>\
+                                <td><img width="30px" height="30px" src="/static/usuarios/imagenes/productos/'+producto.imagen+'" alt="'+producto.nombre_producto+'"></td>\
+                                <td>'+producto.nombre_producto+'</td>\
+                                <td>'+producto.descripcion+'</td>\
+                                <td>'+producto.marca+'</td>\
+                                <td>'+producto.precio+'</td>\
+                                <td>'+producto.stock+'</td>\
+                                <td>'+producto.guardado_por+'</td>\
+                                <td><button type="" class="btn btn-primary">Actualizar</button></td>\
+                                <td><button type="" class="btn btn-danger" >Eliminar</button></td>\
+                            </tr>';
+                            console.log(p);
+                            $("#body-tabla-productos-en-venta").append(p);
+                        });
+                    }
+                }
+            });    
+        }
+        $('#tab2 a').click(function (e) {
+            e.preventDefault()
+            console.log("click");
+            cargar_productos_en_paneles();
+            $(this).tab('show');
+        });
+
+        $('#tab3 a').click(function (e) {
+            e.preventDefault()
+            console.log("click");
+            cargar_productos_en_tabla();
+            $(this).tab('show');
+        });
+
+
+        $("#form-agregar-producto").on("submit", function(e){
+            e.preventDefault();
+            console.log("Se va a enviar el formularion");
+            console.log("DATOS");
+            var nombre = $("#nombre-producto").val();
+            var descripcion = $("#descripcion-producto").val();
+            var marca = $("#marca-producto").val();
+            var precio = $("#precio-producto").val();
+            var cantidad = $("#cantidad-producto").val();
+            var imagen = $("#imagen-producto")[0].files[0];
+            var categoria = $("#categoria-producto").val();
+            console.log("Nombre: "+nombre);
+            console.log("Descripcion: "+descripcion);
+            console.log("Marca: "+marca);
+            console.log("Precio: "+precio);
+            console.log("Cantidad: "+cantidad);
+            console.log("Categoria: "+categoria);
+            console.log(imagen);
+            if(categoria!=0){
+                var datos = new FormData();
+                datos.append("nombre", nombre);
+                datos.append("descripcion", descripcion);
+                datos.append("marca", marca);
+                datos.append("categoria", categoria);
+                datos.append("precio", precio);
+                datos.append("cantidad", cantidad);
+                datos.append("imagen", imagen);
+                datos.append("id_tienda", localStorage.id_tienda);
+                datos.append("id_admin", localStorage.id_admin);
+                console.log(datos);
+                $.ajax({
+                    type: "POST",
+                    url: "/api/agregar-a-productos-en-venta",
+                    data: datos,
+                    contentType: false,
+                    processData: false,
+                    cache:false,
+                    success: function(data) {
+                        console.log(data);
+                        // cargar_productos();
+                    }
+                });
+            }else{
+                alert("Debe seleccionar una categoria para el producto a guardar");
+            }
+        })
+
+
+    });
+    </script>
+</body>
+
+</html>
