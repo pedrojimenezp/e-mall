@@ -41,9 +41,9 @@ if (!defined('PROJECT_NAME')) {
 
 $DATABASE = array(
 	"engine" => 'mysql', //mysql, postgres, sqlite
-	'user' => 'u113489316_root',
+	'user' => 'eshos_15158121',
 	'password' => '1q2w3e4r',
-    'host' => 'mysql.hostinger.co',
-    'db' => 'u113489316_emall'
+    'host' => 'sql109.eshost.es',
+    'db' => 'eshos_15158121_emall'
 	);
 ?>
