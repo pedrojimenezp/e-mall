@@ -1,7 +1,7 @@
 <?php 
 require_once CORE_PATH . "models.php";
 
-class Carro_de_compras extends Models{
+class Pedidos extends Models{
   private  $conexion;
   function __construct(){
     parent::__construct();
@@ -12,18 +12,17 @@ class Carro_de_compras extends Models{
     $this->disconnect();
   }
 
-  public function guardar ($id_cliente, $id_producto, $cantidad) {
-    // $fecha = date("Y")."-".date("m")."-".date("d");
-    // $password = md5($password);
-    $consulta = "INSERT INTO carro_de_compras (id_cliente, id_producto, cantidad) VALUES (".$id_cliente.",".$id_producto.",".$cantidad.");";
+  public function guardar ($id_tienda, $id_cliente, $ids_productos_cantidad, $estado) {
+    $fecha = date("Y")."-".date("m")."-".date("d");
+    $consulta = "INSERT INTO pedidos (id_tienda, id_cliente, ids_productos_cantidad, estado, fecha_registro) VALUES (".$id_tienda.", ".$id_cliente.", '".$ids_productos_cantidad."', '".$estado."', '".$fecha."');";
     // echo $consulta;
     if(!$this->conexion->query($consulta)){
       echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
     }else{
-      $consulta = "SELECT * FROM carro_de_compras WHERE id = ".$this->conexion->insert_id;
+      $consulta = "SELECT * FROM pedidos WHERE id = ".$this->conexion->insert_id;
       $resultado = $this->conexion->query($consulta);
       $fila = $resultado->fetch_assoc();
-      return array("error"=>null, "info"=>"producto_agregado","producto"=>$fila);
+      return array("error"=>null, "info"=>"pedido_registrado","pedido"=>$fila);
     }
   }
 
@@ -41,24 +40,23 @@ class Carro_de_compras extends Models{
   }
 
   public function buscar_por_id ($id){
-    $consulta = "SELECT t1.id AS id_producto, t2.id AS id_carro_compra, t1.nombre AS nombre_producto, t1.imagen, t1.marca, t1.descripcion, t1.precio, t2.cantidad, t2.id_cliente, t3.nombre AS nombre_tienda FROM productos_en_venta AS t1 JOIN carro_de_compras AS t2 JOIN tiendas AS t3 WHERE t2.id = ".$id." AND t2.id_producto=t1.id AND t1.id_tienda=t3.id";
+    $consulta = "SELECT * FROM pedidos WHERE id = ".$id;
     if($resultado = $this->conexion->query($consulta)){
       $fila = $resultado->fetch_assoc();
-      return array("error"=>null, "producto"=>$fila);
+      return array("error"=>null, "pedido"=>$fila);
     }else{
       echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
     }
   }
 
   public function eliminar_por_id ($id){
-    $consulta = "DELETE FROM carro_de_compras as WHERE id = ".$id;
+    $consulta = "DELETE FROM pedidos WHERE id = ".$id;
     if($resultado = $this->conexion->query($consulta)){
-      return array("error"=>null, "info"=>"producto eliminado");
+      return array("error"=>null, "info"=>"pedido eliminado");
     }else{
       echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
     }
   }
-
   public function eliminar_por_id_carro_id_cliente ($id_carro, $id_cliente){
     $consulta = "DELETE FROM carro_de_compras WHERE id = ".$id_carro." AND id_cliente=".$id_cliente;
     if($resultado = $this->conexion->query($consulta)){
@@ -68,26 +66,16 @@ class Carro_de_compras extends Models{
     }
   }
 
-  public function eliminar_por_id_cliente_id_producto ($id_cliente, $id_producto){
-    $consulta = "DELETE FROM carro_de_compras WHERE id_cliente = ".$id_cliente." AND id_producto=".$id_producto;
-    echo $consulta;
-    if($resultado = $this->conexion->query($consulta)){
-      return array("error"=>null, "info"=>"producto eliminado");
-    }else{
-      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
-    }
-  }
-
-  public function actualizar_cantidad ($id, $cantidad){
-    $consulta = "UPDATE carro_de_compras SET cantidad=".$cantidad." WHERE id = ".$id;
-    echo $consulta;
+  public function actualizar_estado ($id, $estado){
+    $consulta = "UPDATE pedidos SET estado='".$estado."' WHERE id = ".$id;
+    // echo $consulta;
     if(!$this->conexion->query($consulta)){
       echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
     }else{
-      $consulta = "SELECT * FROM carro_de_compras WHERE id = ".$id;
+      $consulta = "SELECT * FROM pedidos WHERE id = ".$id;
       $resultado = $this->conexion->query($consulta);
       $fila = $resultado->fetch_assoc();
-      return array("error"=>null, "info"=>"producto_actualizado", "producto"=>$fila);
+      return array("error"=>null, "info"=>"pedido_actualizado", "pedido"=>$fila);
     } 
   }
 

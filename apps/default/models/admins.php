@@ -76,5 +76,32 @@ class Admins extends Models{
       echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
     }
   }
+
+  public function actualizar_info_por_id($id, $nombre, $email){
+    $consulta = "UPDATE admins SET nombre='".$nombre."', email='".$email."' WHERE id = ".$id;
+    // echo $consulta;
+    if(!$this->conexion->query($consulta)){
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      $consulta = "SELECT * FROM admins WHERE id = ".$id;
+      $resultado = $this->conexion->query($consulta);
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "info"=>"info_actualizada", "admin"=>$fila);
+    } 
+  }
+
+  public function actualizar_password_por_id($id, $password){
+    $password = md5($password);
+    $consulta = "UPDATE admins SET password='".$password."' WHERE id = ".$id;
+    // echo $consulta;
+    if(!$this->conexion->query($consulta)){
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      $consulta = "SELECT * FROM admins WHERE id = ".$id;
+      $resultado = $this->conexion->query($consulta);
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "info"=>"info_actualizada", "admin"=>$fila);
+    } 
+  }
 }
 ?>

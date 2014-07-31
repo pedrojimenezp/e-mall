@@ -50,7 +50,7 @@ class Views
 	}
 
 	public static function send($str){
-		echo($str);
+		print_r($str);
 	}
 
 	public static function json($obj){

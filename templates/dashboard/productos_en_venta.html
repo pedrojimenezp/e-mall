@@ -126,10 +126,12 @@
                         <div class="tab-pane fade" id="burbujas">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <ul class="nav nav-pills">
-                                      <li class="active"><a href="#">Home</a></li>
-                                      <li><a href="#">Profile</a></li>
-                                      <li><a href="#">Messages</a></li>
+                                    <ul class="nav nav-pills nav-justified" role="tablist" style="margin:10px 0;">
+                                        <?php 
+                                            foreach ($params["categorias_productos"] as $value) {
+                                                print_r("<li><a class='li-a-categorias' href='#".$value['categoria_producto']."' data-categoria='".$value['categoria_producto']."'>".$value['categoria_producto']."</a></li>");     
+                                            }
+                                        ?>
                                     </ul>
                                     
                                 </div>
@@ -178,11 +180,16 @@
     $(document).on("ready", function(){
         console.log("documento listo XD");
         console.log(localStorage);
-        function cargar_productos_en_paneles(){
+        function cargar_productos_en_paneles(categoria){
             $("#div-mostrar-productos-en-venta").html("");
+            if (categoria) {
+                var url = "/api/obtener-productos-en-venta?id_tienda="+localStorage.id_tienda+"&categoria-productos="+categoria;
+            }else{
+                var url = "/api/obtener-productos-en-venta?id_tienda="+localStorage.id_tienda;
+            }
             $.ajax({
                 type: "GET",
-                url: "/api/obtener-productos-en-venta?id_tienda="+localStorage.id_tienda,
+                url: url,
                 success: function(data) {
                     data = JSON.parse(data);
                     console.log(data);
@@ -202,6 +209,7 @@
                                         <img src="/static/usuarios/imagenes/productos/'+producto.imagen+'" alt="'+producto.nombre_producto+'" width="100%" height="200px">\
                                         <p>'+producto.descripcion+'</p>\
                                         <p>'+producto.marca+'</p>\
+                                        <p>'+producto.categoria+'</p>\
                                         <p>'+producto.precio+'</p>\
                                         <p>'+producto.stock+'</p>\
                                     </div>\
@@ -339,7 +347,11 @@
             }
         })
 
-
+        $(".li-a-categorias").on("click", function (e) {
+            console.log("click categoria");
+            console.log($(this).attr("data-categoria"));
+            cargar_productos_en_paneles($(this).attr("data-categoria"));
+        });
     });
     </script>
 </body>

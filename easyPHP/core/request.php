@@ -4,7 +4,7 @@ require_once CORE_PATH . 'session.php';
 /*
 Request is the class that manage the request of the navegator, this class provides methods to manage url, POST, GET, also this class extends from Session class wich allow to manage the sessions in the request of navegator.
 */
-class Request extends Session 
+class Request extends Session
 {
 	
 	private $url;//url of navegator

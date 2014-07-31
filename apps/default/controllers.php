@@ -183,4 +183,18 @@ function mostrar_plantilla_carrito_de_compras($req, $res) {
   }
 }
 
+function mostrar_plantilla_pedido_cancelado($req, $res){
+  if ($req->query("id")) {
+    $pedidos = new Pedidos();
+    $r = $pedidos->eliminar_por_id($req->query("id"));
+    $res->render_template("pedido_cancelado.html");
+  }else{
+    $res->send("Debe pasar un id por la url para cancelar el pedido");
+  }
+}
+
+function mostrar_plantilla_pedido_pagado($req, $res){
+  $res->render_template("pedido_pagado.html");
+}
+
 ?>

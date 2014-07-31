@@ -149,9 +149,15 @@ function agregar_a_productos_en_venta($req, $res){
 
 function obtener_productos_en_venta($req, $res){
   if ($req->query("id_tienda")) {
-    $productos_en_venta = new Productos_en_venta();
-    $r = $productos_en_venta->buscar_por_id_tienda($req->query("id_tienda"));
-    $res->json($r);
+    if ($req->query("categoria-productos")) {
+      $productos_en_venta = new Productos_en_venta();
+      $r = $productos_en_venta->buscar_por_id_tienda_y_categoria($req->query("id_tienda"), $req->query("categoria-productos"));
+      $res->json($r);
+    }else{
+      $productos_en_venta = new Productos_en_venta();
+      $r = $productos_en_venta->buscar_por_id_tienda($req->query("id_tienda"));
+      $res->json($r);
+    }
   }else{
     $r = array("error"=>"faltan_paramentros", "info"=>"Debe enviar el paramentro id_tienda por la  url y utilizar el metodo GET para realizar la peticion");
     $res->json($r);
@@ -211,7 +217,7 @@ function agregar_producto_al_carrito($req, $res){
       $res->send("El id del producto que paso no esta en la base de datos");
     }
   }else{
-    $error = array("error"=>"faltan_parametros", "info"=>"Faltan parametros, debe enviar (id_producto, id_cliente, cantidad");
+    $error = array("error"=>"faltan_parametros", "info"=>"Faltan parametros, debe enviar (id_producto, id_cliente, cantidad)");
     $res->json($error);
   }
 }
@@ -222,7 +228,246 @@ function eliminar_producto_del_carrito($req, $res){
     $r = $carro_de_compras->eliminar_por_id_carro_id_cliente($req->query("id_carrito"), $req->query("id_cliente"));
     $res->json($r);
   }else{
-    $error = array("error"=>"faltan_parametros", "info"=>"Faltan parametros, debe enviar (id_carrito, id_cliente");
+    $error = array("error"=>"faltan_parametros", "info"=>"Faltan parametros, debe enviar (id_carrito, id_cliente) por el metodo GET");
+    $res->json($error);
+  }
+}
+
+function actualizar_info_personal_admin($req, $res){
+  if($req->body("nombre") && $req->body("email") && $req->body("password") && $req->body("id_admin")){
+    $admins = new Admins();
+    $r = $admins->buscar_por_email($req->body("email"));
+    if($r["admin"] && $r["admin"]["id"] == $req->body("id_admin")){
+      if ($r["admin"]["password"] == md5($req->body("password"))) {
+        if ($r["admin"]["nombre"] != $req->body("nombre") || $r["admin"]["email"] != $req->body("email")) {
+          $r2 = $admins->actualizar_info_por_id($req->body("id_admin"), $req->body("nombre"), $req->body("email"));
+          $res->json($r2);
+        }else{
+          $error = array("error"=>"datos_iguales", "info"=>"El nombre e email que paso son los mismos que estan registrados, la operacion no es necesaria");
+          $res->json($error);
+        }
+      }else{
+        $error = array("error"=>"password_incorrecta", "info"=>"La password que ha ingresado es incorrecta");
+        $res->json($error);  
+      }
+    }else{
+      $error = array("error"=>"email_ya_registrado", "info"=>"El email que paso ya esta regisrado porfavor ingrese otro");
+      $res->json($error);  
+    }
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (nombre, email, password, id_admin) por el metodo POST");
+    $res->json($error);
+  }
+}
+
+function actualizar_password_admin($req, $res){
+  if($req->body("password_actual") && $req->body("password_nueva") && $req->body("id_admin")){
+    $admins = new Admins();
+    $r = $admins->buscar_por_id($req->body("id_admin"));
+    if($r["admin"]){
+      if ($r["admin"]["password"] == md5($req->body("password_actual"))) {
+        if ($r["admin"]["password"] != md5($req->body("password_nueva"))) {
+          $r2 = $admins->actualizar_password_por_id($req->body("id_admin"), $req->body("password_nueva"));
+          $res->json($r2);
+        }else{
+          $error = array("error"=>"datos_iguales", "info"=>"La password que quiere ingresar como nueva es la misa que la antigua, la operacion no es necesaria");
+          $res->json($error);
+        }
+      }else{
+        $error = array("error"=>"password_incorrecta", "info"=>"La password que ha ingresado es incorrecta");
+        $res->json($error);  
+      }
+    }else{
+      $error = array("error"=>"admin_no_registrado", "info"=>"El id que paso no esta asociado a ningun administrador");
+      $res->json($error);  
+    }
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (nombre, email, password, id_admin) por el metodo POST");
+    $res->json($error);
+  }
+}
+
+function agregar_sub_admins ($req, $res){
+  if($req->body("password_admin") && $req->body("password_sub_admin") && $req->body("nombre_sub_admin") && $req->body("email_sub_admin") && $req->body("id_tienda") && $req->body("id_admin")){
+    $admins = new Admins();
+    $r = $admins->buscar_por_id($req->body("id_admin"));
+    if ($r["admin"]) {
+      if($r["admin"]["password"] == md5($req->body("password_admin"))){
+        if ($r["admin"]["es_propietario"] == "si" && $r["admin"]["id_tienda"] == $req->body("id_tienda")) {
+          $r1 = $admins->buscar_por_email($req->body("email_sub_admin"));
+          if (!$r1["admin"]) {
+            $r2 = $admins->guardar($req->body("id_tienda"), $req->body("nombre_sub_admin"), $req->body("email_sub_admin"), $req->body("password_sub_admin"), "no");
+            $res->json($r2); 
+          }else{
+            $datos = array("error"=>"email_ya_registrado", "descripcion"=>"El email que ha pasado ya esta registrado, por favor ingrese envio uno diferente");
+            $res->json($datos);
+          }
+        }else{
+          $error = array("error"=>"no_es_el_propietario", "info"=>"Usted no es el propietario de la tienda que paso como parametro, la operacion no se puede efectuar");
+          $res->json($error);  
+        }
+      }else{
+        $error = array("error"=>"password_incorrecta", "info"=>"La password que ha ingresado es incorrecta");
+        $res->json($error);
+      }
+    }else{
+      $error = array("error"=>"admin_no_registrado", "info"=>"El id_admin que paso no esta asociado a ningun administrador");
+      $res->json($error); 
+    }
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (id_admin, id_tienda, password_admin, nombre_sub_admin, email_sub_admin, password_sub_admin) por el metodo POST");
+    $res->json($error);
+  }
+}
+
+function crear_pedido ($req, $res){
+  if($req->body("id_cliente") && $req->body("id_tienda") && $req->body("productos_cantidad")){
+    $p_c = substr($req->body("productos_cantidad"), 0, -1);
+    $productos_cantidad = explode(",", $p_c);
+    $se_puede_hacer_checkout = true;
+    $productos_en_venta = new Productos_en_venta();
+    $errores = array();
+    foreach ($productos_cantidad as $producto_cantidad) {
+      if ($producto_cantidad) {
+        $pc = explode(":", $producto_cantidad);
+        $producto = $pc[0];
+        $cantidad = $pc[1];
+        $r = $productos_en_venta->buscar_por_id($producto);
+        if ($r["producto"]) {
+          if ($r["producto"]["stock"] < $cantidad) {
+            $se_puede_hacer_checkout = false;
+            $error = array('error' => "cantidad_no_disponible", "info"=> "Quiere comprar (".$cantidad.") de (".$r["producto"]["nombre"].") y el vendedor tiene disponible (".$r["producto"]["stock"].")");
+            array_push($errores, $error);
+          }
+        }else{
+          $se_puede_hacer_checkout = false;
+          $error = array('error' => "producto_no_registrado", "info"=> "Quiere comprar un producto (".$r["producto"]["nombre"].") que no esta registrado en nuestra base de datos");
+          array_push($errores, $error);
+          break;
+        }
+        // $res->send(array("Producto"=>$producto, "Cantidad"=>$cantidad));
+      }
+    }
+    if ($se_puede_hacer_checkout) {
+      $pedidos = new Pedidos();
+      $r = $pedidos->guardar($req->body("id_tienda"), $req->body("id_cliente"), $p_c, "en proceso");
+      $res->json($r);
+    }else{
+      $res->send($errores);
+    }
+    // $res->json($req->body());
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (id_cliente, id_tienda, productos_en_venta) por el metodo POST");
+    $res->json($error);
+  }
+}
+
+function cambiar_estado_pedido_cancelado($req, $res){
+  if ($req->body("id_pedido")) {
+    $pedidos = new Pedidos();
+    $r = $pedidos->buscar_por_id($req->body("id_pedido"));
+    if ($r["pedido"]) {
+      $r2 = $pedidos->actualizar_estado($req->body("id_pedido"), "cancelado");
+      $res->json($r2);
+    }else{
+      $error = array("error"=>"pedido_no_encontrado", "info"=>"El id que ingreso no esta asociado a ningun  pedido");
+      $res->json($error);  
+    }
+  }else if ($req->query("id_pedido")) {
+    $pedidos = new Pedidos();
+    $r = $pedidos->buscar_por_id($req->query("id_pedido"));
+    if ($r["pedido"]) {
+      $r2 = $pedidos->actualizar_estado($req->query("id_pedido"), "cancelado");
+      $res->json($r2);
+    }else{
+      $error = array("error"=>"pedido_no_encontrado", "info"=>"El id que ingreso no esta asociado a ningun  pedido");
+      $res->json($error);  
+    }
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (id_pedido) por el metodo POST o GET");
+    $res->json($error);
+  }
+}
+
+function cambiar_estado_pedido_pagado($req, $res){
+  if ($req->body("id_pedido")) {
+    $pedidos = new Pedidos();
+    $r = $pedidos->buscar_por_id($req->body("id_pedido"));
+    if ($r["pedido"]) {
+      $r2 = $pedidos->actualizar_estado($req->body("id_pedido"), "pagado");
+      $res->json($r2);
+    }else{
+      $error = array("error"=>"pedido_no_encontrado", "info"=>"El id que ingreso no esta asociado a ningun  pedido");
+      $res->json($error);  
+    }
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (id_pedido) por el metodo POST");
+    $res->json($error);
+  }
+}
+
+function cambiar_estado_pedido_enviado($req, $res){
+  if ($req->body("id_pedido")) {
+    $pedidos = new Pedidos();
+    $r = $pedidos->buscar_por_id($req->body("id_pedido"));
+    if ($r["pedido"]) {
+      $r2 = $pedidos->actualizar_estado($req->body("id_pedido"), "enviado");
+      $res->json($r2);
+    }else{
+      $error = array("error"=>"pedido_no_encontrado", "info"=>"El id que ingreso no esta asociado a ningun  pedido");
+      $res->json($error);  
+    }
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (id_pedido) por el metodo POST");
+    $res->json($error);
+  }
+}
+
+function cambiar_estado_pedido_entregado($req, $res){
+  if ($req->body("id_pedido")) {
+    $pedidos = new Pedidos();
+    $r = $pedidos->buscar_por_id($req->body("id_pedido"));
+    if ($r["pedido"]) {
+      $r2 = $pedidos->actualizar_estado($req->body("id_pedido"), "entregado");
+      $res->json($r2);
+    }else{
+      $error = array("error"=>"pedido_no_encontrado", "info"=>"El id que ingreso no esta asociado a ningun  pedido");
+      $res->json($error);  
+    }
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (id_pedido) por el metodo POST");
+    $res->json($error);
+  }
+}
+
+function notificacion_pago_inmediato($req, $res){
+  if ($req->body("payment_status") && $req->body("item_number")) {
+    if ($req->body("payment_status")=="Completed" || $req->body("payment_status")=="Processed") {
+      $pedidos = new Pedidos();
+      $r = $pedidos->buscar_por_id($req->body("item_number"));
+      if ($r["pedido"]) {
+        $r2 = $pedidos->actualizar_estado($req->body("item_number"), "pagado");
+        $p_c = $r2["pedido"]["ids_productos_cantidad"];
+        $productos_cantidad = explode(",", $p_c);
+        $carro_de_compras = new Carro_de_compras();
+        foreach ($productos_cantidad as $producto_cantidad) {
+          if ($producto_cantidad) {
+            $pc = explode(":", $producto_cantidad);
+            $id_producto = $pc[0];
+            $r3 = $carro_de_compras->eliminar_por_id_cliente_id_producto($r2["pedido"]["id_cliente"], $id_producto);
+            $res->json($r3);
+          }
+        }
+        $res->json($r2["pedido"]);
+      }else{
+        $error = array("error"=>"pedido_no_encontrado", "info"=>"El id que ingreso no esta asociado a ningun  pedido");
+        $res->json($error);  
+      }
+    }else{
+      $res->send("No se  puede hacer nada");
+    }
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (payment_status, item_number) por el metodo POST");
     $res->json($error);
   }
 }
