@@ -62,7 +62,6 @@
         <div class="col-lg-12 col-sm-12">
         <?php if ($params["productos"]) { ?>
           <span class="title">SHOPPING CART</span>
-          <?php print_r($params["productos"]); ?>
         </div>
           <?php
             $tabla_comenzada = false;
@@ -115,7 +114,7 @@
               }  
             ?>
                 <tr>
-                  <td><a href="#"><img src="/static/usuarios/imagenes/productos/<?php echo $producto['imagen']; ?>" alt="" title="" width="47" height="47" /></a></td>
+                  <td><a href="#"><img class="imagen-producto" src="/static/usuarios/imagenes/productos/<?php echo $producto['imagen']; ?>" alt="" title="" width="47" height="47" /></a></td>
                   <td data-id="<?php echo $producto['id_producto']; ?>"><a href="#"><?php echo $producto["nombre_producto"]; ?></a></td>
                   <td><a href="#"><?php echo $producto["marca"]; ?></a></td>
                   <td data-precio="<?php echo $producto['precio']; ?>"><?php echo $producto["precio"]; ?></td>
@@ -160,16 +159,33 @@
               <input type="hidden" name="cmd" value="_xclick">
               <input type="hidden" name="business" value="pagos@emall.com">
               <input id="item_name" type="hidden" name="item_name" value="">
+              <input id="item_number" type='hidden' name='item_number' value=''>
               <input id="amount" type="hidden" name="amount" value="">
               <input type="hidden" name="currency_code" value="USD">
               <input type="image" src="http://www.paypal.com/es_XC/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
-              <input id="r_p" type="hidden" name="return" value="http://e-mall.esy.es/redireccion/paypal/pagado">
-              <input id="r_c" type="hidden" name="cancel_return" value="http://e-mall.esy.es/redireccion/paypal/cancelado">
+              <input id="r_p" type="hidden" name="return" value="http://e-mall.noip.me/redireccion/paypal/pagado">
+              <input id="r_c" type="hidden" name="cancel_return" value="http://e-mall.noip.me/redireccion/paypal/cancelado">
               <input type="hidden" name="no_shipping" value="1">
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-img" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Imagen del producto</h4>
+          </div>
+          <div class="modal-body">
+            <img id="imagen-grande" width="100%" height="auto" src="">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
           </div>
         </div>
       </div>
@@ -203,21 +219,30 @@
         type: "POST",
         data: datos,
         success: function(data) {
+          console.log(data);
           data = JSON.parse(data);
           if (data.info=="pedido_registrado") {
             $("#item_name").val("Pedido "+data.pedido.id);
-            $("#amount").val(Math.round(precio_total/2000));
+            $("#item_number").val(data.pedido.id);
+            $("#amount").val(Math.round(precio_total/2000)+1);
             $("#r_p").val($("#r_p").val()+"?id="+data.pedido.id);
             $("#r_c").val($("#r_c").val()+"?id="+data.pedido.id);
             $('#modal-pagar-con-paypal').modal({
               keyboard: false,
               backdrop: false
             });
+          }else{
+            alert(data.info);
           }
-          console.log(data.info);
-          console.log(data.pedido);
         }
       });
+    });
+
+    $(".imagen-producto").on("click", function(e){
+      var url = $(this).attr("src");
+      console.log(url);
+      $("#imagen-grande").attr("src", url);
+      $('#modal-img').modal();
     });
   });
   </script>

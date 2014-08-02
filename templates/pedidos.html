@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>e-Mall - Pedidos</title>
+    <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="<?php echo STATIC_DIR; ?>vendors/mimity/css/catalogo.css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+  <style>
+    body{
+      padding-top: 70px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <!-- text logo on mobile view -->
+        <a class="navbar-brand" href="/">e-Mall</a>
+      </div>
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="/cliente/mi-carrito-de-compras">Mi carro compras</a></li>
+          <li class="active"><a href="/cliente/mis-pedidos">Mis pedidos</a></li>
+        </ul>
+        
+        <form class="navbar-form navbar-left" role="search">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Nombre del producto a buscar">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+            </span>
+          </div>
+        </form>
+        
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="/api/cerrar-sesion">Cerrar sesion</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+  <div class="container main-container">
+    <div class="row">
+      <!-- Cart -->
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="col-lg-12 col-sm-12">
+        <?php 
+        if (isset($params["pedidos"]) && $params["pedidos"]) { ?>
+          <?php
+          foreach ($params["pedidos"] as $pedido) {?>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                
+                <h3><?php echo "Pedido hecho a la tienda ".$pedido["productos"][0]["producto"]["nombre_tienda"] ?></h3>
+                <h4>Fecha en que se realizo el pedido: <b><?php echo $pedido["fecha_registro"]; ?></b></h4>
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Image</th>
+                        <th>Nombre</th>
+                        <th>Marca</th>
+                        <th>Precio (Pesos)</th>
+                        <th class="th-qty">Cantidad</th>
+                        <th>Sub Total (Pesos)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                      $suma = 0;
+                      // print_r($pedido);
+                      foreach ($pedido["productos"] as $producto) {
+                        $suma = $suma + ($producto["cantidad_comprada"]*$producto["producto"]["precio"]); ?>
+                        <tr>
+                          <td><img class="imagen-producto" style="cursor:pointer;" src="/static/usuarios/imagenes/productos/<?php echo $producto["producto"]['imagen']; ?>" alt="" title="" width="35" height="35" /></td>
+                          <td><?php echo $producto["producto"]["nombre_producto"]; ?></td>
+                          <td><?php echo $producto["producto"]["marca"]; ?></td>
+                          <td>$ <?php echo $producto["producto"]["precio"]; ?></td>
+                          <td><?php echo $producto["cantidad_comprada"]; ?></td>
+                          <td>$ <?php echo ($producto["cantidad_comprada"]*$producto["producto"]["precio"]); ?></td>
+                        </tr>
+                      <?php } ?>
+                      <tr>
+                        <td colspan="5" align="right">Total</td>
+                        <td class="total"><b>$ <?php echo $suma ?></b></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <?php if($pedido["estado"] == "sin confirmar") { ?>
+                  <h4>Estado del pedido: 
+                    <span class="label label-warning"><b>Sin confirmar</b></span>
+                    <span><button class="btn btn-primary boton-confirmar-pagar" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" data-precio-total="<?php echo $suma; ?>" >Confirmar y pagar</button></span>
+                    <span><a href="/api/eliminar-pedido?id_pedido=<?php echo $pedido["id_pedido"]; ?>" class="btn btn-danger">Eliminar pedido</a></span>
+                  </h4>
+                <?php } else if($pedido["estado"] == "pagado") {  ?>
+                  <h4>Estado del pedido: <span class="label label-success"><b>Pagado</b> </span></h4>
+                <?php } else if($pedido["estado"] == "enviado") {  ?>
+                  <h4>Estado del pedido: 
+                    <span class="label label-success"><b>Pagado</b></span>
+                    <span class="label label-info"><b>Enviado</b></span>
+                  </h4>
+                <?php } else if($pedido["estado"] == "entregado") {  ?>
+                  <h4>Estado del pedido: 
+                    <span class="label label-success"><b>Pagado</b></span>
+                    <span class="label label-info"><b>Enviado</b></span>
+                    <span class="label label-primary"><b>Entregado</b></span>
+                  </h4>
+                <?php } ?>
+              </div>
+            </div>
+        <?php 
+          } 
+        } else { ?>
+          <h2>Usted no ha realizado ningun pedido aun</h2>
+        <?php 
+        } ?>
+      </div>
+      <!-- End Cart -->
+      <!-- Small modal -->
+    <div id="modal-pagar-con-paypal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Pagar con PayPal</h4>
+          </div>
+          <div class="modal-body">
+            <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="pagos@emall.com">
+              <input id="item_name" type="hidden" name="item_name" value="">
+              <input id="item_number" type='hidden' name='item_number' value=''>
+              <input id="amount" type="hidden" name="amount" value="">
+              <input type="hidden" name="currency_code" value="USD">
+              <input type="image" src="http://www.paypal.com/es_XC/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+              <input id="r_p" type="hidden" name="return" value="http://e-mall.noip.me/redireccion/paypal/pagado">
+              <input id="r_c" type="hidden" name="cancel_return" value="http://e-mall.noip.me/redireccion/paypal/cancelado">
+              <input type="hidden" name="no_shipping" value="1">
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-img" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Imagen del producto</h4>
+          </div>
+          <div class="modal-body">
+            <img id="imagen-grande" width="100%" height="auto" src="">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+  </footer>
+  <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
+  <script src="<?php echo STATIC_DIR; ?>vendors/bootstrap/js/bootstrap.min.js"></script>
+  <script src="<?php echo STATIC_DIR; ?>vendors/mimity/js/blImageCenter.js"></script>
+  <script src="<?php echo STATIC_DIR; ?>vendors/mimity/js/mimity.js"></script>
+  <script>
+  $(document).on("ready", function(){
+    console.log("ready");
+    $(".boton-confirmar-pagar").on("click", function(e){
+      console.log("Click");
+      var id_pedido = $(this).attr("data-id-pedido");
+      var precio_total = $(this).attr("data-precio-total");
+      console.log(id_pedido);
+      console.log(precio_total);
+      $("#item_name").val("Pedido "+id_pedido);
+      $("#item_number").val(id_pedido);
+      $("#amount").val(Math.round(precio_total/2000)+1);
+      $("#r_p").val($("#r_p").val()+"?id="+id_pedido);
+      $("#r_c").val($("#r_c").val()+"?id="+id_pedido);
+      $('#modal-pagar-con-paypal').modal({
+        keyboard: false,
+        backdrop: false
+      });
+    });
+
+    $(".imagen-producto").on("click", function(e){
+      var url = $(this).attr("src");
+      console.log(url);
+      $("#imagen-grande").attr("src", url);
+      $('#modal-img').modal();
+    });
+
+  });
+  </script>
+  
+</body>
+</html>

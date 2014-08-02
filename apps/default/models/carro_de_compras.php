@@ -70,7 +70,6 @@ class Carro_de_compras extends Models{
 
   public function eliminar_por_id_cliente_id_producto ($id_cliente, $id_producto){
     $consulta = "DELETE FROM carro_de_compras WHERE id_cliente = ".$id_cliente." AND id_producto=".$id_producto;
-    echo $consulta;
     if($resultado = $this->conexion->query($consulta)){
       return array("error"=>null, "info"=>"producto eliminado");
     }else{

@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>e-Mal - Productos en venta</title>
+    <title>e-Mal - Pedidos entregados</title>
 
     <!-- Core CSS - Include with every page -->
     <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -68,88 +68,84 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12 col-md-12">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs nav-justified" role="tablist" style="margin:10px 0;">
-                      <li class="active" id="tab1"><a href="#home" role="tab" data-toggle="tab">Agregar productos</a></li>
-                      <li id="tab2"><a href="#burbujas" role="tab" data-toggle="tab">Ver productos en paneles</a></li>
-                      <li id="tab3"><a href="#tabla" role="tab" data-toggle="tab">Ver productos en tabla</a></li>
-                    </ul>
-                    <!-- Tab panes -->
-
-                    <div class="tab-content">
-                        <div class="tab-pane fade in active" id="home">
-                            <div class="row">
-                                <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2">
-                                    <div class="panel panel-primary ">
-                                        <div class="panel-heading">
-                                            Agregar un producto
-                                        </div>
-                                        <div class="panel-body">
-                                            <form role="form" id="form-agregar-producto">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" id="nombre-producto" placeholder="Nombre del producto" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <textarea class="form-control" rows="3" id="descripcion-producto" placeholder="Descripcion del producto" required></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" id="marca-producto" placeholder="Marca del producto" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <select class="form-control" id="categoria-producto">
-                                                        <option value=0>Seleccione una categoria</option>
-                                                      <?php 
-                                                        foreach ($params["categorias_productos"] as $value) {
-                                                            print_r("<option value='".$value['categoria_producto']."'>".$value['categoria_producto']."</option>");     
-                                                        }
-                                                      ?>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="number" class="form-control" id="precio-producto" placeholder="Precio del producto" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="number" class="form-control" id="cantidad-producto" placeholder="Cantidad en bodega" required>
-                                                </div>
-                                               
-                                                <div class="form-group">
-                                                    <input type="file" class="filestyle" id="imagen-producto" data-buttonText="Cargar imagen" required>
-                                                </div>
-                                                
-                                                <button type="submit" class="btn btn-primary">Agregar producto</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>   
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="burbujas">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <ul class="nav nav-pills nav-justified" role="tablist" style="margin:10px 0;">
-                                        <?php 
-                                            foreach ($params["categorias_productos"] as $value) {
-                                                print_r("<li><a class='li-a-categorias' href='#".$value['categoria_producto']."' data-categoria='".$value['categoria_producto']."'>".$value['categoria_producto']."</a></li>");     
-                                            }
-                                        ?>
-                                    </ul>
-                                    
-                                </div>
-                            </div>
-                            <div class="row" id="div-mostrar-productos-en-venta">
-                                
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="tabla">
-                            <div class="col-lg-12">
-                                <div class="row" id="div-mostrar-tabla-productos-en-venta">
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
+                    <?php print_r($params["pedidos_entregados"]); ?>
                 </div>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="col-lg-12 col-sm-12">
+            <?php 
+            if (isset($params["pedidos_entregados"]) && $params["pedidos_entregados"]) { ?>
+              <?php
+              foreach ($params["pedidos_entregados"] as $pedido) {?>
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <h4>Fecha en que se realizo el pedido: <b><?php echo $pedido["fecha_registro"]; ?></b></h4>
+                    <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Image</th>
+                            <th>Nombre</th>
+                            <th>Marca</th>
+                            <th>Precio (Pesos)</th>
+                            <th class="th-qty">Cantidad</th>
+                            <th>Sub Total (Pesos)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php
+                          $suma = 0;
+                          // print_r($pedido);
+                          foreach ($pedido["productos"] as $producto) {
+                            $suma = $suma + ($producto["cantidad_comprada"]*$producto["producto"]["precio"]); ?>
+                            <tr>
+                              <td><img class="imagen-producto" style="cursor:pointer;" src="/static/usuarios/imagenes/productos/<?php echo $producto["producto"]['imagen']; ?>" alt="" title="" width="35" height="35" /></td>
+                              <td><?php echo $producto["producto"]["nombre_producto"]; ?></td>
+                              <td><?php echo $producto["producto"]["marca"]; ?></td>
+                              <td>$ <?php echo $producto["producto"]["precio"]; ?></td>
+                              <td><?php echo $producto["cantidad_comprada"]; ?></td>
+                              <td>$ <?php echo ($producto["cantidad_comprada"]*$producto["producto"]["precio"]); ?></td>
+                            </tr>
+                          <?php } ?>
+                          <tr>
+                            <td colspan="5" align="right">Total</td>
+                            <td class="total"><b>$ <?php echo $suma ?></b></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <?php if($pedido["estado"] == "sin confirmar") { ?>
+                      <h4>Estado del pedido: 
+                        <span class="label label-warning"><b>Sin confirmar</b></span>
+                        <span><button class="btn btn-primary boton-confirmar-pagar" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" data-precio-total="<?php echo $suma; ?>" >Confirmar y pagar</button></span>
+                        <span><a href="/api/eliminar-pedido?id_pedido=<?php echo $pedido["id_pedido"]; ?>" class="btn btn-danger">Eliminar pedido</a></span>
+                      </h4>
+                    <?php } else if($pedido["estado"] == "pagado") {  ?>
+                      <h4>Estado del pedido: 
+                        <span class="label label-success"><b>Pagado</b></span>
+                        <span><button class="btn btn-primary boton-enviar" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" >Enviar al comprador</button></span>
+                      </h4>
+                    <?php } else if($pedido["estado"] == "enviado") {  ?>
+                      <h4>Estado del pedido: 
+                        <span class="label label-success"><b>Pagado</b></span>
+                        <span class="label label-info"><b>Enviado</b></span>
+                        <span><button class="btn btn-primary boton-entregado" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" >Cambiar estado de pedido a entregado</button></span>
+                      </h4>
+                    <?php } else if($pedido["estado"] == "entregado") {  ?>
+                      <h4>Estado del pedido: 
+                        <span class="label label-success"><b>Pagado</b></span>
+                        <span class="label label-info"><b>Enviado</b></span>
+                        <span class="label label-primary"><b>Entregado</b></span>
+                      </h4>
+                    <?php } ?>
+                  </div>
+                </div>
+            <?php 
+              } 
+            } else { ?>
+              <h2>Usted no ha realizado ningun pedido aun</h2>
+            <?php 
+            } ?>
+        </div>
                 
                 <!-- /.col-lg-12 -->
             </div>

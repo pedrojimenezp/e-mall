@@ -10,8 +10,13 @@ $urls_array = array(
   "^/dashboard/mis-productos/en-venta$" => "default@mostrar_plantilla_productos_en_venta",
   "^/dashboard/mis-configuraciones$" => "default@mostrar_plantilla_configuraciones",
   
+  "^/dashboard/mis-pedidos/nuevos$" => "default@mostrar_plantilla_pedidos_nuevos",
+  "^/dashboard/mis-pedidos/enviados$" => "default@mostrar_plantilla_pedidos_enviados",
+  "^/dashboard/mis-pedidos/entregados$" => "default@mostrar_plantilla_pedidos_entregados",
+  
   "^/busqueda/productos$" => "default@mostrar_plantilla_resultado_productos",
   "^/cliente/mi-carrito-de-compras$" => "default@mostrar_plantilla_carrito_de_compras",
+  "^/cliente/mis-pedidos$" => "default@mostrar_plantilla_pedidos",
   
   "^/redireccion/paypal/cancelado$" => "default@mostrar_plantilla_pedido_cancelado",
   "^/redireccion/paypal/pagado$" => "default@mostrar_plantilla_pedido_pagado",
@@ -40,6 +45,8 @@ $urls_array = array(
   "^/api/pedidos/estado/pagado$" => "api@cambiar_estado_pedido_pagado",
   "^/api/pedidos/estado/enviado$" => "api@cambiar_estado_pedido_enviado",
   "^/api/pedidos/estado/entregado$" => "api@cambiar_estado_pedido_entregado",
+  
+  "^/api/eliminar-pedido$" => "api@eliminar_pedido",
   
 
   "^/api/paypal/ipn$" => "api@notificacion_pago_inmediato",

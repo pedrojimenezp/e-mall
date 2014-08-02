@@ -26,21 +26,8 @@ class Pedidos extends Models{
     }
   }
 
-  public function buscar_todos (){
-    $consulta = "SELECT t1.id AS id_producto, t2.id AS id_carro_compra, t1.nombre AS nombre_producto, t1.imagen, t1.marca, t1.descripcion, t1.precio, t2.cantidad, t3.nombre AS nombre_tienda FROM productos_en_venta AS t1 JOIN carro_de_compras AS t2 JOIN tiendas AS t3";
-    if($resultado = $this->conexion->query($consulta)){
-      $filas = array();
-      while ($fila = $resultado->fetch_assoc()) {
-        array_push($filas, $fila);
-      }
-      return array("error"=>null, "productos"=>$filas);
-    }else{
-      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
-    }
-  }
-
   public function buscar_por_id ($id){
-    $consulta = "SELECT * FROM pedidos WHERE id = ".$id;
+    $consulta = "SELECT * FROM pedidos WHERE id = ".$id." ORDER BY 'fecha_registro' DESC";
     if($resultado = $this->conexion->query($consulta)){
       $fila = $resultado->fetch_assoc();
       return array("error"=>null, "pedido"=>$fila);
@@ -49,18 +36,46 @@ class Pedidos extends Models{
     }
   }
 
-  public function eliminar_por_id ($id){
-    $consulta = "DELETE FROM pedidos WHERE id = ".$id;
+  public function buscar_por_id_cliente ($id_cliente, $estado=null){
+    if ($estado == null) {
+      $consulta = "SELECT * FROM pedidos WHERE id_cliente = ".$id_cliente." ORDER BY 'fecha_registro' ASC";
+    }else{
+      $consulta = "SELECT * FROM pedidos WHERE id_cliente = ".$id_cliente." AND estado='".$estado."' ORDER BY 'fecha_registro' ASC";
+    }
     if($resultado = $this->conexion->query($consulta)){
-      return array("error"=>null, "info"=>"pedido eliminado");
+      $filas = array();
+      while ($fila = $resultado->fetch_assoc()) {
+        array_push($filas, $fila);
+      }
+      return array("error"=>null, "pedidos"=>$filas);
     }else{
       echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
     }
   }
-  public function eliminar_por_id_carro_id_cliente ($id_carro, $id_cliente){
-    $consulta = "DELETE FROM carro_de_compras WHERE id = ".$id_carro." AND id_cliente=".$id_cliente;
+
+  public function buscar_por_id_tienda ($id_tienda, $estado=null){
+    if ($estado == null) {
+      $consulta = "SELECT * FROM pedidos WHERE id_tienda = ".$id_tienda." ORDER BY 'fecha_registro' ASC";
+    }else{
+      $consulta = "SELECT * FROM pedidos WHERE id_tienda = ".$id_tienda." AND estado='".$estado."' ORDER BY 'fecha_registro' ASC";
+    }
     if($resultado = $this->conexion->query($consulta)){
-      return array("error"=>null, "info"=>"producto eliminado");
+      $filas = array();
+      while ($fila = $resultado->fetch_assoc()) {
+        array_push($filas, $fila);
+      }
+      return array("error"=>null, "pedidos"=>$filas);
+    }else{
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
+    }
+  }
+
+
+
+  public function eliminar_por_id ($id){
+    $consulta = "DELETE FROM pedidos WHERE id = ".$id;
+    if($resultado = $this->conexion->query($consulta)){
+      return array("error"=>null, "info"=>"pedido eliminado");
     }else{
       echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
     }
@@ -79,28 +94,17 @@ class Pedidos extends Models{
     } 
   }
 
-  public function buscar_por_id_producto ($id_producto){
-    $consulta = "SELECT * FROM carro_de_compras WHERE id_producto = ".$id_producto;
-    if($resultado = $this->conexion->query($consulta)){
+  public function actualizar_ids_pc ($id, $ids_pc){
+    $consulta = "UPDATE pedidos SET ids_productos_cantidad='".$ids_pc."' WHERE id = ".$id;
+    // echo $consulta;
+    if(!$this->conexion->query($consulta)){
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      $consulta = "SELECT * FROM pedidos WHERE id = ".$id;
+      $resultado = $this->conexion->query($consulta);
       $fila = $resultado->fetch_assoc();
-      return array("error"=>null, "producto"=>$fila);
-    }else{
-      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
-    }
+      return array("error"=>null, "info"=>"pedido_actualizado", "pedido"=>$fila);
+    } 
   }
-
-  public function buscar_por_id_cliente ($id_cliente){
-    $consulta = "SELECT t1.id AS id_producto, t2.id AS id_carro_compra, t1.id_tienda, t1.nombre AS nombre_producto, t1.imagen, t1.marca, t1.descripcion, t1.precio, t2.cantidad, t2.id_cliente, t3.nombre AS nombre_tienda FROM productos_en_venta AS t1 JOIN carro_de_compras AS t2 JOIN tiendas AS t3 WHERE t2.id_cliente = ".$id_cliente." AND t2.id_producto=t1.id AND t1.id_tienda=t3.id ORDER BY  t3.nombre ";
-    if($resultado = $this->conexion->query($consulta)){
-      $filas = array();
-      while ($fila = $resultado->fetch_assoc()) {
-        array_push($filas, $fila);
-      }
-      return array("error"=>null, "productos"=>$filas);
-    }else{
-      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
-    }
-  }
-
 }
 ?>

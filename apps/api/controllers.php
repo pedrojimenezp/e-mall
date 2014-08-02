@@ -326,7 +326,7 @@ function crear_pedido ($req, $res){
     $productos_cantidad = explode(",", $p_c);
     $se_puede_hacer_checkout = true;
     $productos_en_venta = new Productos_en_venta();
-    $errores = array();
+    $error = array();
     foreach ($productos_cantidad as $producto_cantidad) {
       if ($producto_cantidad) {
         $pc = explode(":", $producto_cantidad);
@@ -337,12 +337,12 @@ function crear_pedido ($req, $res){
           if ($r["producto"]["stock"] < $cantidad) {
             $se_puede_hacer_checkout = false;
             $error = array('error' => "cantidad_no_disponible", "info"=> "Quiere comprar (".$cantidad.") de (".$r["producto"]["nombre"].") y el vendedor tiene disponible (".$r["producto"]["stock"].")");
-            array_push($errores, $error);
+            // array_push($errores, $error);
           }
         }else{
           $se_puede_hacer_checkout = false;
           $error = array('error' => "producto_no_registrado", "info"=> "Quiere comprar un producto (".$r["producto"]["nombre"].") que no esta registrado en nuestra base de datos");
-          array_push($errores, $error);
+          // array_push($errores, $error);
           break;
         }
         // $res->send(array("Producto"=>$producto, "Cantidad"=>$cantidad));
@@ -350,10 +350,19 @@ function crear_pedido ($req, $res){
     }
     if ($se_puede_hacer_checkout) {
       $pedidos = new Pedidos();
-      $r = $pedidos->guardar($req->body("id_tienda"), $req->body("id_cliente"), $p_c, "en proceso");
-      $res->json($r);
+      $r1 = $pedidos->guardar($req->body("id_tienda"), $req->body("id_cliente"), $p_c, "sin confirmar");
+      $carro_de_compras = new Carro_de_compras();
+      foreach ($productos_cantidad as $producto_cantidad) {
+        if ($producto_cantidad) {
+          $pc = explode(":", $producto_cantidad);
+          $producto = $pc[0];
+          $cantidad = $pc[1];
+          $r2 = $carro_de_compras->eliminar_por_id_cliente_id_producto($req->body("id_cliente"), $producto);
+        }
+      } 
+      $res->json($r1);
     }else{
-      $res->send($errores);
+      $res->json($error);
     }
     // $res->json($req->body());
   }else{
@@ -450,15 +459,28 @@ function notificacion_pago_inmediato($req, $res){
         $p_c = $r2["pedido"]["ids_productos_cantidad"];
         $productos_cantidad = explode(",", $p_c);
         $carro_de_compras = new Carro_de_compras();
+        $nuevos_ids_pc = "";
         foreach ($productos_cantidad as $producto_cantidad) {
           if ($producto_cantidad) {
             $pc = explode(":", $producto_cantidad);
             $id_producto = $pc[0];
-            $r3 = $carro_de_compras->eliminar_por_id_cliente_id_producto($r2["pedido"]["id_cliente"], $id_producto);
-            $res->json($r3);
+            $cantidad = $pc[1];
+            $productos_en_venta = new Productos_en_venta();
+            $r3 = $productos_en_venta->buscar_por_id($id_producto);
+            if ($r3["producto"]) {
+              $r4 = $productos_en_venta->actualizar_cantidad($id_producto, $r3["producto"]["stock"]-$cantidad);
+              $productos_vendidos = new Productos_vendidos();
+              $r5 = $productos_vendidos->guardar($r3["producto"]["id_tienda"], $r2["pedido"]["id_cliente"], $r3["producto"]["nombre_producto"], $r3["producto"]["descripcion"], $r3["producto"]["marca"], $r3["producto"]["categoria"], $r3["producto"]["precio"], $cantidad, $r3["producto"]["imagen"]);
+              $nuevos_ids_pc = $nuevos_ids_pc.$r5["producto"]["id"].":".$cantidad.",";
+
+              $r6 = $carro_de_compras->eliminar_por_id_cliente_id_producto($r2["pedido"]["id_cliente"], $id_producto);
+              $res->send("Todo bien");
+            }
           }
         }
-        $res->json($r2["pedido"]);
+        $nuevos_ids_pc = substr($nuevos_ids_pc, 0, -1);
+        $r7 = $pedidos->actualizar_ids_pc($req->body("item_number"), $nuevos_ids_pc);
+        $res->json($r7["pedido"]);
       }else{
         $error = array("error"=>"pedido_no_encontrado", "info"=>"El id que ingreso no esta asociado a ningun  pedido");
         $res->json($error);  
@@ -469,6 +491,16 @@ function notificacion_pago_inmediato($req, $res){
   }else{
     $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (payment_status, item_number) por el metodo POST");
     $res->json($error);
+  }
+}
+
+function eliminar_pedido ($req, $res){
+  if ($req->query("id_pedido")) {
+    $pedidos = new Pedidos();
+    $r = $pedidos->eliminar_por_id($req->query("id_pedido"));
+    $res->json($r);
+  }else{
+    $res->send("Debe pasar el id del pediddo a eliminar");
   }
 }
 
