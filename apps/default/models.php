@@ -6,4 +6,6 @@ require_once "models".DS."productos.php";
 require_once "models".DS."carro_de_compras.php";
 require_once "models".DS."categorias.php";
 require_once "models".DS."pedidos.php";
+require_once "models".DS."datos_clientes.php";
+require_once "models".DS."notificaciones.php";
 ?>

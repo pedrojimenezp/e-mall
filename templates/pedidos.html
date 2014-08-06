@@ -46,8 +46,99 @@
         </form>
         
         <ul class="nav navbar-nav navbar-right">
-          <li>
-            <a href="/api/cerrar-sesion">Cerrar sesion</a>
+          <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-messages">
+                  <li>
+                      <a href="#">
+                          <div>
+                              <strong>John Smith</strong>
+                              <span class="pull-right text-muted">
+                                  <em>Yesterday</em>
+                              </span>
+                          </div>
+                          <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+              </ul>
+              <!-- /.dropdown-messages -->
+          </li>
+          <!-- /.dropdown -->
+          <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-alerts">
+                  <li>
+                      <a href="#">
+                          <div>
+                              <i class="fa fa-comment fa-fw"></i> New Comment
+                              <span class="pull-right text-muted small">4 minutes ago</span>
+                          </div>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a href="#">
+                          <div>
+                              <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                              <span class="pull-right text-muted small">12 minutes ago</span>
+                          </div>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a href="#">
+                          <div>
+                              <i class="fa fa-envelope fa-fw"></i> Message Sent
+                              <span class="pull-right text-muted small">4 minutes ago</span>
+                          </div>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a href="#">
+                          <div>
+                              <i class="fa fa-tasks fa-fw"></i> New Task
+                              <span class="pull-right text-muted small">4 minutes ago</span>
+                          </div>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a href="#">
+                          <div>
+                              <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                              <span class="pull-right text-muted small">4 minutes ago</span>
+                          </div>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a class="text-center" href="#">
+                          <strong>See All Alerts</strong>
+                          <i class="fa fa-angle-right"></i>
+                      </a>
+                  </li>
+              </ul>
+              <!-- /.dropdown-alerts -->
+          </li>
+          <!-- /.dropdown -->
+          <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-user">
+                  <li><a href="/cliente/mis-configuraciones"><i class="fa fa-gear fa-fw"></i> Configuraciones</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li><a href="/api/cerrar-sesion"><i class="fa fa-sign-out fa-fw"></i> Cerrar sesion</a>
+                  </li>
+              </ul>
+              <!-- /.dropdown-user -->
           </li>
         </ul>
       </div>
@@ -107,7 +198,7 @@
                   <h4>Estado del pedido: 
                     <span class="label label-warning"><b>Sin confirmar</b></span>
                     <span><button class="btn btn-primary boton-confirmar-pagar" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" data-precio-total="<?php echo $suma; ?>" >Confirmar y pagar</button></span>
-                    <span><a href="/api/eliminar-pedido?id_pedido=<?php echo $pedido["id_pedido"]; ?>" class="btn btn-danger">Eliminar pedido</a></span>
+                    <span><a href="/api/pedidos/eliminar-pedido?id_pedido=<?php echo $pedido["id_pedido"]; ?>" class="btn btn-danger">Eliminar pedido</a></span>
                   </h4>
                 <?php } else if($pedido["estado"] == "pagado") {  ?>
                   <h4>Estado del pedido: <span class="label label-success"><b>Pagado</b> </span></h4>

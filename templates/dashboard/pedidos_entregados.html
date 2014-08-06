@@ -32,7 +32,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="/"><?php print_r($params["tienda"]["nombre"]) ?></a>
-                <a class="navbar-brand" href="/"><i class="fa fa-barcode"></i> Productos en venta</a>
+                <a class="navbar-brand" href="/"><i class="fa fa-thumbs-up"></i> Pedidos entregados</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -113,36 +113,19 @@
                         </tbody>
                       </table>
                     </div>
-                    <?php if($pedido["estado"] == "sin confirmar") { ?>
-                      <h4>Estado del pedido: 
-                        <span class="label label-warning"><b>Sin confirmar</b></span>
-                        <span><button class="btn btn-primary boton-confirmar-pagar" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" data-precio-total="<?php echo $suma; ?>" >Confirmar y pagar</button></span>
-                        <span><a href="/api/eliminar-pedido?id_pedido=<?php echo $pedido["id_pedido"]; ?>" class="btn btn-danger">Eliminar pedido</a></span>
-                      </h4>
-                    <?php } else if($pedido["estado"] == "pagado") {  ?>
-                      <h4>Estado del pedido: 
-                        <span class="label label-success"><b>Pagado</b></span>
-                        <span><button class="btn btn-primary boton-enviar" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" >Enviar al comprador</button></span>
-                      </h4>
-                    <?php } else if($pedido["estado"] == "enviado") {  ?>
-                      <h4>Estado del pedido: 
-                        <span class="label label-success"><b>Pagado</b></span>
-                        <span class="label label-info"><b>Enviado</b></span>
-                        <span><button class="btn btn-primary boton-entregado" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" >Cambiar estado de pedido a entregado</button></span>
-                      </h4>
-                    <?php } else if($pedido["estado"] == "entregado") {  ?>
-                      <h4>Estado del pedido: 
+                    
+                    <h4>Estado del pedido: 
                         <span class="label label-success"><b>Pagado</b></span>
                         <span class="label label-info"><b>Enviado</b></span>
                         <span class="label label-primary"><b>Entregado</b></span>
-                      </h4>
-                    <?php } ?>
+                        <span><button class="btn btn-info boton-info-cliente" data-id-cliente="<?php echo $pedido["id_cliente"]; ?>" >Ver informacion del cliente</button></span>
+                    </h4>
                   </div>
                 </div>
             <?php 
               } 
             } else { ?>
-              <h2>Usted no ha realizado ningun pedido aun</h2>
+              <h2>Usted no tiene pedidos entregados a ningun cliente</h2>
             <?php 
             } ?>
         </div>

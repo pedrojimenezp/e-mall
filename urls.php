@@ -17,6 +17,7 @@ $urls_array = array(
   "^/busqueda/productos$" => "default@mostrar_plantilla_resultado_productos",
   "^/cliente/mi-carrito-de-compras$" => "default@mostrar_plantilla_carrito_de_compras",
   "^/cliente/mis-pedidos$" => "default@mostrar_plantilla_pedidos",
+  "^/cliente/mis-configuraciones$" => "default@mostrar_plantilla_configuraciones_cliente",
   
   "^/redireccion/paypal/cancelado$" => "default@mostrar_plantilla_pedido_cancelado",
   "^/redireccion/paypal/pagado$" => "default@mostrar_plantilla_pedido_pagado",
@@ -35,18 +36,25 @@ $urls_array = array(
   "^/api/agregar-producto-al-carrito$" => "api@agregar_producto_al_carrito",
   "^/api/eliminar-producto-del-carrito$" => "api@eliminar_producto_del_carrito",
 
+  "^/api/obtener-datos-cliente$" => "api@obtener_datos_cliente",
+
+
   "^/api/admin/actualizar-info-personal$" => "api@actualizar_info_personal_admin",
   "^/api/admin/actualizar-password$" => "api@actualizar_password_admin",
   "^/api/admin/agregar-sub-admins$" => "api@agregar_sub_admins",
 
+  "^/api/cliente/actualizar-datos-cliente$" => "api@actualizar_datos_cliente",
 
   "^/api/pedidos/crear-pedido$" => "api@crear_pedido",
+  "^/api/pedidos/enviar-pedido$" => "api@enviar_pedido",
+  "^/api/pedidos/entregar-pedido$" => "api@entregar_pedido",
+  "^/api/pedidos/eliminar-pedido$" => "api@eliminar_pedido",
+  
   "^/api/pedidos/estado/cancelado$" => "api@cambiar_estado_pedido_cancelado",
   "^/api/pedidos/estado/pagado$" => "api@cambiar_estado_pedido_pagado",
   "^/api/pedidos/estado/enviado$" => "api@cambiar_estado_pedido_enviado",
   "^/api/pedidos/estado/entregado$" => "api@cambiar_estado_pedido_entregado",
   
-  "^/api/eliminar-pedido$" => "api@eliminar_pedido",
   
 
   "^/api/paypal/ipn$" => "api@notificacion_pago_inmediato",

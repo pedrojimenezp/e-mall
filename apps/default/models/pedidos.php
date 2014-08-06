@@ -106,5 +106,35 @@ class Pedidos extends Models{
       return array("error"=>null, "info"=>"pedido_actualizado", "pedido"=>$fila);
     } 
   }
+
+  public function cambiar_estado_a_enviado ($id){
+    $fecha = date("Y")."-".date("m")."-".date("d");
+    
+    $consulta = "UPDATE pedidos SET estado='enviado', fecha_envio='".$fecha."' WHERE id = ".$id;
+    // echo $consulta;
+    if(!$this->conexion->query($consulta)){
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      $consulta = "SELECT * FROM pedidos WHERE id = ".$id;
+      $resultado = $this->conexion->query($consulta);
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "info"=>"pedido_actualizado", "pedido"=>$fila);
+    }
+  }
+
+  public function cambiar_estado_a_entregado ($id){
+    $fecha = date("Y")."-".date("m")."-".date("d");
+    
+    $consulta = "UPDATE pedidos SET estado='entregado', fecha_entrega='".$fecha."' WHERE id = ".$id;
+    // echo $consulta;
+    if(!$this->conexion->query($consulta)){
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      $consulta = "SELECT * FROM pedidos WHERE id = ".$id;
+      $resultado = $this->conexion->query($consulta);
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "info"=>"pedido_actualizado", "pedido"=>$fila);
+    }
+  }
 }
 ?>

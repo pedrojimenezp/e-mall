@@ -102,10 +102,10 @@ class Productos_vendidos extends Models{
     $this->disconnect();
   }
 
-  public function guardar ($id_tienda, $id_cliente, $nombre, $descripcion, $marca, $categoria, $precio, $cantidad, $imagen) {
+  public function guardar ($id_producto_ev, $id_tienda, $id_cliente, $nombre, $descripcion, $marca, $categoria, $precio, $cantidad, $imagen) {
     $fecha = date("Y")."-".date("m")."-".date("d");
     // $password = md5($password);
-    $consulta = "INSERT INTO productos_vendidos (id_tienda, id_cliente, nombre, descripcion, marca, categoria, precio, cantidad, imagen, fecha_registro) VALUES (".$id_tienda.", ".$id_cliente.", '".$nombre."','".$descripcion."', '".$marca."', '".$categoria."', ".$precio.", ".$cantidad.", '".$imagen."', '".$fecha."');";
+    $consulta = "INSERT INTO productos_vendidos (id_producto_ev, id_tienda, id_cliente, nombre, descripcion, marca, categoria, precio, cantidad, imagen, fecha_registro) VALUES (".$id_producto_ev.", ".$id_tienda.", ".$id_cliente.", '".$nombre."','".$descripcion."', '".$marca."', '".$categoria."', ".$precio.", ".$cantidad.", '".$imagen."', '".$fecha."');";
     echo $consulta;
     if(!$this->conexion->query($consulta)){
       echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
@@ -119,6 +119,16 @@ class Productos_vendidos extends Models{
 
   public function buscar_por_id ($id){
     $consulta = "SELECT t1.id AS id_producto, t2.id AS id_tienda, t1.id_cliente, t1.nombre AS nombre_producto, t2.nombre AS nombre_tienda, t1.imagen, t1.marca, t1.descripcion, t1.precio, t1.cantidad, t1.categoria FROM productos_vendidos AS t1 JOIN tiendas AS t2 WHERE t1.id = ".$id." AND t1.id_tienda=t2.id";
+    if($resultado = $this->conexion->query($consulta)){
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "producto"=>$fila);
+    }else{
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
+    }
+  }
+
+  public function buscar_por_id_producto_ev ($id_producto_ev){
+    $consulta = "SELECT t1.id AS id_producto, t2.id AS id_tienda, t1.id_cliente, t1.nombre AS nombre_producto, t2.nombre AS nombre_tienda, t1.imagen, t1.marca, t1.descripcion, t1.precio, t1.cantidad, t1.categoria FROM productos_vendidos AS t1 JOIN tiendas AS t2 WHERE t1.id_producto_ev = ".$id_producto_ev." AND t1.id_tienda=t2.id";
     if($resultado = $this->conexion->query($consulta)){
       $fila = $resultado->fetch_assoc();
       return array("error"=>null, "producto"=>$fila);

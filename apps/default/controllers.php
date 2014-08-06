@@ -60,6 +60,17 @@ function mostrar_plantilla_registrar_cliente ($req, $res){
   }
 }
 
+function notificaciones_tienda($id_receptor){
+  $notificaciones = new Notificaciones();
+  $n = array();
+  $r = $notificaciones->buscar_por_id_receptor($id_receptor, "no leida");
+  foreach ($r["notificaciones"] as $notificacion) {
+    array_push($n, $notificacion["tipo"]);
+  }
+
+  return $n;
+}
+
 function mostrar_plantilla_productos_en_venta($req, $res){
   if($req->session("sesion_iniciada")){
     if ($req->session("tipo_usuario") == "admin") {
@@ -72,11 +83,14 @@ function mostrar_plantilla_productos_en_venta($req, $res){
       $categorias_productos = new Categorias_productos();
       $r3 = $categorias_productos->buscar_por_categoria_tienda($r2["tienda"]["categoria"]);
       
+
+      $nt = notificaciones_tienda($req->session("id_tienda"));
       if ($r["admin"]) {
         $params = array(
           "admin"=>$r["admin"], 
           "tienda"=>$r2["tienda"], 
-          "categorias_productos"=>$r3["categorias_productos"]
+          "categorias_productos"=>$r3["categorias_productos"],
+          "notificaciones"=> $nt
         );
         $res->render_template("dashboard/productos_en_venta.html", $params);
       }else{
@@ -130,6 +144,7 @@ function mostrar_plantilla_pedidos_nuevos($req, $res){
         $pedido["estado"] = $p["estado"];
         $pedido["fecha_registro"] = $p["fecha_registro"];
         $pedido["id_pedido"] = $p["id"];
+        $pedido["id_cliente"] = $p["id_cliente"];
         array_push($lista_pedidos, $pedido);
       }
       if ($r["admin"]) {
@@ -190,6 +205,7 @@ function mostrar_plantilla_pedidos_enviados($req, $res){
         $pedido["estado"] = $p["estado"];
         $pedido["fecha_registro"] = $p["fecha_registro"];
         $pedido["id_pedido"] = $p["id"];
+        $pedido["id_cliente"] = $p["id_cliente"];
         array_push($lista_pedidos, $pedido);
       }
       if ($r["admin"]) {
@@ -222,7 +238,7 @@ function mostrar_plantilla_pedidos_entregados($req, $res){
       
       $pedidos = new Pedidos();
       $r3 = $pedidos->buscar_por_id_tienda($req->session("id_tienda"), "entregado");
-      
+
       $lista_pedidos = array();
       foreach ($r3["pedidos"] as $p) {
         $pedido = array();
@@ -250,14 +266,16 @@ function mostrar_plantilla_pedidos_entregados($req, $res){
         $pedido["estado"] = $p["estado"];
         $pedido["fecha_registro"] = $p["fecha_registro"];
         $pedido["id_pedido"] = $p["id"];
+        $pedido["id_cliente"] = $p["id_cliente"];
         array_push($lista_pedidos, $pedido);
       }
       if ($r["admin"]) {
         $params = array(
           "admin"=>$r["admin"], 
           "tienda"=>$r2["tienda"], 
-          "pedidos_entregados"=>$lista_pedidos
+          "pedidos_entregados"=>$lista_pedidos,
         );
+        // $res->json($params);
         $res->render_template("dashboard/pedidos_entregados.html", $params);
       }else{
         print_r($r);
@@ -356,10 +374,17 @@ function mostrar_plantilla_catalogo_tienda($req, $res){
 
 function mostrar_plantilla_carrito_de_compras($req, $res) {
   if ($req->session("sesion_iniciada") && $req->session("tipo_usuario") == "cliente") {
-    $carro_de_compras = new Carro_de_compras();
-    $r = $carro_de_compras->buscar_por_id_cliente($req->session("id_cliente"));
-    $p = array("productos"=>$r["productos"]);
-    $res->render_template("carro_de_compras.html", $p);
+    $datos_clientes = new Datos_clientes();
+    $r = $datos_clientes->buscar_por_id_cliente($req->session("id_cliente"));
+    if ($r["datos_cliente"]["nombre"] && $r["datos_cliente"]["edad"] && $r["datos_cliente"]["direccion"] && $r["datos_cliente"]["barrio"] && $r["datos_cliente"]["telefonos"]) {
+      $carro_de_compras = new Carro_de_compras();
+      $r1 = $carro_de_compras->buscar_por_id_cliente($req->session("id_cliente"));
+      $p = array("productos"=>$r1["productos"]);
+      $res->render_template("carro_de_compras.html", $p);
+      // $res->send("si tiene");
+    }else{
+      $res->redirect_to("/cliente/mis-configuraciones");
+    }
   }else{
     $res->redirect_to("/");
   }
@@ -367,42 +392,58 @@ function mostrar_plantilla_carrito_de_compras($req, $res) {
 
 function mostrar_plantilla_pedidos($req, $res){
   if ($req->session("sesion_iniciada") && $req->session("tipo_usuario") == "cliente") {
-    $pedidos = new Pedidos();
-    $r = $pedidos->buscar_por_id_cliente($req->session("id_cliente"));
-    $lista_pedidos = array();
-    foreach ($r["pedidos"] as $p) {
-      $pedido = array();
-      $productos_cantidad = explode(",", $p["ids_productos_cantidad"]);
-      $productos = array();
-      foreach ($productos_cantidad as $producto_cantidad) {
-        if ($producto_cantidad) {
-          $pc = explode(":", $producto_cantidad);
-          $producto = $pc[0];
-          $cantidad = $pc[1];
-          if ($p["estado"] == "pagado" || $p["estado"] == "enviado" || $p["estado"] == "entregado") {
-            $productos_vendidos = new Productos_vendidos();
-            $r1 = $productos_vendidos->buscar_por_id($producto);
-          }else{
-            $productos_en_venta = new Productos_en_venta();
-            $r1 = $productos_en_venta->buscar_por_id($producto);
-          }
-          if ($r1["producto"]) {
-            $p2 = array("producto"=>$r1["producto"], "cantidad_comprada"=>$cantidad);
-            array_push($productos, $p2);
+    $datos_clientes = new Datos_clientes();
+    $r = $datos_clientes->buscar_por_id_cliente($req->session("id_cliente"));
+    if ($r["datos_cliente"]["nombre"] && $r["datos_cliente"]["edad"] && $r["datos_cliente"]["direccion"] && $r["datos_cliente"]["barrio"] && $r["datos_cliente"]["telefonos"]) {
+
+      $pedidos = new Pedidos();
+      $r = $pedidos->buscar_por_id_cliente($req->session("id_cliente"));
+      $lista_pedidos = array();
+      foreach ($r["pedidos"] as $p) {
+        $pedido = array();
+        $productos_cantidad = explode(",", $p["ids_productos_cantidad"]);
+        $productos = array();
+        foreach ($productos_cantidad as $producto_cantidad) {
+          if ($producto_cantidad) {
+            $pc = explode(":", $producto_cantidad);
+            $producto = $pc[0];
+            $cantidad = $pc[1];
+            if ($p["estado"] == "pagado" || $p["estado"] == "enviado" || $p["estado"] == "entregado") {
+              $productos_vendidos = new Productos_vendidos();
+              $r1 = $productos_vendidos->buscar_por_id($producto);
+            }else{
+              $productos_en_venta = new Productos_en_venta();
+              $r1 = $productos_en_venta->buscar_por_id($producto);
+            }
+            if ($r1["producto"]) {
+              $p2 = array("producto"=>$r1["producto"], "cantidad_comprada"=>$cantidad);
+              array_push($productos, $p2);
+            }
           }
         }
+        $pedido["productos"] = $productos;
+        $pedido["estado"] = $p["estado"];
+        $pedido["fecha_registro"] = $p["fecha_registro"];
+        $pedido["id_pedido"] = $p["id"];
+        array_push($lista_pedidos, $pedido);
       }
-      $pedido["productos"] = $productos;
-      $pedido["estado"] = $p["estado"];
-      $pedido["fecha_registro"] = $p["fecha_registro"];
-      $pedido["id_pedido"] = $p["id"];
-      array_push($lista_pedidos, $pedido);
+      $res->render_template("pedidos.html", array('pedidos' => $lista_pedidos));
+    }else{
+      $res->redirect_to("/cliente/mis-configuraciones");
     }
-    $res->render_template("pedidos.html", array('pedidos' => $lista_pedidos));
   }else{
     $res->redirect_to("/");
   }
 }
+
+function mostrar_plantilla_configuraciones_cliente($req, $res){
+  if ($req->session("sesion_iniciada") && $req->session("tipo_usuario") == "cliente") {
+    $res->render_template("mis_configuraciones.html");
+  }else{
+    $res->redirect_to("/");
+  }
+}
+
 function mostrar_plantilla_pedido_cancelado($req, $res){
   if ($req->query("id")) {
     $pedidos = new Pedidos();

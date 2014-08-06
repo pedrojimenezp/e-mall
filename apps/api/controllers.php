@@ -470,10 +470,12 @@ function notificacion_pago_inmediato($req, $res){
             if ($r3["producto"]) {
               $r4 = $productos_en_venta->actualizar_cantidad($id_producto, $r3["producto"]["stock"]-$cantidad);
               $productos_vendidos = new Productos_vendidos();
-              $r5 = $productos_vendidos->guardar($r3["producto"]["id_tienda"], $r2["pedido"]["id_cliente"], $r3["producto"]["nombre_producto"], $r3["producto"]["descripcion"], $r3["producto"]["marca"], $r3["producto"]["categoria"], $r3["producto"]["precio"], $cantidad, $r3["producto"]["imagen"]);
+              $r5 = $productos_vendidos->guardar($id_producto, $r3["producto"]["id_tienda"], $r2["pedido"]["id_cliente"], $r3["producto"]["nombre_producto"], $r3["producto"]["descripcion"], $r3["producto"]["marca"], $r3["producto"]["categoria"], $r3["producto"]["precio"], $cantidad, $r3["producto"]["imagen"]);
               $nuevos_ids_pc = $nuevos_ids_pc.$r5["producto"]["id"].":".$cantidad.",";
 
               $r6 = $carro_de_compras->eliminar_por_id_cliente_id_producto($r2["pedido"]["id_cliente"], $id_producto);
+              $notificaciones = new Notificaciones();
+              $r7 = $notificaciones->guardar($r3["producto"]["id_tienda"], "nuevo_pedido", $r["pedido"]["id"], "no leida");
               $res->send("Todo bien");
             }
           }
@@ -494,6 +496,26 @@ function notificacion_pago_inmediato($req, $res){
   }
 }
 
+function enviar_pedido($req, $res){
+  if ($req->query("id_pedido")) {
+    $pedidos = new Pedidos();
+    $r = $pedidos->cambiar_estado_a_enviado($req->query("id_pedido"));
+    $res->json($r);
+  }else{
+    $res->send("Debe pasar el id del pediddo a enviar");
+  }
+}
+
+function entregar_pedido($req, $res){
+  if ($req->query("id_pedido")) {
+    $pedidos = new Pedidos();
+    $r = $pedidos->cambiar_estado_a_entregado($req->query("id_pedido"));
+    $res->json($r);
+  }else{
+    $res->send("Debe pasar el id del pediddo a entregar");
+  }
+}
+
 function eliminar_pedido ($req, $res){
   if ($req->query("id_pedido")) {
     $pedidos = new Pedidos();
@@ -501,6 +523,40 @@ function eliminar_pedido ($req, $res){
     $res->json($r);
   }else{
     $res->send("Debe pasar el id del pediddo a eliminar");
+  }
+}
+
+function obtener_datos_cliente($req, $res){
+  if ($req->query("id_cliente")) {
+    $datos_clientes = new Datos_clientes();
+    $r = $datos_clientes->buscar_por_id_cliente($req->query("id_cliente"));
+    $res->json($r);
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (id_cliente) por el metodo GET");
+    $res->json($error);
+  }
+}
+
+function actualizar_datos_cliente($req, $res){
+  if($req->body("nombre") && $req->body("edad") && $req->body("password") && $req->body("id_cliente") && $req->body("direccion") && $req->body("barrio") && $req->body("telefonos")){
+    $clientes = new Clientes();
+    $r = $clientes->buscar_por_id($req->body("id_cliente"));
+    if (isset($r["cliente"])) {
+      if ($r["cliente"]["password"] == md5($req->body("password"))) {
+        $datos_clientes = new Datos_clientes();
+        $r1 = $datos_clientes->actualizar($req->body("id_cliente"), $req->body("nombre"), $req->body("edad"), $req->body("direccion"), $req->body("barrio"), $req->body("telefonos"));
+        $res->json($r1);
+      }else{
+        $error = array("error"=>"password_incorrecta", "info"=>"El password que ingreso no es el correcto, la operacion no se puede realizar");
+      $res->json($error);
+      }
+    }else{
+      $error = array("error"=>"cliete_no_encontrado", "info"=>"El id_cliente que acaba de pasar no esta asociado a ningun cliente en nuestra tienda");
+      $res->json($error);
+    }
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (id_cliente, nombre, edad, direccion, barrio, telefonos, password) por el metodo POST");
+    $res->json($error);
   }
 }
 
