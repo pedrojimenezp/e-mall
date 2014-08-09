@@ -4,8 +4,7 @@ $urls_array = array(
   "^/iniciar-sesion$" => "default@mostrar_plantilla_iniciar_sesion",
   "^/registrar/tienda$" => "default@mostrar_plantilla_registrar_tienda",
   "^/registrar/cliente$" => "default@mostrar_plantilla_registrar_cliente",
-  "^/tiendas$" => "default@mostrar_plantilla_tiendas",
-  "^/tiendas/catalogo$" => "default@mostrar_plantilla_catalogo_tienda",
+  
 
   "^/dashboard/mis-productos/en-venta$" => "default@mostrar_plantilla_productos_en_venta",
   "^/dashboard/mis-configuraciones$" => "default@mostrar_plantilla_configuraciones",
@@ -15,10 +14,24 @@ $urls_array = array(
   "^/dashboard/mis-pedidos/entregados$" => "default@mostrar_plantilla_pedidos_entregados",
   
   "^/busqueda/productos$" => "default@mostrar_plantilla_resultado_productos",
-  "^/cliente/mi-carrito-de-compras$" => "default@mostrar_plantilla_carrito_de_compras",
-  "^/cliente/mis-pedidos$" => "default@mostrar_plantilla_pedidos",
-  "^/cliente/mis-configuraciones$" => "default@mostrar_plantilla_configuraciones_cliente",
   
+  // CLIENTE
+  "^/tiendas$" => "clientes@mostrar_plantilla_tiendas",
+  "^/tiendas/catalogo$" => "clientes@mostrar_plantilla_catalogo_tienda",
+  
+  "^/cliente/mi-carrito-de-compras$" => "clientes@mostrar_plantilla_carrito_de_compras",
+  
+  "^/cliente/mis-pedidos/sin-confirmar$" => "clientes@mostrar_plantilla_pedidos_sin_confirmar",
+  "^/cliente/mis-pedidos/pagados$" => "clientes@mostrar_plantilla_pedidos_pagados",
+  "^/cliente/mis-pedidos/enviados$" => "clientes@mostrar_plantilla_pedidos_enviados",
+  "^/cliente/mis-pedidos/entregados$" => "clientes@mostrar_plantilla_pedidos_entregados",
+  
+  "^/cliente/mis-configuraciones$" => "clientes@mostrar_plantilla_configuraciones",
+  
+  // FIN CLIENTES
+
+
+
   "^/redireccion/paypal/cancelado$" => "default@mostrar_plantilla_pedido_cancelado",
   "^/redireccion/paypal/pagado$" => "default@mostrar_plantilla_pedido_pagado",
   
@@ -41,6 +54,7 @@ $urls_array = array(
 
   "^/api/admin/actualizar-info-personal$" => "api@actualizar_info_personal_admin",
   "^/api/admin/actualizar-password$" => "api@actualizar_password_admin",
+  "^/api/admin/actualizar-datos-tienda$" => "api@actualizar_datos_tienda",
   "^/api/admin/agregar-sub-admins$" => "api@agregar_sub_admins",
 
   "^/api/cliente/actualizar-datos-cliente$" => "api@actualizar_datos_cliente",

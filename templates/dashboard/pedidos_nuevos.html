@@ -12,55 +12,43 @@
     <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
-    <!-- Page-Level Plugin CSS - Dashboard -->
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/plugins/timeline/timeline.css" rel="stylesheet">
+    <style type="text/css">
+        body { padding-top: 70px; }
 
-    <!-- SB Admin CSS - Include with every page -->
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/sb-admin.css" rel="stylesheet">
-
+        *{
+            border-radius: 0 !important;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="wrapper">
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/"><?php print_r($params["tienda"]["nombre"]) ?></a>
-                <a class="navbar-brand" href="/"><i class="fa fa-cube"></i> Pedidos nuevos</a>
+                <a class="navbar-brand" href="#"><i class="fa fa-cube"></i> Pedidos nuevos</a>
             </div>
             <!-- /.navbar-header -->
 
-            <?php require_once "partes/notificaciones.html"; ?>
-            <!-- /.navbar-top-links -->
-
-            <div class="navbar-default navbar-static-side" role="navigation">
-                <div class="sidebar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <?php require_once "partes/link-pedidos.html"; ?>
-                        <?php require_once "partes/link-productos.html"; ?>
-                        <?php require_once "partes/link-configuraciones.html"; ?>
-                    </ul>
-                    <!-- /#side-menu -->
-                </div>
-                <!-- /.sidebar-collapse -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <?php require_once "partes/links.html"; ?>
+                <?php require_once "partes/notificaciones.html"; ?>
             </div>
-            <!-- /.navbar-static-side -->
-        </nav>
-
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <?php print_r($params["pedidos_nuevos"]); ?>
-                </div>
-                <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="col-lg-12 col-sm-12">
-            <?php 
+            <!-- /.navbar-top-links -->
+        </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 col-md-12">
+          <?php //print_r($params["pedidos_nuevos"]); ?>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <?php 
             if (isset($params["pedidos_nuevos"]) && $params["pedidos_nuevos"]) { ?>
               <?php
               foreach ($params["pedidos_nuevos"] as $pedido) {?>
@@ -82,7 +70,6 @@
                         <tbody>
                           <?php
                           $suma = 0;
-                          // print_r($pedido);
                           foreach ($pedido["productos"] as $producto) {
                             $suma = $suma + ($producto["cantidad_comprada"]*$producto["producto"]["precio"]); ?>
                             <tr>
@@ -99,29 +86,24 @@
                             <td class="total"><b>$ <?php echo $suma ?></b></td>
                           </tr>
                         </tbody>
-                    </table>
+                      </table>
                     <h4>Estado del pedido: 
-                        <span class="label label-success"><b>Pagado</b></span>
-                        <span><button class="btn btn-primary boton-enviar" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" >Enviar al comprador</button></span>
-                        <span><button class="btn btn-info boton-info-cliente" data-id-cliente="<?php echo $pedido["id_cliente"]; ?>" >Ver informacion del cliente</button></span>
+                      <span class="label label-success"><b>Pagado</b></span>
+                      <span><button class="btn btn-primary boton-enviar" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" >Enviar al comprador</button></span>
+                      <span><button class="btn btn-info boton-info-cliente" data-id-cliente="<?php echo $pedido["id_cliente"]; ?>" >Ver informacion del cliente</button></span>
                     </h4>
+                    </div>
                   </div>
                 </div>
-            <?php 
+              <?php 
               } 
             } else { ?>
-              <h2>Usted no tiene pedidos nuevos</h2>
-            <?php 
-            } ?>
+            <h2>Usted no tiene pedidos nuevos</h2>
+          <?php } ?>
+        <!-- /.col-lg-12 -->
         </div>
-                
-                <!-- /.col-lg-12 -->
-            </div>
-        </div>
-        <!-- /#page-wrapper -->
+      </div>
     </div>
-    <!-- /#wrapper -->
-
     <div id="modal-informacion" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-md">
           <div class="modal-content">
@@ -156,13 +138,7 @@
     <!-- Core Scripts - Include with every page -->
     <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
     <script src="<?php echo STATIC_DIR; ?>vendors/bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/bootstrap-filestyle.min.js"></script>
-    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 
-
-    <!-- SB Admin Scripts - Include with every page 
-    -->
-    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/sb-admin.js"></script>
 
     <script>
     $(document).on("ready", function(){

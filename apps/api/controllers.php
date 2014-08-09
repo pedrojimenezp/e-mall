@@ -287,6 +287,52 @@ function actualizar_password_admin($req, $res){
   }
 }
 
+function actualizar_datos_tienda($req, $res){
+  if($req->body("nombre") && $req->body("direccion") && $req->body("barrio") && $req->body("telefonos") && $req->body("password") && $req->body("id_admin") && $req->body("id_tienda")){
+    $admins = new Admins();
+    $r = $admins->buscar_por_id($req->body("id_admin"));
+    if($r["admin"]){
+      if ($r["admin"]["id_tienda"] == $req->body("id_tienda")) {
+        if ($r["admin"]["password"] == md5($req->body("password"))) {
+          
+          $tiendas = new Tiendas();
+          $r1 = $tiendas->buscar_por_nombre($req->body("nombre"));
+          if (!$r1["tienda"] || ($r1["tienda"]["id"] == $req->body("id_tienda"))) {
+          
+            $r2 = $tiendas->actualizar_nombre($req->body("id_tienda"), $req->body("nombre"));
+            $res->json($r2);
+            
+            $datos_tiendas = new Datos_tiendas();
+            $r3 = $datos_tiendas->buscar_por_id_tienda($req->body("id_tienda"));
+            if (!$r3["datos_tienda"]) {
+              $r4 = $datos_tiendas->guardar($req->body("id_tienda"), $req->body("direccion"), $req->body("barrio"), $req->body("telefonos"));
+              $res->json($r1);
+            }else{
+              $r4 = $datos_tiendas->actualizar($req->body("id_tienda"), $req->body("direccion"), $req->body("barrio"), $req->body("telefonos"));
+              $res->json($r4);
+            }
+          }else{
+            $error = array("error"=>"nombre_ya_registrado", "info"=>"El nombre que ha pasado ya esta reistrado, inrese uno diferente");
+          $res->json($error);  
+          }
+        }else{
+          $error = array("error"=>"password_incorrecta", "info"=>"La password que ha ingresado es incorrecta");
+          $res->json($error);  
+        }
+      }else{
+        $error = array("error"=>"sin_permisos", "info"=>"Usted no es administrador de la tienda a la que le quiere actualizar sus datos");
+          $res->json($error); 
+      }
+    }else{
+      $error = array("error"=>"admin_no_encontrado", "info"=>"El id_admin que paso no esta asociado a ningun admin en nuestro sitio");
+      $res->json($error);  
+    }
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (nombre, direccion, barrio, telefonos, password, id_admin, id_tienda) por el metodo POST");
+    $res->json($error);
+  }
+}
+
 function agregar_sub_admins ($req, $res){
   if($req->body("password_admin") && $req->body("password_sub_admin") && $req->body("nombre_sub_admin") && $req->body("email_sub_admin") && $req->body("id_tienda") && $req->body("id_admin")){
     $admins = new Admins();
@@ -359,7 +405,10 @@ function crear_pedido ($req, $res){
           $cantidad = $pc[1];
           $r2 = $carro_de_compras->eliminar_por_id_cliente_id_producto($req->body("id_cliente"), $producto);
         }
-      } 
+      }
+      $notificaciones = new Notificaciones();
+      // $res->json($r1["pedido"]);
+      $r9 = $notificaciones->guardar($req->body("id_cliente"), "pedido_sin_confirmar", $r1["pedido"]["id"], "no leida"); 
       $res->json($r1);
     }else{
       $res->json($error);
@@ -500,6 +549,8 @@ function enviar_pedido($req, $res){
   if ($req->query("id_pedido")) {
     $pedidos = new Pedidos();
     $r = $pedidos->cambiar_estado_a_enviado($req->query("id_pedido"));
+    $notificaciones = new Notificaciones();
+    $r2 = $notificaciones->guardar($r["pedido"]["id_cliente"], "pedido_enviado", $r["pedido"]["id"], "no leida");
     $res->json($r);
   }else{
     $res->send("Debe pasar el id del pediddo a enviar");
@@ -510,6 +561,8 @@ function entregar_pedido($req, $res){
   if ($req->query("id_pedido")) {
     $pedidos = new Pedidos();
     $r = $pedidos->cambiar_estado_a_entregado($req->query("id_pedido"));
+    $notificaciones = new Notificaciones();
+    $r2 = $notificaciones->guardar($r["pedido"]["id_cliente"], "pedido_entregado", $r["pedido"]["id"], "no leida");
     $res->json($r);
   }else{
     $res->send("Debe pasar el id del pediddo a entregar");

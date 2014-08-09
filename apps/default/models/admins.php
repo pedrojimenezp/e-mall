@@ -41,6 +41,24 @@ class Admins extends Models{
     }
   }
 
+  public function buscar_por_id_tienda ($id_tienda, $es_propietario=null){
+    if ($es_propietario) {
+      $consulta = "SELECT * FROM admins WHERE id_tienda = ".$id_tienda." AND es_propietario='".$es_propietario."'";
+    }else{
+      $consulta = "SELECT * FROM admins WHERE id_tienda = ".$id_tienda;
+    }
+    if($resultado = $this->conexion->query($consulta)){
+      $filas = array();
+      while ($fila = $resultado->fetch_assoc()) {
+        array_push($filas, $fila);
+      }
+      return array("error"=>null, "admins"=>$filas);
+    }else{
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
+    }
+  }
+
+
   public function buscar_por_email ($email){
     $consulta = "SELECT * FROM admins WHERE email = '".$email."'";
     if($resultado = $this->conexion->query($consulta)){

@@ -1,0 +1,111 @@
+<?php if (isset($params["sesion_comprador_iniciada"]) && $params["sesion_comprador_iniciada"]) { ?>
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-messages">
+                <li>
+                    <a href="#">
+                        <div>
+                            <strong>John Smith</strong>
+                            <span class="pull-right text-muted">
+                                <em>Yesterday</em>
+                            </span>
+                        </div>
+                        <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                    </a>
+                </li>
+                <li class="divider"></li>
+            </ul>
+            <!-- /.dropdown-messages -->
+        </li>
+        <!-- /.dropdown -->
+        <li class="dropdown">
+            <?php if (isset($params["notificaciones"])) { ?>
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-bell fa-fw"></i> 
+                    <?php if (count($params["notificaciones"])>0) { ?>
+                        <span class="badge"><?php echo count($params["notificaciones"]); ?></span> 
+                    <?php } ?>
+                    <i class="fa fa-caret-down"></i>
+                </a>
+            <?php } ?>
+            <ul class="dropdown-menu dropdown-alerts">
+                <?php if (count($params["notificaciones"])>0) { ?>
+                    <?php if (isset($params["notificaciones"]["pedido_enviado"])) { ?>
+                        <li>
+                            <a href="/cliente/mis-pedidos/enviados">
+                                <div>
+                                    <i class="fa fa-comment fa-truck"></i> Se le han enviado <?php echo count($params["notificaciones"]["pedido_enviado"]); ?> pedidos a su residencia
+                                </div>
+                            </a>
+                        </li>
+                        <?php if (count($params["notificaciones"])>1) { ?>
+                            <li class="divider"></li>
+                        <?php } ?>
+                    <?php } ?>
+                    <?php if (isset($params["notificaciones"]["pedido_entregado"])) { ?>
+                        <li>
+                            <a href="/cliente/mis-pedidos/entregados">
+                                <div>
+                                    <i class="fa fa-comment fa-thumbs-up"></i> Se le han entregado <?php echo count($params["notificaciones"]["pedido_entregado"]); ?> pedidos en su residencia
+                                </div>
+                            </a>
+                        </li>
+                        <?php if (count($params["notificaciones"])>2) { ?>
+                            <li class="divider"></li>
+                        <?php } ?>
+                    <?php } ?>
+                    <?php if (isset($params["notificaciones"]["pedido_sin_confirmar"])) { ?>
+                        <li>
+                            <a href="/cliente/mis-pedidos/sin-confirmar">
+                                <div>
+                                    <i class="fa fa-exclamation-circle"></i> Tiene <?php echo count($params["notificaciones"]["pedido_sin_confirmar"]); ?> pedidos sin confirmar
+                                </div>
+                            </a>
+                        </li>
+                        <?php if (count($params["notificaciones"])>3) { ?>
+                            <li class="divider"></li>
+                        <?php } ?>
+                    <?php } ?>
+                <?php }else{ ?>
+                    <li>
+                        <a href="#">
+                            No tiene notificaciones
+                        </a>
+                    </li>
+                <?php } ?>
+            </ul>
+            <!-- /.dropdown-alerts -->
+        </li>
+        <!-- /.dropdown -->
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="/cliente/mis-configuraciones"><i class="fa fa-gear fa-fw"></i> Configuraciones</a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="/api/cerrar-sesion"><i class="fa fa-sign-out fa-fw"></i> Cerrar sesion</a>
+                </li>
+            </ul>
+            <!-- /.dropdown-user -->
+        </li>
+        <!-- /.dropdown -->
+    </ul>
+<?php }else{ ?>
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+          <?php if (isset($params['nombre_tienda']) && isset($params['categoria_productos'])) { ?>
+            <a href="/iniciar-sesion?redireccionar-a=<?php print_r($params['nombre_tienda'])?>&categoria-productos=<?php print_r($params['categoria_productos']);?>">Iniciar sesion</a>
+          <?php }elseif (isset($params['nombre_tienda'])) { ?>
+            <a href="/iniciar-sesion?redireccionar-a=<?php print_r($params['nombre_tienda']);?>">Iniciar sesion</a>
+          <?php }else{ ?>
+            <a href="/iniciar-sesion">Iniciar sesion</a>
+          <?php } ?>
+        </li>
+    </ul>
+<?php } ?>
+

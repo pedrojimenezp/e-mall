@@ -32,11 +32,7 @@
         <a class="navbar-brand" href="/">e-Mall</a>
       </div>
       <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav">
-          <li><a href="/tiendas">Tiendas</a></li>
-          <li><a href="/cliente/mi-carrito-de-compras">Mi carro compras</a></li>
-          <li class="active"><a href="/cliente/mis-pedidos">Mis pedidos</a></li>
-        </ul>
+        <?php require_once "partes/links.html"; ?>
         
         <?php require_once "partes/notificaciones.html"; ?>
       </div>
@@ -58,6 +54,12 @@
                 
                 <h3><?php echo "Pedido hecho a la tienda ".$pedido["productos"][0]["producto"]["nombre_tienda"] ?></h3>
                 <h4>Fecha en que se realizo el pedido: <b><?php echo $pedido["fecha_registro"]; ?></b></h4>
+                <?php if (isset($pedido["fecha_envio"])) { ?>
+                  <h4>Fecha en que se envio el pedido: <b><?php echo $pedido["fecha_envio"]; ?></b></h4>
+                <?php } ?>
+                <?php if (isset($pedido["fecha_entrega"])) { ?>
+                  <h4>Fecha en que se entrego el pedido: <b><?php echo $pedido["fecha_entrega"]; ?></b></h4>
+                <?php } ?>
                 <div class="table-responsive">
                   <table class="table table-bordered">
                     <thead>

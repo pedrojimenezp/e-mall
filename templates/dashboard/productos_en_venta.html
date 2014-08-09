@@ -4,180 +4,156 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>e-Mal - Productos en venta</title>
 
     <!-- Core CSS - Include with every page -->
     <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <style type="text/css">
+        body { padding-top: 70px; }
 
-    <!-- Page-Level Plugin CSS - Dashboard -->
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/plugins/timeline/timeline.css" rel="stylesheet">
-
-    <!-- SB Admin CSS - Include with every page -->
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/sb-admin.css" rel="stylesheet">
-
+        *{
+            border-radius: 0 !important;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="wrapper">
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/"><?php print_r($params["tienda"]["nombre"]) ?></a>
-                <a class="navbar-brand" href="/"><i class="fa fa-barcode"></i> Productos en venta</a>
+                <a class="navbar-brand" href="#"><i class="fa fa-barcode"></i> Productos en venta</a>
             </div>
             <!-- /.navbar-header -->
 
-            <?php require_once "partes/notificaciones.html"; ?>
-            <!-- /.navbar-top-links -->
-
-            <div class="navbar-default navbar-static-side" role="navigation">
-                <div class="sidebar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <!-- <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                            </div>
-                            
-                        </li> -->
-                        
-                        <?php require_once "partes/link-pedidos.html"; ?>
-                        <?php require_once "partes/link-productos.html"; ?>
-                        <?php require_once "partes/link-configuraciones.html"; ?>
-                    </ul>
-                    <!-- /#side-menu -->
-                </div>
-                <!-- /.sidebar-collapse -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <?php require_once "partes/links.html"; ?>
+                <?php require_once "partes/notificaciones.html"; ?>
             </div>
-            <!-- /.navbar-static-side -->
-        </nav>
+            <!-- /.navbar-top-links -->
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs nav-justified" role="tablist" style="margin:10px 0;">
+                  <li id="tab1"><a href="#home" role="tab" data-toggle="tab">Agregar productos</a></li>
+                  <li id="tab2"><a href="#burbujas" role="tab" data-toggle="tab">Ver productos en paneles</a></li>
+                  <li class="active" id="tab3"><a href="#tabla" role="tab" data-toggle="tab">Ver productos en tabla</a></li>
+                </ul>
+                <!-- Tab panes -->
 
-        <div id="page-wrapper">
-            <div class="row">
-
-                    <?php print_r($params["notificaciones"]); ?>
-                <div class="col-lg-12 col-md-12">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs nav-justified" role="tablist" style="margin:10px 0;">
-                      <li class="active" id="tab1"><a href="#home" role="tab" data-toggle="tab">Agregar productos</a></li>
-                      <li id="tab2"><a href="#burbujas" role="tab" data-toggle="tab">Ver productos en paneles</a></li>
-                      <li id="tab3"><a href="#tabla" role="tab" data-toggle="tab">Ver productos en tabla</a></li>
-                    </ul>
-                    <!-- Tab panes -->
-
-                    <div class="tab-content">
-                        <div class="tab-pane fade in active" id="home">
-                            <div class="row">
-                                <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2">
-                                    <div class="panel panel-primary ">
-                                        <div class="panel-heading">
-                                            Agregar un producto
-                                        </div>
-                                        <div class="panel-body">
-                                            <form role="form" id="form-agregar-producto">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" id="nombre-producto" placeholder="Nombre del producto" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <textarea class="form-control" rows="3" id="descripcion-producto" placeholder="Descripcion del producto" required></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" id="marca-producto" placeholder="Marca del producto" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <select class="form-control" id="categoria-producto">
-                                                        <option value=0>Seleccione una categoria</option>
-                                                      <?php 
-                                                        foreach ($params["categorias_productos"] as $value) {
-                                                            print_r("<option value='".$value['categoria_producto']."'>".$value['categoria_producto']."</option>");     
-                                                        }
-                                                      ?>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="number" class="form-control" id="precio-producto" placeholder="Precio del producto" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="number" class="form-control" id="cantidad-producto" placeholder="Cantidad en bodega" required>
-                                                </div>
-                                               
-                                                <div class="form-group">
-                                                    <input type="file" class="filestyle" id="imagen-producto" data-buttonText="Cargar imagen" required>
-                                                </div>
-                                                
-                                                <button type="submit" class="btn btn-primary">Agregar producto</button>
-                                            </form>
-                                        </div>
+                <div class="tab-content">
+                    <div class="tab-pane fade" id="home">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
+                                <div class="panel panel-primary ">
+                                    <div class="panel-heading">
+                                        Agregar un producto
                                     </div>
-                                </div>   
-                            </div>
+                                    <div class="panel-body">
+                                        <form role="form" id="form-agregar-producto">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="nombre-producto" placeholder="Nombre del producto" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea class="form-control" rows="3" id="descripcion-producto" placeholder="Descripcion del producto" required></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="marca-producto" placeholder="Marca del producto" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <select class="form-control" id="categoria-producto">
+                                                    <option value=0>Seleccione una categoria</option>
+                                                  <?php 
+                                                    foreach ($params["categorias_productos"] as $value) {
+                                                        print_r("<option value='".$value['categoria_producto']."'>".$value['categoria_producto']."</option>");     
+                                                    }
+                                                  ?>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" id="precio-producto" placeholder="Precio del producto" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" id="cantidad-producto" placeholder="Cantidad en bodega" required>
+                                            </div>
+                                           
+                                            <div class="form-group">
+                                                <input type="file" class="filestyle" id="imagen-producto" data-buttonText="Cargar imagen" required>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary">Agregar producto</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>   
                         </div>
-                        <div class="tab-pane fade" id="burbujas">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <ul class="nav nav-pills nav-justified" role="tablist" style="margin:10px 0;">
-                                        <?php 
-                                            foreach ($params["categorias_productos"] as $value) {
-                                                print_r("<li><a class='li-a-categorias' href='#".$value['categoria_producto']."' data-categoria='".$value['categoria_producto']."'>".$value['categoria_producto']."</a></li>");     
+                    </div>
+                    <div class="tab-pane fade" id="burbujas">
+                        <div class="row" style="padding:10px 0;">
+                            <div class="col-xs-12" class="form-control">
+                                <select id="select-categorias" class="form-control">
+                                    <option value="-1">Seleccione una categoria</option>
+                                    <option value="1">Todos</option>
+                                    <?php 
+                                        foreach ($params["categorias_productos"] as $value) {
+                                            print_r("<option value='".$value['categoria_producto']."'>".$value['categoria_producto']."</option>");     
                                             }
                                         ?>
-                                    </ul>
-                                    
-                                </div>
+                                </select>
                             </div>
-                            <div class="row" id="div-mostrar-productos-en-venta">
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12" id="div-mostrar-productos-en-venta">
                                 
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="tabla">
-                            <div class="col-lg-12">
-                                <div class="row" id="div-mostrar-tabla-productos-en-venta">
-                                    
-                                </div>
+                    </div>
+                    <div class="tab-pane fade in active" id="tabla">
+                        
+                        <div class="row" style="padding:10px 0;">
+                            <div class="col-xs-12">
+                                <select id="select-categorias2" class="form-control">
+                                    <option value="-1">Seleccione una categoria</option>
+                                    <option value="1">Todos</option>
+                                    <?php 
+                                        foreach ($params["categorias_productos"] as $value) {
+                                            print_r("<option value='".$value['categoria_producto']."'>".$value['categoria_producto']."</option>");     
+                                            }
+                                        ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12" id="div-mostrar-tabla-productos-en-venta">
+                                
                             </div>
                         </div>
                     </div>
-                    
                 </div>
                 
-                <!-- /.col-lg-12 -->
             </div>
+            
+            <!-- /.col-lg-12 -->
         </div>
-        <!-- /#page-wrapper -->
+        
     </div>
-    <!-- /#wrapper -->
-
+    
     <!-- Core Scripts - Include with every page -->
     <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
     <script src="<?php echo STATIC_DIR; ?>vendors/bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/bootstrap-filestyle.min.js"></script>
-    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 
-    <!-- Page-Level Plugin Scripts - Dashboard 
-    <script src="<?php echo STATIC_DIR; ?>dashboard/js/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="<?php echo STATIC_DIR; ?>dashboard/js/plugins/morris/morris.js"></script>
-    -->    
-    
-    <!-- SB Admin Scripts - Include with every page 
-    -->
-    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/sb-admin.js"></script>
-
-    <!-- Page-Level Demo Scripts - Dashboard - Use for reference
-    <script src="<?php echo STATIC_DIR; ?>dashboard/js/demo/dashboard-demo.js"></script> 
-    -->
     <script>
     $(document).on("ready", function(){
         console.log("documento listo XD");
@@ -196,13 +172,17 @@
                     data = JSON.parse(data);
                     console.log(data);
                     if(data.error ==  null && data.productos.length == 0){
-                        var s = "<h2>No tiene productos registrados</h2>"
+                        if (categoria) {
+                            var s = "<h2>No tiene productos de la categoria <span class='label label-info'>"+categoria+"</span> registrados</h2>"
+                        }else{
+                            var s = "<h2>No tiene productos registrados</h2>";
+                        }
                         $("#div-mostrar-productos-en-venta").html(s);
                     }else{
                         data.productos.forEach(function(producto){
                             // producto = JSON.stringify(producto);
                             console.log(producto);
-                            var p = '<div class="col-sm-6 col-md-4">\
+                            var p = '<div class="col-xs-6 col-sm-4 col-md-3">\
                                 <div class="panel panel-default">\
                                     <div class="panel-heading">\
                                         '+producto.nombre_producto+'\
@@ -215,15 +195,9 @@
                                         <p>'+producto.precio+'</p>\
                                         <p>'+producto.stock+'</p>\
                                     </div>\
-                                    <div class="panel-footer">\
-                                        <div class="row">\
-                                            <div class="col-xs-6">\
-                                                <button class="btn btn-primary">Actualizar</button>\
-                                            </div>\
-                                            <div class="col-xs-6">\
-                                                <button class="btn btn-danger">Eliminar</button>\
-                                            </div>\
-                                        </div>\
+                                    <div class="panel-footer center-block">\
+                                        <button class="btn btn-primary" style="width:100%; margin-bottom:10px;">Actualizar</button>\
+                                        <button class="btn btn-danger" style="min-width:100%;">Eliminar</button>\
                                     </div>\
                                 </div>\
                             </div>';
@@ -236,15 +210,25 @@
             });    
         }
 
-        function cargar_productos_en_tabla(){
+        function cargar_productos_en_tabla(categoria){
+            $("#div-mostrar-tabla-productos-en-venta").html("");
+            if (categoria) {
+                var url = "/api/obtener-productos-en-venta?id_tienda="+localStorage.id_tienda+"&categoria-productos="+categoria;
+            }else{
+                var url = "/api/obtener-productos-en-venta?id_tienda="+localStorage.id_tienda;
+            }
             $.ajax({
                 type: "GET",
-                url: "/api/obtener-productos-en-venta?id_tienda="+localStorage.id_tienda,
+                url: url,
                 success: function(data) {
                     data = JSON.parse(data);
                     console.log(data);
                     if(data.error ==  null && data.productos.length == 0){
-                        var s = "<h2>No tiene productos registrados</h2>"
+                        if (categoria) {
+                            var s = "<h2>No tiene productos de la categoria <span class='label label-info'>"+categoria+"</span> registrados</h2>"
+                        }else{
+                            var s = "<h2>No tiene productos registrados</h2>";
+                        }
                         $("#div-mostrar-tabla-productos-en-venta").html(s);
                     }else{
                         var t = '<div class="table-responsive">\
@@ -287,6 +271,9 @@
                 }
             });    
         }
+
+        cargar_productos_en_tabla();
+
         $('#tab2 a').click(function (e) {
             e.preventDefault()
             console.log("click");
@@ -349,10 +336,28 @@
             }
         })
 
-        $(".li-a-categorias").on("click", function (e) {
+        $("#select-categorias").on("change", function (e) {
             console.log("click categoria");
-            console.log($(this).attr("data-categoria"));
-            cargar_productos_en_paneles($(this).attr("data-categoria"));
+            console.log($(this).val());
+            if($(this).val() != -1){
+                if ($(this).val() == 1) {
+                    cargar_productos_en_paneles();
+                }else{
+                    cargar_productos_en_paneles($(this).val());
+                }
+            }
+        });
+
+        $("#select-categorias2").on("change", function (e) {
+            console.log("click categoria");
+            console.log($(this).val());
+            if($(this).val() != -1){
+                if ($(this).val() == 1) {
+                    cargar_productos_en_tabla();
+                }else{
+                    cargar_productos_en_tabla($(this).val());
+                }
+            }
         });
     });
     </script>

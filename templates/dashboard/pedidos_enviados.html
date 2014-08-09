@@ -12,127 +12,98 @@
     <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
-    <!-- Page-Level Plugin CSS - Dashboard -->
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/plugins/timeline/timeline.css" rel="stylesheet">
+    <style type="text/css">
+        body { padding-top: 70px; }
 
-    <!-- SB Admin CSS - Include with every page -->
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/sb-admin.css" rel="stylesheet">
-
+        *{
+            border-radius: 0 !important;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="wrapper">
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/"><?php print_r($params["tienda"]["nombre"]) ?></a>
-                <a class="navbar-brand" href="/"><i class="fa fa-truck"></i> Pedidos enviados</a>
+                <a class="navbar-brand" href="#"><i class="fa fa-truck"></i> Pedidos enviados</a>
             </div>
             <!-- /.navbar-header -->
 
-            <?php require_once "partes/notificaciones.html"; ?>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <?php require_once "partes/links.html"; ?>
+                <?php require_once "partes/notificaciones.html"; ?>
+            </div>
             <!-- /.navbar-top-links -->
-
-            <div class="navbar-default navbar-static-side" role="navigation">
-                <div class="sidebar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <!-- <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <?php //print_r($params["pedidos_enviados"]); ?>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <?php 
+                    if (isset($params["pedidos_enviados"]) && $params["pedidos_enviados"]) { 
+                        foreach ($params["pedidos_enviados"] as $pedido) {?>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <h4>Fecha en que se realizo el pedido: <b><?php echo $pedido["fecha_registro"]; ?></b></h4>
+                                    <h4>Fecha en que se envio el pedido: <b><?php echo $pedido["fecha_envio"]; ?></b></h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Image</th>
+                                                    <th>Nombre</th>
+                                                    <th>Marca</th>
+                                                    <th>Precio (Pesos)</th>
+                                                    <th class="th-qty">Cantidad</th>
+                                                    <th>Sub Total (Pesos)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                    $suma = 0;
+                                                    foreach ($pedido["productos"] as $producto) {
+                                                    $suma = $suma + ($producto["cantidad_comprada"]*$producto["producto"]["precio"]); ?>
+                                                    <tr>
+                                                        <td><img class="imagen-producto" style="cursor:pointer;" src="/static/usuarios/imagenes/productos/<?php echo $producto["producto"]['imagen']; ?>" alt="" title="" width="35" height="35" /></td>
+                                                        <td><?php echo $producto["producto"]["nombre_producto"]; ?></td>
+                                                        <td><?php echo $producto["producto"]["marca"]; ?></td>
+                                                        <td>$ <?php echo $producto["producto"]["precio"]; ?></td>
+                                                        <td><?php echo $producto["cantidad_comprada"]; ?></td>
+                                                        <td>$ <?php echo ($producto["cantidad_comprada"]*$producto["producto"]["precio"]); ?></td>
+                                                    </tr>
+                                                <?php } ?>
+                                                <tr>
+                                                    <td colspan="5" align="right">Total</td>
+                                                    <td class="total"><b>$ <?php echo $suma ?></b></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <h4>Estado del pedido: 
+                                        <span class="label label-success"><b>Pagado</b></span>
+                                        <span class="label label-info"><b>Enviado</b></span>
+                                        <span><button class="btn btn-primary boton-entregado" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" >Cambiar estado de pedido a entregado</button></span>
+                                        <span><button class="btn btn-info boton-info-cliente" data-id-cliente="<?php echo $pedido["id_cliente"]; ?>" >Ver informacion del cliente</button></span>
+                                    </h4>
+                                </div>
                             </div>
-                            
-                        </li> -->
-                        
-                        <?php require_once "partes/link-pedidos.html"; ?>
-                        <?php require_once "partes/link-productos.html"; ?>
-                        <?php require_once "partes/link-configuraciones.html"; ?>
-                    </ul>
-                    <!-- /#side-menu -->
-                </div>
-                <!-- /.sidebar-collapse -->
+                        <?php 
+                        } 
+                    } else { ?>
+                        <h2>Usted no tiene pedidos enviado a ningun cliente</h2>
+                <?php } ?>
             </div>
-            <!-- /.navbar-static-side -->
-        </nav>
-
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <?php print_r($params["pedidos_enviados"]); ?>
-                </div>
-                <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="col-lg-12 col-sm-12">
-            <?php 
-            if (isset($params["pedidos_enviados"]) && $params["pedidos_enviados"]) { ?>
-              <?php
-              foreach ($params["pedidos_enviados"] as $pedido) {?>
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                    <h4>Fecha en que se realizo el pedido: <b><?php echo $pedido["fecha_registro"]; ?></b></h4>
-                    <div class="table-responsive">
-                      <table class="table table-bordered">
-                        <thead>
-                          <tr>
-                            <th>Image</th>
-                            <th>Nombre</th>
-                            <th>Marca</th>
-                            <th>Precio (Pesos)</th>
-                            <th class="th-qty">Cantidad</th>
-                            <th>Sub Total (Pesos)</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php
-                          $suma = 0;
-                          // print_r($pedido);
-                          foreach ($pedido["productos"] as $producto) {
-                            $suma = $suma + ($producto["cantidad_comprada"]*$producto["producto"]["precio"]); ?>
-                            <tr>
-                              <td><img class="imagen-producto" style="cursor:pointer;" src="/static/usuarios/imagenes/productos/<?php echo $producto["producto"]['imagen']; ?>" alt="" title="" width="35" height="35" /></td>
-                              <td><?php echo $producto["producto"]["nombre_producto"]; ?></td>
-                              <td><?php echo $producto["producto"]["marca"]; ?></td>
-                              <td>$ <?php echo $producto["producto"]["precio"]; ?></td>
-                              <td><?php echo $producto["cantidad_comprada"]; ?></td>
-                              <td>$ <?php echo ($producto["cantidad_comprada"]*$producto["producto"]["precio"]); ?></td>
-                            </tr>
-                          <?php } ?>
-                          <tr>
-                            <td colspan="5" align="right">Total</td>
-                            <td class="total"><b>$ <?php echo $suma ?></b></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <h4>Estado del pedido: 
-                        <span class="label label-success"><b>Pagado</b></span>
-                        <span class="label label-info"><b>Enviado</b></span>
-                        <span><button class="btn btn-primary boton-entregado" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" >Cambiar estado de pedido a entregado</button></span>
-                        <span><button class="btn btn-info boton-info-cliente" data-id-cliente="<?php echo $pedido["id_cliente"]; ?>" >Ver informacion del cliente</button></span>
-                    </h4>
-                  </div>
-                </div>
-            <?php 
-              } 
-            } else { ?>
-              <h2>Usted no tiene pedidos enviado a ningun cliente</h2>
-            <?php 
-            } ?>
-        </div>
                 
-                <!-- /.col-lg-12 -->
-            </div>
         </div>
-        <!-- /#page-wrapper -->
     </div>
     <!-- /#wrapper -->
     <div id="modal-informacion" class="modal fade" tabindex="-1" role="dialog">

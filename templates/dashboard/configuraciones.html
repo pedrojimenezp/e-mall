@@ -11,75 +11,50 @@
     <!-- Core CSS - Include with every page -->
     <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <style type="text/css">
+        body { padding-top: 70px; }
 
-    <!-- Page-Level Plugin CSS - Dashboard -->
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/plugins/timeline/timeline.css" rel="stylesheet">
-
-    <!-- SB Admin CSS - Include with every page -->
-    <link href="<?php echo STATIC_DIR; ?>vendors/dashboard/css/sb-admin.css" rel="stylesheet">
-
+        *{
+            border-radius: 0 !important;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="wrapper">
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/"><?php print_r($params["tienda"]["nombre"]) ?></a>
-                <a class="navbar-brand" href="/"><i class="fa fa-cogs"></i> Configuraciones</a>
+                <a class="navbar-brand" href="#"><i class="fa fa-cogs"></i> Configuraciones</a>
             </div>
             <!-- /.navbar-header -->
 
-            <?php require_once "partes/notificaciones.html"; ?>
-            <!-- /.navbar-top-links -->
-
-            <div class="navbar-default navbar-static-side" role="navigation">
-                <div class="sidebar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <!-- <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                            </div>
-                            
-                        </li> -->
-                        
-                        <?php require_once "partes/link-pedidos.html"; ?>
-                        <?php require_once "partes/link-productos.html"; ?>
-                        <?php require_once "partes/link-configuraciones.html"; ?>
-                    </ul>
-                    <!-- /#side-menu -->
-                </div>
-                <!-- /.sidebar-collapse -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <?php require_once "partes/links.html"; ?>
+                <?php require_once "partes/notificaciones.html"; ?>
             </div>
-            <!-- /.navbar-static-side -->
-        </nav>
-
-        <div id="page-wrapper">
-            <?php print_r($params["admin"]) ?>
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs nav-justified" role="tablist" style="margin:10px 0;">
-                      <li class="active" id="tab1"><a href="#informacion" role="tab" data-toggle="tab">Informacion</a></li>
-                      <?php if ($params["admin"]["es_propietario"] == "si") { ?>
+            <!-- /.navbar-top-links -->
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <?php //print_r($params["admin"]) ?>
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <ul class="nav nav-tabs nav-justified" role="tablist" style="margin:10px 0;">
+                    <li class="active" id="tab1"><a href="#informacion" role="tab" data-toggle="tab">Informacion</a></li>
+                    <?php if ($params["admin"]["es_propietario"] == "si") { ?>
                         <li id="tab2"><a href="#administradores" role="tab" data-toggle="tab">Administradores</a></li>
-                      <?php } ?>  
-                    </ul>
-                    <!-- Tab panes -->
+                    <?php } ?>  
+                </ul>
 
-                    <div class="tab-content">
-                        <div class="tab-pane fade in active" id="informacion">
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="informacion">
+                        <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-6 col-lg-4">
                                     <form action="" role="form" id="form-actualizar-info-admin">
@@ -145,132 +120,139 @@
                                 </div>
                                 <?php if ($params["admin"]["es_propietario"] == "si") { ?>
                                     <div class="col-md-6 col-lg-4">
-                                        <div class="panel panel-info">
-                                            <div class="panel-heading">
-                                                Informacion de la tienda
-                                            </div>
-                                            <div class="panel-body">
-                                                <form action="" role="form">
+                                        <form id="form-actualizar-datos-tienda" action="" role="form">
+                                            <div class="panel panel-info">
+                                                <div class="panel-heading">
+                                                    Informacion de la tienda
+                                                </div>
+                                                <div class="panel-body">
                                                     <div class="form-group">
                                                         <label for="nombre-tienda">Nombre</label>
-                                                        <input type="text" class="form-control" id="nombre-tienda" placeholder="Ej: Tienda tecnologica">
+                                                        <input type="text" class="form-control" id="nombre-tienda" placeholder="Ej: Tienda tecnologica" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="categoria-tienda">Categoria de la tienda</label>
-                                                        <input type="text" class="form-control" id="categoria-tienda" disabled>
+                                                        <input type="text" class="form-control" id="categoria-tienda" required disabled>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="direccion-tienda">Direccion</label>
-                                                        <input type="text" class="form-control" id="direccion-tienda" placeholder="Ej: Calle 1 carrera 1 #1-2">
+                                                        <input type="text" class="form-control" id="direccion-tienda" placeholder="Ej: Calle 1 carrera 1 #1-2" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="barrio-tienda">Barrio</label>
-                                                        <input type="text" class="form-control" id="barrio-tienda" placeholder="Ej: Barrio centro">
+                                                        <input type="text" class="form-control" id="barrio-tienda" placeholder="Ej: Barrio centro" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="telefonos-tienda">Telefonos (Separados por comas)</label>
-                                                        <input type="text" class="form-control" id="telefonos-tienda" placeholder="Ej: 1112233, 1234567">
+                                                        <input type="text" class="form-control" id="telefonos-tienda" placeholder="Ej: 1112233, 1234567" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="estado-tienda">Estado de la tienda</label>
-                                                        <input type="text" class="form-control" id="estado-tienda" disabled>
+                                                        <input type="text" class="form-control" id="estado-tienda" required disabled>
                                                     </div>
-                                                </form>
-                                            </div>
-                                            <div class="panel-footer">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="input-group">
-                                                            <input type="password" class="form-control" placeholder="Ingrese su contraseña para actualizar los datos">
-                                                            <span class="input-group-btn">
-                                                                <button class="btn btn-primary" type="button">Actualizar</button>
-                                                            </span>
+                                                </div>
+                                                <div class="panel-footer">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="input-group">
+                                                                <input type="password" id="password-admin-datos-tienda" class="form-control" placeholder="Ingrese su contraseña para actualizar los datos" required>
+                                                                <span class="input-group-btn">
+                                                                    <input class="btn btn-primary" type="submit" value="Actualizar"/>
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 <?php } ?>
                             </div>
                         </div>
-                        <?php if ($params["admin"]["es_propietario"] == "si") { ?>
-                            <div class="tab-pane fade" id="administradores">
-                                <div class="alert alert-info">
-                                    <p>Los sub-administradores son administradores que pueden hacer lo mismo que usted pero con algunas restricciones.</p>
-                                    <p>Por ejemplo ellos pueden agregar o eliminar productos pero no pueden agregar mas administradores o cambiar datos de la tienda, eso solo lo puede hacer usted como propietario</p>
-                                </div>
-                                <div class="col-lg-4">
-                                    <form action="" role="form" id="form-agregar-sub-admin">
-                                        <div class="panel panel-danger">
-                                            <div class="panel-heading">
-                                                Agregar sub-administradores
-                                            </div>
-                                            <div class="panel-body">
-                                                    <div class="form-group">
-                                                        <label for="nombre-sub-admin">Nombre</label>
-                                                        <input type="text" class="form-control" id="nombre-sub-admin" required placeholder="Ej: Fuck yeah">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="email-sub-admin">Email</label>
-                                                        <input type="email" class="form-control" id="email-sub-admin" required placeholder="Ej: j@g.com">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="password-sub-admin">Contraseña</label>
-                                                        <input type="password" class="form-control" id="password-sub-admin" required placeholder="********">
-                                                    </div>
-                                            </div>
-                                            <div class="panel-footer">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="input-group">
-                                                            <input type="password" class="form-control" id="password-admin-asa" required  placeholder="Ingrese su contraseña actual">
-                                                            <span class="input-group-btn">
-                                                                <button class="btn btn-danger" type="submit">Agregar</button>
-                                                            </span>
-                                                        </div>
+                    </div>
+                    <?php if ($params["admin"]["es_propietario"] == "si") { ?>
+                        <div class="tab-pane fade" id="administradores">
+                            <div class="alert alert-info">
+                                <p>Los sub-administradores son administradores que pueden hacer lo mismo que usted pero con algunas restricciones.</p>
+                                <p>Por ejemplo ellos pueden agregar o eliminar productos pero no pueden agregar mas administradores o cambiar datos de la tienda, eso solo lo puede hacer usted como propietario</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <form action="" role="form" id="form-agregar-sub-admin">
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading">
+                                            Agregar sub-administradores
+                                        </div>
+                                        <div class="panel-body">
+                                                <div class="form-group">
+                                                    <label for="nombre-sub-admin">Nombre</label>
+                                                    <input type="text" class="form-control" id="nombre-sub-admin" required placeholder="Ej: Fuck yeah">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email-sub-admin">Email</label>
+                                                    <input type="email" class="form-control" id="email-sub-admin" required placeholder="Ej: j@g.com">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password-sub-admin">Contraseña</label>
+                                                    <input type="password" class="form-control" id="password-sub-admin" required placeholder="********">
+                                                </div>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="input-group">
+                                                        <input type="password" class="form-control" id="password-admin-asa" required  placeholder="Ingrese su contraseña actual">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-danger" type="submit">Agregar</button>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
-                                <div class="col-lg-8">
-                                    <div class="row" id="">
-
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="row" id="">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-condensed table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Email</th>
+                                                    <th>Fecha de registro</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php 
+                                                if (count($params["admins"])>0) { 
+                                                    foreach ($params["admins"] as $admin) { ?>
+                                                        <tr>
+                                                            <td><?php echo $admin["nombre"]; ?></td>
+                                                            <td><?php echo $admin["email"]; ?></td>
+                                                            <td><?php echo $admin["fecha_registro"]; ?></td>
+                                                            <td><a href="/api/elimianr-sub-admin?id_admin=<?php echo $admin['id']; ?>" class="btn btn-danger">Eliminar</a></td>
+                                                        </tr>
+                                                <?php 
+                                                    }
+                                                } ?>
+                                            </tbody>
+                                        </table>
+                                        <?php print_r($params["admins"]); ?>
                                     </div>
                                 </div>
                             </div>
-                        <?php } ?>
-                    </div>
-                    
-                </div>
-                
-                <!-- /.col-lg-12 -->
+                        </div>
+                    <?php } ?>
+                </div> 
             </div>
         </div>
-        <!-- /#page-wrapper -->
     </div>
-    <!-- /#wrapper -->
 
     <!-- Core Scripts - Include with every page -->
     <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
     <script src="<?php echo STATIC_DIR; ?>vendors/bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/bootstrap-filestyle.min.js"></script>
-    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 
-    <!-- Page-Level Plugin Scripts - Dashboard 
-    <script src="<?php echo STATIC_DIR; ?>dashboard/js/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="<?php echo STATIC_DIR; ?>dashboard/js/plugins/morris/morris.js"></script>
-    -->    
-    
-    <!-- SB Admin Scripts - Include with every page 
-    -->
-    <script src="<?php echo STATIC_DIR; ?>vendors/dashboard/js/sb-admin.js"></script>
-
-    <!-- Page-Level Demo Scripts - Dashboard - Use for reference
-    <script src="<?php echo STATIC_DIR; ?>dashboard/js/demo/dashboard-demo.js"></script> 
-    -->
     <script>
     $(document).on("ready", function(){
         console.log("documento listo XD");
@@ -301,8 +283,8 @@
                 type: "GET",
                 url: "/api/obtener-datos-tienda?id_tienda="+localStorage.id_tienda,
                 success: function(data) {
-                    data = JSON.parse(data);
                     console.log(data);
+                    data = JSON.parse(data);
                     if(data.error ==  null && data.tienda){
                         if(data.tienda.nombre){
                             $("#nombre-tienda").val(data.tienda.nombre);
@@ -399,6 +381,38 @@
             }else{
                 alert("Las contraseñas nuevas no coinciden");
             }
+        });
+
+        $("#form-actualizar-datos-tienda").on("submit", function(e){
+            e.preventDefault();
+            var nombre = $("input#nombre-tienda").val();
+            var direccion = $("input#direccion-tienda").val();
+            var barrio = $("input#barrio-tienda").val();
+            var telefonos = $("input#telefonos-tienda").val();
+            var password = $("input#password-admin-datos-tienda").val();
+
+            var datos = {
+                "nombre" : nombre,
+                "direccion" : direccion,
+                "barrio" : barrio,
+                "telefonos" : telefonos,
+                "password": password,
+                "id_admin" : localStorage.id_admin,
+                "id_tienda" : localStorage.id_tienda
+            }
+
+            console.log(datos);
+
+            $.ajax({
+                type: "POST",
+                url: "/api/admin/actualizar-datos-tienda",
+                data: datos,
+                success: function(data) {
+                    // data = JSON.parse(data);
+                    alert(data);
+                    // console.log(data);
+                }
+            });
         });
 
         $("#form-agregar-sub-admin").on("submit", function(e){

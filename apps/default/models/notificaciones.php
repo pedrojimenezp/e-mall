@@ -70,6 +70,20 @@ class Notificaciones extends Models{
     } 
   }
 
+  public function actualizar_estado_por_id_receptor($id_receptor, $estado, $tipo=null){
+    $filtro_tipo = "";
+    if ($tipo) {
+      $filtro_tipo = " AND tipo='".$tipo."'";
+    }
+    $consulta = "UPDATE notificaciones SET estado='".$estado."' WHERE id_receptor = ".$id_receptor.$filtro_tipo;
+    // echo $consulta;
+    if(!$this->conexion->query($consulta)){
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      return array("error"=>null, "info"=>"notificaciones_actualizadas");
+    } 
+  }
+
 
   public function eliminar_por_id ($id){
     $consulta = "DELETE FROM notificaciones WHERE id = ".$id;

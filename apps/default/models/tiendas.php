@@ -33,7 +33,7 @@ class Tiendas extends Models{
   }
 
   public function actualizar_nombre ($id, $nombre) {
-    $consulta = "UPDATE tiendas SET nombre='".$nombre."' WHERE id = ".$id.")";
+    $consulta = "UPDATE tiendas SET nombre='".$nombre."' WHERE id = ".$id;
     if(!$this->conexion->query($consulta)){
       if($this->conexion->errno == 1062){
         $error = array("numero"=>1062, "descripcion"=>"Ya existe una tienda con ese nombre por lo anto no se puede guardar"); 
@@ -81,11 +81,12 @@ class Tiendas extends Models{
     }else{
       echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
     }
-    
   }
 
+
+
   public function buscar_por_id ($id) {
-    $consulta = "SELECT * FROM tiendas WHERE id = ".$id;
+    $consulta = "SELECT * FROM tiendas JOIN datos_tiendas ON tiendas.id = ".$id." AND tiendas.id = datos_tiendas.id_tienda";
     if($resultado = $this->conexion->query($consulta)){
       $fila = $resultado->fetch_assoc();
       return array("error"=>null, "tienda"=>$fila);
@@ -94,7 +95,7 @@ class Tiendas extends Models{
     }
   }
 
-  public function buscar_por_nombre ($nombre, $estado) {
+  public function buscar_por_nombre ($nombre, $estado=null) {
     $consulta = "SELECT * FROM tiendas WHERE nombre = '".$nombre."'";
     if($estado){
       $consulta = $consulta."AND estado='".$estado."'";
@@ -139,6 +140,55 @@ class Tiendas extends Models{
     }else{
       echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
     } 
+  }
+}
+
+class Datos_tiendas extends Models{
+  private  $conexion;
+  function __construct(){
+    parent::__construct();
+    $this->conexion = $this->connect();
+  }
+
+  function __destruct() {
+    $this->disconnect();
+  }
+
+  public function guardar ($id_tienda, $direccion, $barrio, $telefonos) {
+    $consulta = "INSERT INTO datos_tiendas (id_tienda, direccion, barrio, telefonos) VALUES (".$id_tienda.", '".$direccion."','".$barrio."','".$telefonos."')";
+    // echo $consulta;
+    if(!$this->conexion->query($consulta)){
+        echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      $consulta = "SELECT * FROM datos_tiendas WHERE id = ".$this->conexion->insert_id;
+      $resultado = $this->conexion->query($consulta);
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "info"=>"datos_tienda_guardados", "datos_tienda"=>$fila);
+    }
+  }
+
+  public function actualizar ($id_tienda, $direccion, $barrio, $telefonos) {
+    $consulta = "UPDATE datos_tiendas SET direccion='".$direccion."', barrio='".$barrio."', telefonos='".$telefonos."' WHERE id_tienda=".$id_tienda;
+    // echo $consulta;
+    if(!$this->conexion->query($consulta)){
+        echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      $consulta = "SELECT * FROM datos_tiendas WHERE id_tienda = ".$id_tienda;
+      $resultado = $this->conexion->query($consulta);
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "info"=>"datos_actualizados", "datos_tienda"=>$fila);
+    }
+  }
+
+  public function buscar_por_id_tienda ($id_tienda) {
+    $consulta = "SELECT * FROM datos_tiendas WHERE id_tienda=".$id_tienda;
+    // echo $consulta;
+    if($resultado = $this->conexion->query($consulta)){
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "datos_tienda" =>$fila);
+    }else{
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
+    }
   }
 }
 ?>
