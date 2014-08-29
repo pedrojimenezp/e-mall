@@ -144,7 +144,6 @@
                 </div>
                 
             </div>
-            
             <!-- /.col-lg-12 -->
         </div>
         
@@ -255,14 +254,14 @@
                             console.log(producto);
                             var p = '<tr>\
                                 <td><img width="30px" height="30px" src="/static/usuarios/imagenes/productos/'+producto.imagen+'" alt="'+producto.nombre_producto+'"></td>\
-                                <td>'+producto.nombre_producto+'</td>\
-                                <td>'+producto.descripcion+'</td>\
-                                <td>'+producto.marca+'</td>\
-                                <td>'+producto.precio+'</td>\
-                                <td>'+producto.stock+'</td>\
+                                <td><input type="text" id="input-nombre-'+producto.id+'" class="form-control" value="'+producto.nombre_producto+'" required/></td>\
+                                <td><input type="text" id="input-descripcion-'+producto.id+'" class="form-control" value="'+producto.descripcion+'" required/></td>\
+                                <td><input type="text" id="input-marca-'+producto.id+'" class="form-control" value="'+producto.marca+'" required/></td>\
+                                <td><input type="text" id="input-precio-'+producto.id+'" class="form-control" value="'+producto.precio+'" required/></td>\
+                                <td><input type="text" id="input-stock-'+producto.id+'" class="form-control" value="'+producto.stock+'" required/></td>\
                                 <td>'+producto.guardado_por+'</td>\
-                                <td><button type="" class="btn btn-primary">Actualizar</button></td>\
-                                <td><button type="" class="btn btn-danger" >Eliminar</button></td>\
+                                <td><button type="button" class="btn btn-primary" data-id='+producto.id+' data-type="actualizar">Actualizar</button></td>\
+                                <td><button type="button" class="btn btn-danger" data-id='+producto.id+' data-type="eliminar">Eliminar</button></td>\
                             </tr>';
                             console.log(p);
                             $("#body-tabla-productos-en-venta").append(p);
@@ -357,6 +356,28 @@
                 }else{
                     cargar_productos_en_tabla($(this).val());
                 }
+            }
+        });
+
+        $("#div-mostrar-tabla-productos-en-venta").on("click", "button", function(e){
+            var id= $(this).attr("data-id");
+            var type= $(this).attr("data-type");
+            console.log(type, id);
+            if (type == "actualizar") {
+                var nombre = $("#input-nombre-"+id).val();
+                var descripcion = $("#input-descripcion-"+id).val();
+                var marca = $("#input-marca-"+id).val();
+                var precio = $("#input-precio-"+id).val();
+                var cantidad = $("#input-stock-"+id).val();
+                console.log(nombre);
+                console.log(descripcion);
+                console.log(marca);
+                console.log(precio);
+                console.log(cantidad);
+
+                
+            }else{
+
             }
         });
     });

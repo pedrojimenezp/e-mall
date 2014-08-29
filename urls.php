@@ -1,23 +1,27 @@
 <?php
 $urls_array = array(
   "^/$" => "default@mostrar_plantilla_inicio",
+  
+  // PLANTILLAS LOGIN Y SIGN UP
   "^/iniciar-sesion$" => "default@mostrar_plantilla_iniciar_sesion",
   "^/registrar/tienda$" => "default@mostrar_plantilla_registrar_tienda",
   "^/registrar/cliente$" => "default@mostrar_plantilla_registrar_cliente",
-  
+  // PLANTILLAS LOGIN Y SIGN UP
 
+
+  // PLANTILLAS DE VENDEDORES
   "^/dashboard/mis-productos/en-venta$" => "default@mostrar_plantilla_productos_en_venta",
   "^/dashboard/mis-configuraciones$" => "default@mostrar_plantilla_configuraciones",
-  
   "^/dashboard/mis-pedidos/nuevos$" => "default@mostrar_plantilla_pedidos_nuevos",
   "^/dashboard/mis-pedidos/enviados$" => "default@mostrar_plantilla_pedidos_enviados",
   "^/dashboard/mis-pedidos/entregados$" => "default@mostrar_plantilla_pedidos_entregados",
+  // FIN PLANTILLAS VENDEDORES
+
   
-  "^/busqueda/productos$" => "default@mostrar_plantilla_resultado_productos",
-  
-  // CLIENTE
+  // PLANTILAS DE CLIENTES
   "^/tiendas$" => "clientes@mostrar_plantilla_tiendas",
   "^/tiendas/catalogo$" => "clientes@mostrar_plantilla_catalogo_tienda",
+  "^/busqueda/productos$" => "default@mostrar_plantilla_resultado_productos",
   
   "^/cliente/mi-carrito-de-compras$" => "clientes@mostrar_plantilla_carrito_de_compras",
   
@@ -28,16 +32,15 @@ $urls_array = array(
   
   "^/cliente/mis-configuraciones$" => "clientes@mostrar_plantilla_configuraciones",
   
-  // FIN CLIENTES
-
-
-
   "^/redireccion/paypal/cancelado$" => "default@mostrar_plantilla_pedido_cancelado",
-  "^/redireccion/paypal/pagado$" => "default@mostrar_plantilla_pedido_pagado",
+  "^/redireccion/paypal/pagado$" => "default@mostrar_plantilla_pedido_pagado",  
+  // FIN PLANTILLAS CLIENTES
+
   
   // API
   "^/api/registrar/tienda$" => "api@registrar_tienda",
   "^/api/registrar/cliente$" => "api@registrar_cliente",
+
   "^/api/iniciar-sesion/admin$" => "api@iniciar_sesion_admin",
   "^/api/iniciar-sesion/cliente$" => "api@iniciar_sesion_cliente",
   "^/api/cerrar-sesion$" => "api@cerrar_sesion",
@@ -51,7 +54,6 @@ $urls_array = array(
 
   "^/api/obtener-datos-cliente$" => "api@obtener_datos_cliente",
 
-
   "^/api/admin/actualizar-info-personal$" => "api@actualizar_info_personal_admin",
   "^/api/admin/actualizar-password$" => "api@actualizar_password_admin",
   "^/api/admin/actualizar-datos-tienda$" => "api@actualizar_datos_tienda",
@@ -63,28 +65,26 @@ $urls_array = array(
   "^/api/pedidos/enviar-pedido$" => "api@enviar_pedido",
   "^/api/pedidos/entregar-pedido$" => "api@entregar_pedido",
   "^/api/pedidos/eliminar-pedido$" => "api@eliminar_pedido",
-  
-  "^/api/pedidos/estado/cancelado$" => "api@cambiar_estado_pedido_cancelado",
-  "^/api/pedidos/estado/pagado$" => "api@cambiar_estado_pedido_pagado",
-  "^/api/pedidos/estado/enviado$" => "api@cambiar_estado_pedido_enviado",
-  "^/api/pedidos/estado/entregado$" => "api@cambiar_estado_pedido_entregado",
-  
+  // FIN API
   
 
-  "^/api/paypal/ipn$" => "api@notificacion_pago_inmediato",
+  // PAYPAL
+  "^/api/paypal/ipn$" => "api@notificacion_pago_inmediato", // paypal notifica inmediatamente al servidor un pago mediante esta url
+  // FIN PAYPAL
 
 
 
 
 
 
+  //"^/obtener-tienda$" => "default@obtener_tienda",
+  //"^/guardar-tiendas$" => "default@guardarTienda", 
+  //"^/guardar-admin$" => "default@guardar_admin", 
+  //"^/esta-registrado$" => "default@esta_registrado", 
 
-  "^/obtener-tienda$" => "default@obtener_tienda",
-  "^/pgn$" => "default@pgn",
-  "^/guardar-tiendas$" => "default@guardarTienda", 
-  "^/guardar-admin$" => "default@guardar_admin", 
-  "^/esta-registrado$" => "default@esta_registrado", 
-  "^/prueba$" => "default@prueba",
-  "^/prueba/prueba$" => "default@prueba"
+  //"^/api/pedidos/estado/cancelado$" => "api@cambiar_estado_pedido_cancelado",
+  //"^/api/pedidos/estado/pagado$" => "api@cambiar_estado_pedido_pagado",
+  //"^/api/pedidos/estado/enviado$" => "api@cambiar_estado_pedido_enviado",
+  //"^/api/pedidos/estado/entregado$" => "api@cambiar_estado_pedido_entregado",
 );
 ?>
