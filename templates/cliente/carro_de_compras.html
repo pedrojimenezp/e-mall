@@ -17,7 +17,7 @@
   </style>
 </head>
 <body>
-<?php print_r($params) ?>
+<?php //print_r($params) ?>
   <!-- Navigation -->
   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -40,13 +40,13 @@
   </nav>
   <!-- End Navigation -->
 
-  <div class="container main-container">
+  <div class="container main-container" style="min-height:500px;">
     <div class="row">
       <!-- Cart -->
       <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="col-lg-12 col-sm-12">
         <?php if ($params["productos"]) { ?>
-          <span class="title">SHOPPING CART</span>
+          <h2><strong><span class="title">Mi carrito de compras</span></strong></h2>
         </div>
           <?php
             $tabla_comenzada = false;
@@ -124,9 +124,11 @@
             <button type="button" class="btn btn-primary boton-checkout" data-id-tienda="<?php echo $id_tienda; ?>" data-lista="<?php echo $lista_productos_cantidades; ?>" data-precio-total="<?php echo $suma ?>">Proceder a pagar <i class="fa fa-arrow-circle-right"></i></button>
           </div>
         </div>
-        <?php } else { ?>
-          <h2>No tiene productos agregados al carrito</h2>
-        <?php } ?>
+        <?php } else {
+          echo "<div style='text-align:center; padding-top:100px;'>";
+          echo "<h2>No tiene productos agregados al carrito</h2>";
+          echo "</div>";
+         } ?>
       </div>
       <!-- End Cart -->
     </div>

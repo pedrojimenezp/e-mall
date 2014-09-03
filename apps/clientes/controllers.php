@@ -76,6 +76,7 @@ function mostrar_plantilla_pedidos_sin_confirmar($req, $res){
       $p = array('pedidos' => $lista_pedidos, "sesion_comprador_iniciada"=>true);
       $nt = notificaciones_cliente($req->session("id_cliente"));
       $p["notificaciones"] = $nt;
+      $p["tipo_pedido"] = "sin confirmar";
       $res->render_template("/cliente/pedidos.html", $p);
     }else{
       $res->redirect_to("/cliente/mis-configuraciones");
@@ -122,6 +123,7 @@ function mostrar_plantilla_pedidos_pagados($req, $res){
       $p = array('pedidos' => $lista_pedidos, "sesion_comprador_iniciada"=>true);
       $nt = notificaciones_cliente($req->session("id_cliente"));
       $p["notificaciones"] = $nt;
+      $p["tipo_pedido"] = "pagados";
       $res->render_template("/cliente/pedidos.html", $p);
     }else{
       $res->redirect_to("/cliente/mis-configuraciones");
@@ -171,6 +173,7 @@ function mostrar_plantilla_pedidos_enviados($req, $res){
       $p = array('pedidos' => $lista_pedidos, "sesion_comprador_iniciada"=>true);
       $nt = notificaciones_cliente($req->session("id_cliente"));
       $p["notificaciones"] = $nt;
+      $p["tipo_pedido"] = "enviados";
       $res->render_template("/cliente/pedidos.html", $p);
     }else{
       $res->redirect_to("/cliente/mis-configuraciones");
@@ -221,6 +224,7 @@ function mostrar_plantilla_pedidos_entregados($req, $res){
       $p = array('pedidos' => $lista_pedidos, "sesion_comprador_iniciada"=>true);
       $nt = notificaciones_cliente($req->session("id_cliente"));
       $p["notificaciones"] = $nt;
+      $p["tipo_pedido"] = "entregados";
       $res->render_template("/cliente/pedidos.html", $p);
     }else{
       $res->redirect_to("/cliente/mis-configuraciones");

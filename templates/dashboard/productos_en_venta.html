@@ -42,7 +42,7 @@
             <!-- /.navbar-top-links -->
         </div>
     </nav>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-md-12">
                 <!-- Nav tabs -->
@@ -62,6 +62,9 @@
                                         Agregar un producto
                                     </div>
                                     <div class="panel-body">
+                                        <div id="alerta-producto-guardado" class="alert alert-success" style="display:none">
+                                          Producto <span class="label label-primary">REGISTRADO</span> satisfactoriamente
+                                        </div>
                                         <form role="form" id="form-agregar-producto">
                                             <div class="form-group">
                                                 <input type="text" class="form-control" id="nombre-producto" placeholder="Nombre del producto" required>
@@ -114,6 +117,15 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div id="eliminacion-exitosa-producto2" class="alert alert-success" style="display:none">
+                                    Producto <span class="label label-danger">ELIMINADO</span> satisfactoriamente.
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-xs-12" id="div-mostrar-productos-en-venta">
                                 
@@ -121,7 +133,16 @@
                         </div>
                     </div>
                     <div class="tab-pane fade in active" id="tabla">
-                        
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div id="actualizacion-exitosa-producto" class="alert alert-success" style="display:none">
+                                  Producto <span class="label label-primary">ACTUALIZADO</span> satisfactoriamente
+                                </div>
+                                <div id="eliminacion-exitosa-producto" class="alert alert-success" style="display:none">
+                                  Producto <span class="label label-danger">ELIMINADO</span> satisfactoriamente
+                                </div>
+                            </div>
+                        </div>
                         <div class="row" style="padding:10px 0;">
                             <div class="col-xs-12">
                                 <select id="select-categorias2" class="form-control">
@@ -155,8 +176,58 @@
 
     <script>
     $(document).on("ready", function(){
-        console.log("documento listo XD");
         console.log(localStorage);
+        var categorias_productos;
+        // console.log(typeof categorias_productos == "undefined");
+        function crear_select_categorias_productos(categoria_tienda, selected, id, callback){
+            //console.log("Categoria: "+categoria_tienda);
+            //console.log("Selected: "+selected);
+            var select_categorias_productos;
+            if (typeof categorias_productos == "undefined") {
+                console.log("Hay que hacer una peticion ajax");
+                $.ajax({
+                    url: '/api/obtener-categorias-productos?categoria-tienda='+categoria_tienda,
+                })
+                .done(function(data) {
+                    console.log("success");
+                    data = JSON.parse(data);
+                    categorias_productos = data.categorias_productos;
+                    select_categorias_productos = "<select id='select-categoria-"+id+"' class='form-control'>"
+                    for(i in categorias_productos){
+                        //console.log(categorias_productos[i].categoria_producto);
+                        if(categorias_productos[i].categoria_producto == selected){
+                            select_categorias_productos = select_categorias_productos + "<option selected value='"+categorias_productos[i].categoria_producto+"'>"+categorias_productos[i].categoria_producto+"</option>"
+                        }else{
+                            select_categorias_productos = select_categorias_productos + "<option value='"+categorias_productos[i].categoria_producto+"'>"+categorias_productos[i].categoria_producto+"</option>"
+                        }
+                    }
+                    select_categorias_productos = select_categorias_productos + "</select>";   
+                    
+                    //console.log(select_categorias_productos);
+                    callback(select_categorias_productos);
+                })
+                .fail(function(data) {
+                    console.log("error obteniendo categorias");
+                    console.log(data);
+                });
+            }else{
+                console.log("No hay que hacer una peticion ajax");
+                select_categorias_productos = "<select class='form-control'>"
+                for(i in categorias_productos){
+                    //console.log(categorias_productos[i].categoria_producto);
+                    if(categorias_productos[i].categoria_producto == selected){
+                            select_categorias_productos = select_categorias_productos + "<option selected value='"+categorias_productos[i].categoria_producto+"'>"+categorias_productos[i].categoria_producto+"</option>"
+                        }else{
+                            select_categorias_productos = select_categorias_productos + "<option value='"+categorias_productos[i].categoria_producto+"'>"+categorias_productos[i].categoria_producto+"</option>"
+                        }
+                }
+                select_categorias_productos = select_categorias_productos + "</select>";
+                callback(select_categorias_productos);
+            }
+        }
+
+        //console.log("documento listo XD");
+        //console.log(localStorage);
         function cargar_productos_en_paneles(categoria){
             $("#div-mostrar-productos-en-venta").html("");
             if (categoria) {
@@ -169,7 +240,7 @@
                 url: url,
                 success: function(data) {
                     data = JSON.parse(data);
-                    console.log(data);
+                    //console.log(data);
                     if(data.error ==  null && data.productos.length == 0){
                         if (categoria) {
                             var s = "<h2>No tiene productos de la categoria <span class='label label-info'>"+categoria+"</span> registrados</h2>"
@@ -180,27 +251,28 @@
                     }else{
                         data.productos.forEach(function(producto){
                             // producto = JSON.stringify(producto);
-                            console.log(producto);
+                            //console.log(producto);
                             var p = '<div class="col-xs-6 col-sm-4 col-md-3">\
                                 <div class="panel panel-default">\
                                     <div class="panel-heading">\
-                                        '+producto.nombre_producto+'\
+                                        <strong style="font-size:16px">'+producto.nombre_producto+'</strong>\
                                     </div>\
                                     <div class="panel-body">\
-                                        <img src="/static/usuarios/imagenes/productos/'+producto.imagen+'" alt="'+producto.nombre_producto+'" width="100%" height="200px">\
-                                        <p>'+producto.descripcion+'</p>\
-                                        <p>'+producto.marca+'</p>\
-                                        <p>'+producto.categoria+'</p>\
-                                        <p>'+producto.precio+'</p>\
-                                        <p>'+producto.stock+'</p>\
+                                        <img width="100%" src="/static/usuarios/imagenes/productos/'+producto.imagen+'" alt="'+producto.nombre_producto+'" width="100%" height="200px">\
+                                        <div style="display:block; text-align:center;">\
+                                            <p><strong style="font-size:16px !important;">Descripcion: </strong> '+producto.descripcion+'</p>\
+                                            <p><strong style="font-size:16px !important;">Marca: </strong><span class="label label-primary">'+producto.marca+'</span> </p>\
+                                            <p><strong style="font-size:16px !important;">Categoria: </strong><span class="label label-info">'+producto.categoria+'</span> </p>\
+                                            <p><strong style="font-size:16px !important;">Precio: </strong><span class="label label-warning">$'+producto.precio+'</span> </p>\
+                                            <p><strong style="font-size:16px !important;">Cantidad: </strong><span class="label label-danger">'+producto.stock+'</span> </p>\
+                                        </div>\
                                     </div>\
                                     <div class="panel-footer center-block">\
-                                        <button class="btn btn-primary" style="width:100%; margin-bottom:10px;">Actualizar</button>\
-                                        <button class="btn btn-danger" style="min-width:100%;">Eliminar</button>\
+                                        <button class="btn btn-danger" style="min-width:100%;" data-id='+producto.id+'>Eliminar</button>\
                                     </div>\
                                 </div>\
                             </div>';
-                            console.log(p);
+                            //console.log(p);
                             $("#div-mostrar-productos-en-venta").append(p);
                             
                         });
@@ -221,7 +293,7 @@
                 url: url,
                 success: function(data) {
                     data = JSON.parse(data);
-                    console.log(data);
+                    //console.log(data);
                     if(data.error ==  null && data.productos.length == 0){
                         if (categoria) {
                             var s = "<h2>No tiene productos de la categoria <span class='label label-info'>"+categoria+"</span> registrados</h2>"
@@ -238,6 +310,7 @@
                                         <th>Nombre</th>\
                                         <th>Descripcion</th>\
                                         <th>Marca</th>\
+                                        <th>Categoria</th>\
                                         <th>Precio</th>\
                                         <th>Cantidad</th>\
                                         <th>Guardado por</th>\
@@ -251,20 +324,23 @@
                         $("#div-mostrar-tabla-productos-en-venta").html(t);
                         data.productos.forEach(function(producto){
                             // producto = JSON.stringify(producto);
-                            console.log(producto);
-                            var p = '<tr>\
-                                <td><img width="30px" height="30px" src="/static/usuarios/imagenes/productos/'+producto.imagen+'" alt="'+producto.nombre_producto+'"></td>\
-                                <td><input type="text" id="input-nombre-'+producto.id+'" class="form-control" value="'+producto.nombre_producto+'" required/></td>\
-                                <td><input type="text" id="input-descripcion-'+producto.id+'" class="form-control" value="'+producto.descripcion+'" required/></td>\
-                                <td><input type="text" id="input-marca-'+producto.id+'" class="form-control" value="'+producto.marca+'" required/></td>\
-                                <td><input type="text" id="input-precio-'+producto.id+'" class="form-control" value="'+producto.precio+'" required/></td>\
-                                <td><input type="text" id="input-stock-'+producto.id+'" class="form-control" value="'+producto.stock+'" required/></td>\
-                                <td>'+producto.guardado_por+'</td>\
-                                <td><button type="button" class="btn btn-primary" data-id='+producto.id+' data-type="actualizar">Actualizar</button></td>\
-                                <td><button type="button" class="btn btn-danger" data-id='+producto.id+' data-type="eliminar">Eliminar</button></td>\
-                            </tr>';
-                            console.log(p);
-                            $("#body-tabla-productos-en-venta").append(p);
+                            //console.log(producto);
+                            crear_select_categorias_productos(localStorage.categoria_tienda, producto.categoria, producto.id, function(select){
+                                var p = '<tr>\
+                                    <td><img width="30px" height="30px" src="/static/usuarios/imagenes/productos/'+producto.imagen+'" alt="'+producto.nombre_producto+'"></td>\
+                                    <td><input type="text" id="input-nombre-'+producto.id+'" class="form-control" value="'+producto.nombre_producto+'" required/></td>\
+                                    <td><input type="text" id="input-descripcion-'+producto.id+'" class="form-control" value="'+producto.descripcion+'" required/></td>\
+                                    <td><input type="text" id="input-marca-'+producto.id+'" class="form-control" value="'+producto.marca+'" required/></td>\
+                                    <td>'+select+'</td>\
+                                    <td><input type="text" id="input-precio-'+producto.id+'" class="form-control" value="'+producto.precio+'" required/></td>\
+                                    <td><input type="text" id="input-stock-'+producto.id+'" class="form-control" value="'+producto.stock+'" required/></td>\
+                                    <td>'+producto.guardado_por+'</td>\
+                                    <td><button type="button" class="btn btn-primary" data-id='+producto.id+' data-type="actualizar">Actualizar</button></td>\
+                                    <td><button type="button" class="btn btn-danger" data-id='+producto.id+' data-type="eliminar">Eliminar</button></td>\
+                                </tr>';
+                                //console.log(p);
+                                $("#body-tabla-productos-en-venta").append(p);
+                            });
                         });
                     }
                 }
@@ -291,7 +367,7 @@
         $("#form-agregar-producto").on("submit", function(e){
             e.preventDefault();
             console.log("Se va a enviar el formularion");
-            console.log("DATOS");
+            //console.log("DATOS");
             var nombre = $("#nombre-producto").val();
             var descripcion = $("#descripcion-producto").val();
             var marca = $("#marca-producto").val();
@@ -299,13 +375,13 @@
             var cantidad = $("#cantidad-producto").val();
             var imagen = $("#imagen-producto")[0].files[0];
             var categoria = $("#categoria-producto").val();
-            console.log("Nombre: "+nombre);
-            console.log("Descripcion: "+descripcion);
-            console.log("Marca: "+marca);
-            console.log("Precio: "+precio);
-            console.log("Cantidad: "+cantidad);
-            console.log("Categoria: "+categoria);
-            console.log(imagen);
+            // console.log("Nombre: "+nombre);
+            // console.log("Descripcion: "+descripcion);
+            // console.log("Marca: "+marca);
+            // console.log("Precio: "+precio);
+            // console.log("Cantidad: "+cantidad);
+            // console.log("Categoria: "+categoria);
+            // console.log(imagen);
             if(categoria!=0){
                 var datos = new FormData();
                 datos.append("nombre", nombre);
@@ -326,7 +402,14 @@
                     processData: false,
                     cache:false,
                     success: function(data) {
-                        console.log(data);
+                        //console.log(data);
+                        data = JSON.parse(data);
+                        if (data.info == "producto_registrado") {
+                            $("#alerta-producto-guardado").slideDown("slow");
+                            setTimeout(function(){
+                              $("#alerta-producto-guardado").slideUp("slow");
+                            }, 2000);
+                        };
                         // cargar_productos();
                     }
                 });
@@ -362,23 +445,114 @@
         $("#div-mostrar-tabla-productos-en-venta").on("click", "button", function(e){
             var id= $(this).attr("data-id");
             var type= $(this).attr("data-type");
-            console.log(type, id);
+            //console.log(type, id);
             if (type == "actualizar") {
                 var nombre = $("#input-nombre-"+id).val();
                 var descripcion = $("#input-descripcion-"+id).val();
                 var marca = $("#input-marca-"+id).val();
                 var precio = $("#input-precio-"+id).val();
                 var cantidad = $("#input-stock-"+id).val();
-                console.log(nombre);
-                console.log(descripcion);
-                console.log(marca);
-                console.log(precio);
-                console.log(cantidad);
+                var categoria = $("#select-categoria-"+id).val();
+                // console.log(nombre);
+                // console.log(descripcion);
+                // console.log(marca);
+                // console.log(precio);
+                // console.log(cantidad);
+                // console.log(categoria);
 
+                $.ajax({
+                    url: '/api/actualizar-productos-en-venta',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        nombre: nombre,
+                        descripcion: descripcion,
+                        marca: marca,
+                        precio: precio,
+                        cantidad: cantidad,
+                        categoria: categoria,
+                        id_admin: localStorage.id_admin,
+                        id_tienda: localStorage.id_tienda
+                    }
+                })
+                .done(function(data) {
+                    // console.log("success");
+                    // console.log(data);
+                    data = JSON.parse(data);
+                    if(data.info == "producto_actualizado"){
+                        $("#actualizacion-exitosa-producto").slideDown("slow");
+                        setTimeout(function(){
+                          $("#actualizacion-exitosa-producto").slideUp("slow");
+                        }, 2000);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                    console.log(data);
+                })
+                .always(function() {
+                    console.log("complete");
+                });
                 
-            }else{
-
+            }else if(type == "eliminar"){
+                $.ajax({
+                    url: '/api/eliminar-productos-en-venta',
+                    type: 'POST',
+                    data: {
+                        id: id
+                    }
+                })
+                .done(function(data) {
+                    console.log("success");
+                    // console.log(data);
+                    data = JSON.parse(data);
+                    if(data.info == "producto_eliminado"){
+                        cargar_productos_en_tabla();
+                        $("#eliminacion-exitosa-producto").slideDown("slow");
+                        setTimeout(function(){
+                          $("#eliminacion-exitosa-producto").slideUp("slow");
+                        }, 2000);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                    console.log(data);
+                })
+                .always(function() {
+                    console.log("complete");
+                });
             }
+        });
+
+        $("#div-mostrar-productos-en-venta").on("click", "button", function(e){
+            var id = $(this).attr("data-id");
+            console.log(id);
+            $.ajax({
+                url: '/api/eliminar-productos-en-venta',
+                type: 'POST',
+                data: {
+                    id: id
+                }
+            })
+            .done(function(data) {
+                console.log("success");
+                console.log(data);
+                data = JSON.parse(data);
+                if(data.info == "producto_eliminado"){
+                    $("#eliminacion-exitosa-producto2").slideDown("slow");
+                    setTimeout(function(){
+                      $("#eliminacion-exitosa-producto2").slideUp("slow");
+                    }, 2000);
+                    cargar_productos_en_paneles();
+                }
+            })
+            .fail(function() {
+                console.log("error");
+                console.log(data);
+            })
+            .always(function() {
+                console.log("complete");
+            });
         });
     });
     </script>

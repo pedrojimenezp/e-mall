@@ -84,10 +84,16 @@ function iniciar_sesion_admin($req, $res){
       $req->session("tipo_usuario", "admin");
       $req->session("id_tienda", $r["admin"]["id_tienda"]);
       $req->session("id_admin", $r["admin"]["id"]);
+
+      $tiendas = new Tiendas();
+      $r2 = $tiendas->buscar_por_id($r["admin"]["id_tienda"]);
+
+      $req->session("categoria_tienda", $r2["tienda"]["categoria"]);
+
       $ids = array("id_tienda" => $r["admin"]["id_tienda"], "id_admin" => $r["admin"]["id"]);
 
       // print_r($req->get_session());
-      $datos = array("error"=>"null", "info"=>"sesion_inicada", "descripcion"=>"Ha iniciado sesion correctamente", "ids"=>$ids);
+      $datos = array("error"=>"null", "info"=>"sesion_inicada", "descripcion"=>"Ha iniciado sesion correctamente", "ids"=>$ids, "categoria_tienda"=>$r2["tienda"]["categoria"]);
       $res->json($datos);
     }else{
       $datos = array("error"=>"admin_no_registrado", "descripcion"=>"El email o contraseña son incorrectos");
@@ -129,7 +135,7 @@ function cerrar_sesion($req, $res){
 }
 
 function agregar_a_productos_en_venta($req, $res){
-  print_r($req->body());
+  //print_r($req->body());
   $nombre_imagen = $_FILES['imagen']['name'];
   $tmp_imagen = $_FILES['imagen']['tmp_name'];
   $hash = md5(microtime());
@@ -144,6 +150,34 @@ function agregar_a_productos_en_venta($req, $res){
     $productos_en_venta = new Productos_en_venta();
     $r = $productos_en_venta->guardar($req->body("id_tienda"),$req->body("nombre"),$req->body("descripcion"),$req->body("marca"),$req->body("categoria"),$req->body("precio"),$req->body("cantidad"),$nombre_imagen, $req->body("id_admin"));
     $res->json($r);
+  }
+}
+
+function actualizar_productos_en_venta($req, $res){
+  //print_r($req->body());
+  if ($req->body("id") && $req->body("nombre") && $req->body("descripcion") && $req->body("marca") && $req->body("categoria") && $req->body("precio") && $req->body("cantidad") && $req->body("id_admin") && $req->body("id_tienda")) {
+    $productos_en_venta = new Productos_en_venta();
+    $r = $productos_en_venta->actualizar($req->body("id"), $req->body("nombre"), $req->body("descripcion"), $req->body("marca"), $req->body("categoria"), $req->body("precio"), $req->body("cantidad"), $req->body("id_admin"));
+    $res->json($r);
+    // $res->send("Ok");
+    // $res->json($req->body());
+  }else{
+    $error = array("error"=>"Faltan parametros", "info"=>"Debe enviar por el metodo post los siguintes parametros: (id, nombre, descripcion, marca, categoria, precio, cantidad, id_admin, id_tienda)");
+    $res->json($error);
+  }
+}
+
+function eliminar_productos_en_venta($req, $res){
+  //print_r($req->body());
+  if ($req->body("id")) {
+    $productos_en_venta = new Productos_en_venta();
+    $r = $productos_en_venta->eliminar($req->body("id"));
+    $res->json($r);
+    //$res->send("Ok");
+    //$res->json($req->body());
+  }else{
+    $error = array("error"=>"Faltan parametros", "info"=>"Debe enviar por el metodo post los siguintes parametros: (id)");
+    $res->json($error);
   }
 }
 
@@ -197,7 +231,7 @@ function agregar_producto_al_carrito($req, $res){
         $r1 = $carro_de_compras->buscar_por_id_producto($req->body("id_producto"));
         if($r1["producto"]){
           if ($r["producto"]["stock"]>=$req->body("cantidad")+$r1["producto"]["cantidad"]) {
-            $res->json($r1["producto"]);
+            // $res->json($r1["producto"]);
             $r2 = $carro_de_compras->actualizar_cantidad($r1["producto"]["id"], $r1["producto"]["cantidad"]+$req->body("cantidad"));
             $res->json($r2);
           }else{
@@ -226,7 +260,8 @@ function eliminar_producto_del_carrito($req, $res){
   if ($req->query("id_carrito") && $req->query("id_cliente")) {
     $carro_de_compras = new Carro_de_compras();
     $r = $carro_de_compras->eliminar_por_id_carro_id_cliente($req->query("id_carrito"), $req->query("id_cliente"));
-    $res->json($r);
+    // $res->json($r);
+    $res->redirect_to("/cliente/mi-carrito-de-compras");
   }else{
     $error = array("error"=>"faltan_parametros", "info"=>"Faltan parametros, debe enviar (id_carrito, id_cliente) por el metodo GET");
     $res->json($error);
@@ -573,7 +608,7 @@ function eliminar_pedido ($req, $res){
   if ($req->query("id_pedido")) {
     $pedidos = new Pedidos();
     $r = $pedidos->eliminar_por_id($req->query("id_pedido"));
-    $res->json($r);
+    $res->redirect_to("/cliente/mis-pedidos/sin-confirmar");
   }else{
     $res->send("Debe pasar el id del pediddo a eliminar");
   }
@@ -611,6 +646,12 @@ function actualizar_datos_cliente($req, $res){
     $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (id_cliente, nombre, edad, direccion, barrio, telefonos, password) por el metodo POST");
     $res->json($error);
   }
+}
+
+function obtener_categorias_productos ($req, $res){
+  $categorias_productos = new Categorias_productos();
+  $r3 = $categorias_productos->buscar_por_categoria_tienda($req->query("categoria-tienda"));
+  $res->json($r3);
 }
 
 ?>

@@ -40,7 +40,7 @@
   </nav>
   <!-- End Navigation -->
 
-  <div class="container main-container">
+  <div class="container main-container" style="min-height:500px;">
     <div class="row">
       <!-- Cart -->
       <div class="col-lg-12 col-md-12 col-sm-12">
@@ -118,9 +118,23 @@
             </div>
         <?php 
           } 
-        } else { ?>
-          <h2>Usted no ha realizado ningun pedido aun</h2>
-        <?php 
+        } else { 
+          echo "<div style='text-align:center; padding-top:100px;'>";
+            
+          if ($params["tipo_pedido"] == "sin confirmar") {
+            echo '<h2>Actualmente no tiene ningun pedido <span class="label label-danger">SIN CONFIRMAR</span></h2>';
+            echo '<i class="fa fa-exclamation-circle" style="margin-top:100px; font-size:200px; color:#d9534f;"></i>';
+          }elseif ($params["tipo_pedido"] == "pagados") {
+            echo '<h2>Actualmente no tiene pedidos <span class="label label-info">PAGADOS</span> registrados a su nombre.</h2>';
+            echo '<i class="fa fa-money" style="margin-top:100px; font-size:200px; color:#5bc0de;"></i>';
+          }elseif ($params["tipo_pedido"] == "enviados") {
+            echo '<h2>Hasta el momento no se le han <span class="label label-primary">ENVIADO</span> pedidos a su direccion de residencia.</h2>';
+            echo '<i class="fa fa-truck" style="margin-top:100px; font-size:200px; color:#428bca;"></i>';
+          }elseif ($params["tipo_pedido"] == "entregados") {
+            echo '<h2>Hasta el momento no tiene se le ha <span class="label label-success">ENTREGADO</span> ningun pedido en su residencia.</h2>';
+            echo '<i class="fa fa-thumbs-o-up" style="margin-top:100px; font-size:200px; color:#5cb85c;"></i>';
+          }
+          echo "</div>";
         } ?>
       </div>
       <!-- End Cart -->

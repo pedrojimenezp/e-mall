@@ -27,6 +27,33 @@ class Productos_en_venta extends Models{
     }
   }
 
+  public function actualizar ($id, $nombre, $descripcion, $marca, $categoria, $precio, $stock, $guardado_por) {
+    // $fecha = date("Y")."-".date("m")."-".date("d");
+    // $password = md5($password);
+    $consulta = "UPDATE productos_en_venta SET nombre='".$nombre."', descripcion='".$descripcion."', marca='".$marca."', categoria='".$categoria."', precio=".$precio.", stock=".$stock.", guardado_por=".$guardado_por." WHERE id=".$id;
+    // echo $consulta;
+    if(!$this->conexion->query($consulta)){
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      $consulta = "SELECT * FROM productos_en_venta WHERE id = ".$id;
+      $resultado = $this->conexion->query($consulta);
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "info"=>"producto_actualizado", "producto"=>$fila);
+    }
+  }
+
+  public function eliminar ($id) {
+    // $fecha = date("Y")."-".date("m")."-".date("d");
+    // $password = md5($password);
+    $consulta = "DELETE FROM productos_en_venta WHERE id=".$id;
+    // echo $consulta;
+    if(!$this->conexion->query($consulta)){
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      return array("error"=>null, "info"=>"producto_eliminado");
+    }
+  }
+
   public function buscar_por_id ($id){
     // $consulta = "SELECT * FROM productos_en_venta WHERE id = ".$id;
     $consulta = "SELECT t1.id AS id_producto, t2.id AS id_tienda, t1.nombre AS nombre_producto, t2.nombre AS nombre_tienda, t1.imagen, t1.marca, t1.descripcion, t1.precio, t1.stock, t1.categoria FROM productos_en_venta AS t1 JOIN tiendas AS t2 WHERE t1.id = ".$id." AND t1.id_tienda=t2.id";

@@ -79,7 +79,7 @@ class Carro_de_compras extends Models{
 
   public function actualizar_cantidad ($id, $cantidad){
     $consulta = "UPDATE carro_de_compras SET cantidad=".$cantidad." WHERE id = ".$id;
-    echo $consulta;
+    //echo $consulta;
     if(!$this->conexion->query($consulta)){
       echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
     }else{

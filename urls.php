@@ -46,11 +46,17 @@ $urls_array = array(
   "^/api/cerrar-sesion$" => "api@cerrar_sesion",
 
   "^/api/agregar-a-productos-en-venta$" => "api@agregar_a_productos_en_venta",
+  "^/api/actualizar-productos-en-venta$" => "api@actualizar_productos_en_venta",
+  "^/api/eliminar-productos-en-venta$" => "api@eliminar_productos_en_venta",
+  
   "^/api/obtener-productos-en-venta$" => "api@obtener_productos_en_venta",
   "^/api/obtener-datos-admin$" => "api@obtener_datos_admin",
   "^/api/obtener-datos-tienda$" => "api@obtener_datos_tienda",
   "^/api/agregar-producto-al-carrito$" => "api@agregar_producto_al_carrito",
   "^/api/eliminar-producto-del-carrito$" => "api@eliminar_producto_del_carrito",
+
+
+  "^/api/obtener-categorias-productos$" => "api@obtener_categorias_productos",
 
   "^/api/obtener-datos-cliente$" => "api@obtener_datos_cliente",
 
