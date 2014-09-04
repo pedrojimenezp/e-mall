@@ -44,6 +44,18 @@
                         <li class="divider"></li>
                     <?php } ?>
                 <?php } ?>
+                <?php if (isset($params["notificaciones"]["pedido_confirmado"])) { ?>
+                    <li>
+                        <a href="/dashboard/mis-pedidos/entregados">
+                            <div>
+                                <i class="fa fa-thumbs-up"></i> <?php echo count($params["notificaciones"]["pedido_confirmado"]); ?> cliente(s) han confirmado la llegada de su pedido
+                            </div>
+                        </a>
+                    </li>
+                    <?php if (count($params["notificaciones"])>1) { ?>
+                        <li class="divider"></li>
+                    <?php } ?>
+                <?php } ?>
             <?php }else{ ?>
                 <li>
                     <a href="#">

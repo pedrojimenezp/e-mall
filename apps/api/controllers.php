@@ -560,6 +560,7 @@ function notificacion_pago_inmediato($req, $res){
               $r6 = $carro_de_compras->eliminar_por_id_cliente_id_producto($r2["pedido"]["id_cliente"], $id_producto);
               $notificaciones = new Notificaciones();
               $r7 = $notificaciones->guardar($r3["producto"]["id_tienda"], "nuevo_pedido", $r["pedido"]["id"], "no leida");
+              $r8 = $notificaciones->guardar($r2["pedido"]["id_cliente"], "pedido_pagado", $r["pedido"]["id"], "no leida");
               $res->send("Todo bien");
             }
           }
@@ -601,6 +602,18 @@ function entregar_pedido($req, $res){
     $res->json($r);
   }else{
     $res->send("Debe pasar el id del pediddo a entregar");
+  }
+}
+
+function confirmar_entrega($req, $res){
+  if ($req->query("id_pedido")) {
+    $pedidos = new Pedidos();
+    $r = $pedidos->confirmar_entrega($req->query("id_pedido"));
+    $notificaciones = new Notificaciones();
+    $r2 = $notificaciones->guardar($r["pedido"]["id_tienda"], "pedido_confirmado", $r["pedido"]["id"], "no leida");
+    $res->json($r);
+  }else{
+    $res->send("Debe pasar el id del pediddo a confirmar");
   }
 }
 

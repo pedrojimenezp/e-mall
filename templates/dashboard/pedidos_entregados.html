@@ -4,7 +4,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <title>e-Mal - Pedidos entregados</title>
 
@@ -45,17 +45,17 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 col-md-12">
-                <?php // print_r($params["pedidos_entregados"]); ?>
+                <?php //print_r($params["pedidos_entregados"]); ?>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <?php 
                     if (isset($params["pedidos_entregados"]) && $params["pedidos_entregados"]) { 
                         foreach ($params["pedidos_entregados"] as $pedido) {?>
                             <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <p>Pedido realizado el <strong><?php echo $pedido["fecha_registro"]; ?></strong>, enviado el <strong> <?php echo $pedido["fecha_envio"]; ?></strong>, entregado el <strong><?php echo $pedido["fecha_entrega"]; ?></strong>.</p>
+                                </div>
                                 <div class="panel-body">
-                                    <h4>Fecha en que se realizo el pedido: <b><?php echo $pedido["fecha_registro"]; ?></b></h4>
-                                    <h4>Fecha en que se envio el pedido: <b><?php echo $pedido["fecha_envio"]; ?></b></h4>
-                                    <h4>Fecha en que se entrego el pedido: <b><?php echo $pedido["fecha_entrega"]; ?></b></h4>
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <thead>
@@ -89,18 +89,31 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <h4>Estado del pedido: 
+                                    <p><strong>Estado del pedido:</strong> 
                                         <span class="label label-success"><b>Pagado</b></span>
                                         <span class="label label-info"><b>Enviado</b></span>
                                         <span class="label label-primary"><b>Entregado</b></span>
-                                        <span><button class="btn btn-info boton-info-cliente" data-id-cliente="<?php echo $pedido["id_cliente"]; ?>" >Ver informacion del cliente</button></span>
-                                    </h4>
+                                        <?php if($pedido["confirmado_por_cliente"]=="si") { ?>
+                                            <span class="label label-warning"><b>Confirmado por el cliente</b></span>
+                                        <?php }else{ ?>
+                                            <span class="label label-danger"><b>Aun no ha sido confirmado por el cliente</b></span>
+                                        <?php } ?>
+                                    </p>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="col-xs-12" >
+                                            <button class="btn btn-info boton-info-cliente btn-sm hidden-xs pull-right" data-id-cliente="<?php echo $pedido["id_cliente"]; ?>" >Ver informacion del cliente</button>                                     
+                                            <button style="margin-top:10px;" class="btn btn-info boton-info-cliente btn-sm visible-xs center-block" data-id-cliente="<?php echo $pedido["id_cliente"]; ?>" >Ver informacion del cliente</button>                                     
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         <?php } 
                     } else { ?>
-                        <div style="text-align:center;">
-                          <h2>Usted no tiene pedidos entregados actualmente.</h2>
+                        <div style='text-align:center; padding-top:70px;'>
+                          <h2>Actualmente no tiene <span class="label label-primary">PEDIDOS ENTREGADOS</span> registrados en su tienda.</h2>
+                          <i class="fa fa-cube fa-5x" style="margin-top:50px; color:#428bca;"></i>
                         </div>
                 <?php } ?>
             </div>

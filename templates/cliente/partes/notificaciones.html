@@ -69,6 +69,18 @@
                             <li class="divider"></li>
                         <?php } ?>
                     <?php } ?>
+                    <?php if (isset($params["notificaciones"]["pedido_pagado"])) { ?>
+                        <li>
+                            <a href="/cliente/mis-pedidos/pagados">
+                                <div>
+                                    <i class="fa fa-money"></i> Ha pagado <?php echo count($params["notificaciones"]["pedido_pagado"]); ?> pedidos.
+                                </div>
+                            </a>
+                        </li>
+                        <?php if (count($params["notificaciones"])>3) { ?>
+                            <li class="divider"></li>
+                        <?php } ?>
+                    <?php } ?>
                 <?php }else{ ?>
                     <li>
                         <a href="#">

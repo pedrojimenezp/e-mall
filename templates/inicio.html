@@ -3,13 +3,13 @@
 <head>
     <meta charset='utf-8'>
     <meta name="" content="">
-    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>E-Mall</title>
     <link rel=author href="humans.txt">
-<!-- 
-    <link rel="stylesheet" type="text/css" href="<?php echo STATIC_DIR; ?>css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo STATIC_DIR; ?>css/responsive.css">
- -->
+
+    <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
 </head>
 <body>  
     <h1>Wellcome to E-Mall</h1>
@@ -33,19 +33,6 @@
         <a href="/registrar/tienda">Registrar una tienda</a> 
         <a href="/registrar/cliente">Registrarme como cliente</a> 
     </p>
-    <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
-        <input type="hidden" name="cmd" value="_xclick">
-        <input type="hidden" name="business" value="pagos@emall.com">
-        <input type="hidden" name="item_name" value="Producto 1">
-        <input type="hidden" name="currency_code" value="USD">
-        <input type="hidden" name="amount" value="50.00">
-        <input type="image" src="http://www.paypal.com/es_XC/i/btn/x-click-but01.gif"
-               name="submit"
-               alt="Make payments with PayPal - it's fast, free and secure!">
-        <input type="hidden" name="return" value="http://e-mall/pagado.php">
-        <input type="hidden" name="cancel_return" value="http://e-mall/cancelado.php">
-        <input type="hidden" name="no_shipping" value="1">
-    </form>
 <!-- 
     <script src="<?php echo STATIC_DIR; ?>js/jquery.js"></script>
     <script src="<?php echo STATIC_DIR; ?>js/bootstrap.js"></script>

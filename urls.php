@@ -71,6 +71,7 @@ $urls_array = array(
   "^/api/pedidos/enviar-pedido$" => "api@enviar_pedido",
   "^/api/pedidos/entregar-pedido$" => "api@entregar_pedido",
   "^/api/pedidos/eliminar-pedido$" => "api@eliminar_pedido",
+  "^/api/pedidos/confirmar-entrega$" => "api@confirmar_entrega",
   // FIN API
   
 

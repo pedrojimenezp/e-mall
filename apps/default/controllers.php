@@ -294,8 +294,11 @@ function mostrar_plantilla_pedidos_entregados($req, $res){
         $pedido["fecha_entrega"] = $p["fecha_entrega"];
         $pedido["id_pedido"] = $p["id"];
         $pedido["id_cliente"] = $p["id_cliente"];
+        $pedido["confirmado_por_cliente"] = $p["confirmado_por_cliente"];
         array_push($lista_pedidos, $pedido);
       }
+      $notificaciones = new Notificaciones();
+      $notificaciones->actualizar_estado_por_id_receptor($req->session("id_tienda"), "leida", "pedido_confirmado");
       $nt = notificaciones_tienda($req->session("id_tienda"));
       if ($r["admin"]) {
         $params = array(

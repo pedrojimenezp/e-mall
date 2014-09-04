@@ -120,6 +120,8 @@ function mostrar_plantilla_pedidos_pagados($req, $res){
         $pedido["id_pedido"] = $p["id"];
         array_push($lista_pedidos, $pedido);
       }
+      $notificaciones = new Notificaciones();
+      $notificaciones->actualizar_estado_por_id_receptor($req->session("id_cliente"), "leida", "pedido_pagado");
       $p = array('pedidos' => $lista_pedidos, "sesion_comprador_iniciada"=>true);
       $nt = notificaciones_cliente($req->session("id_cliente"));
       $p["notificaciones"] = $nt;
@@ -217,6 +219,7 @@ function mostrar_plantilla_pedidos_entregados($req, $res){
         $pedido["fecha_envio"] = $p["fecha_envio"];
         $pedido["fecha_entrega"] = $p["fecha_entrega"];
         $pedido["id_pedido"] = $p["id"];
+        $pedido["confirmado_por_cliente"] = $p["confirmado_por_cliente"];
         array_push($lista_pedidos, $pedido);
       }
       $notificaciones = new Notificaciones();

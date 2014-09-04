@@ -136,5 +136,18 @@ class Pedidos extends Models{
       return array("error"=>null, "info"=>"pedido_actualizado", "pedido"=>$fila);
     }
   }
+
+  public function confirmar_entrega ($id){
+    $consulta = "UPDATE pedidos SET confirmado_por_cliente='si' WHERE id = ".$id;
+    // echo $consulta;
+    if(!$this->conexion->query($consulta)){
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      $consulta = "SELECT * FROM pedidos WHERE id = ".$id;
+      $resultado = $this->conexion->query($consulta);
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "info"=>"pedido_confirmado", "pedido"=>$fila);
+    }
+  }
 }
 ?>

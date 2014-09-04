@@ -10,14 +10,16 @@
   <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <link href="<?php echo STATIC_DIR; ?>vendors/mimity/css/catalogo.css" rel="stylesheet">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
-  <style>
-    body{
-      padding-top: 70px;
-    }
-  </style>
+  <style type="text/css">
+        body { padding-top: 70px; }
+
+        *{
+            border-radius: 0 !important;
+        }
+    </style>
 </head>
 <body>
-  <?php print_r($params) ?>
+  <?php //print_r($params["pedidos"]) ?>
   <!-- Navigation -->
   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -50,16 +52,18 @@
           <?php
           foreach ($params["pedidos"] as $pedido) {?>
             <div class="panel panel-default">
+              <div class="panel-heading">
+                <?php if($pedido["estado"] == "pagado") {  ?>
+                  <p>Pedido realizado el <strong><?php echo $pedido["fecha_registro"]; ?></strong>.</p>
+                <?php } else if($pedido["estado"] == "sin confirmar") {  ?>
+                  <p><strong>Pedido sin confirmar.</strong></p>
+                <?php } else if($pedido["estado"] == "enviado") {  ?>
+                  <p>Pedido realizado el <strong><?php echo $pedido["fecha_registro"]; ?></strong>, enviado el <strong> <?php echo $pedido["fecha_envio"]; ?></strong>.</p>
+                <?php } else if($pedido["estado"] == "entregado") {  ?>
+                  <p>Pedido realizado el <strong><?php echo $pedido["fecha_registro"]; ?></strong>, enviado el <strong> <?php echo $pedido["fecha_envio"]; ?></strong>, entregado el <strong><?php echo $pedido["fecha_entrega"]; ?></strong>.</p>
+                <?php } ?>
+              </div>
               <div class="panel-body">
-                
-                <h3><?php echo "Pedido hecho a la tienda ".$pedido["productos"][0]["producto"]["nombre_tienda"] ?></h3>
-                <h4>Fecha en que se realizo el pedido: <b><?php echo $pedido["fecha_registro"]; ?></b></h4>
-                <?php if (isset($pedido["fecha_envio"])) { ?>
-                  <h4>Fecha en que se envio el pedido: <b><?php echo $pedido["fecha_envio"]; ?></b></h4>
-                <?php } ?>
-                <?php if (isset($pedido["fecha_entrega"])) { ?>
-                  <h4>Fecha en que se entrego el pedido: <b><?php echo $pedido["fecha_entrega"]; ?></b></h4>
-                <?php } ?>
                 <div class="table-responsive">
                   <table class="table table-bordered">
                     <thead>
@@ -95,44 +99,73 @@
                   </table>
                 </div>
                 <?php if($pedido["estado"] == "sin confirmar") { ?>
-                  <h4>Estado del pedido: 
+                  <p><strong>Estado del pedido:</strong>
                     <span class="label label-warning"><b>Sin confirmar</b></span>
-                    <span><button class="btn btn-primary boton-confirmar-pagar" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" data-precio-total="<?php echo $suma; ?>" >Confirmar y pagar</button></span>
-                    <span><a href="/api/pedidos/eliminar-pedido?id_pedido=<?php echo $pedido["id_pedido"]; ?>" class="btn btn-danger">Eliminar pedido</a></span>
-                  </h4>
+                  </p>
                 <?php } else if($pedido["estado"] == "pagado") {  ?>
-                  <h4>Estado del pedido: <span class="label label-success"><b>Pagado</b> </span></h4>
+                  <p>Estado del pedido: <span class="label label-success"><b>Pagado</b> </span></p>
                 <?php } else if($pedido["estado"] == "enviado") {  ?>
-                  <h4>Estado del pedido: 
+                  <p>Estado del pedido: 
                     <span class="label label-success"><b>Pagado</b></span>
                     <span class="label label-info"><b>Enviado</b></span>
-                  </h4>
+                  </p>
                 <?php } else if($pedido["estado"] == "entregado") {  ?>
-                  <h4>Estado del pedido: 
+                  <p>Estado del pedido: 
                     <span class="label label-success"><b>Pagado</b></span>
                     <span class="label label-info"><b>Enviado</b></span>
                     <span class="label label-primary"><b>Entregado</b></span>
-                  </h4>
+                    <?php if($pedido["confirmado_por_cliente"]=="si") { ?>
+                      <span class="label label-success"><b>Confirmado</b></span>
+                    <?php } ?>
+                  </p>
+                  <div id="alerta-pedido-confirmado" class="alert alert-success" style="display:none;">
+                    <p>Usted le ha confirmado al vendedor que ha recivido su pedido satisfactoriamente en su residencia.</p>
+                  </div>
                 <?php } ?>
               </div>
+              <?php if($pedido["estado"] == "sin confirmar") { ?>
+                <div class="panel-footer">
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                      <button class="btn btn-primary boton-confirmar-pagar btn-sm hidden-xs" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" data-precio-total="<?php echo $suma; ?>">Confirmar y pagar</button>
+                      <button class="btn btn-primary boton-confirmar-pagar btn-sm visible-xs center-block" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" data-precio-total="<?php echo $suma; ?>">Confirmar y pagar</button>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6" >
+                      <a href="/api/pedidos/eliminar-pedido?id_pedido=<?php echo $pedido["id_pedido"]; ?>" class="btn btn-danger btn-sm hidden-xs pull-right">Eliminar pedido</a>
+                      <a style="margin-top:10px;" href="/api/pedidos/eliminar-pedido?id_pedido=<?php echo $pedido["id_pedido"]; ?>" class="btn btn-danger btn-sm visible-xs center-block">Eliminar pedido</a>                                     
+                    </div>
+                  </div>
+                </div>
+              <?php } else if($pedido["estado"] == "entregado") { ?>
+                <?php if($pedido["confirmado_por_cliente"] !="si") { ?>
+                  <div class="panel-footer">
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <button class="btn btn-warning boton-confirmar-entrega btn-sm hidden-xs pull-right" data-id-pedido="<?php echo $pedido['id_pedido']; ?>" >Confirmar entrega del pedido</button>
+                        <button class="btn btn-warning boton-confirmar-entrega btn-sm visible-xs center-block" data-id-pedido="<?php echo $pedido['id_pedido']; ?>" >Confirmar entrega del pedido</button>                               
+                      </div>
+                    </div>
+                  </div>
+                <?php } ?>
+              <?php } ?>
             </div>
         <?php 
           } 
         } else { 
-          echo "<div style='text-align:center; padding-top:100px;'>";
+          echo "<div style='text-align:center; padding-top:70px;'>";
             
           if ($params["tipo_pedido"] == "sin confirmar") {
             echo '<h2>Actualmente no tiene ningun pedido <span class="label label-danger">SIN CONFIRMAR</span></h2>';
-            echo '<i class="fa fa-exclamation-circle" style="margin-top:100px; font-size:200px; color:#d9534f;"></i>';
+            echo '<i class="fa fa-5x fa-exclamation-circle" style="margin-top:100px; color:#d9534f;"></i>';
           }elseif ($params["tipo_pedido"] == "pagados") {
             echo '<h2>Actualmente no tiene pedidos <span class="label label-info">PAGADOS</span> registrados a su nombre.</h2>';
-            echo '<i class="fa fa-money" style="margin-top:100px; font-size:200px; color:#5bc0de;"></i>';
+            echo '<i class="fa fa-5x fa-money" style="margin-top:100px; color:#5bc0de;"></i>';
           }elseif ($params["tipo_pedido"] == "enviados") {
             echo '<h2>Hasta el momento no se le han <span class="label label-primary">ENVIADO</span> pedidos a su direccion de residencia.</h2>';
-            echo '<i class="fa fa-truck" style="margin-top:100px; font-size:200px; color:#428bca;"></i>';
+            echo '<i class="fa fa-5x fa-truck" style="margin-top:100px; color:#428bca;"></i>';
           }elseif ($params["tipo_pedido"] == "entregados") {
             echo '<h2>Hasta el momento no tiene se le ha <span class="label label-success">ENTREGADO</span> ningun pedido en su residencia.</h2>';
-            echo '<i class="fa fa-thumbs-o-up" style="margin-top:100px; font-size:200px; color:#5cb85c;"></i>';
+            echo '<i class="fa fa-5x fa-thumbs-o-up" style="margin-top:100px; color:#5cb85c;"></i>';
           }
           echo "</div>";
         } ?>
@@ -216,6 +249,30 @@
       $('#modal-img').modal();
     });
 
+    $(".boton-confirmar-entrega").on("click", function(){
+      var data = {
+          "id_pedido": $(this).attr("data-id-pedido")
+      }
+      console.log(data);
+      $.ajax({
+          url: "/api/pedidos/confirmar-entrega",
+          method: "GET",
+          data: data,
+          success: function (data) {
+              console.log(data);
+              data = JSON.parse(data);
+              console.log(data);
+              if(data.info == "pedido_confirmado"){
+                console.log("mostrar alerta");
+                $("#alerta-pedido-confirmado").slideDown("slow");
+                setTimeout(function(){
+                  $("#alerta-pedido-confirmado").slideUp("slow");
+                }, 3000);
+              }
+
+          }
+      })
+    });
   });
   </script>
   
