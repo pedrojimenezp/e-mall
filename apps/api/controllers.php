@@ -198,6 +198,23 @@ function obtener_productos_en_venta($req, $res){
   }
 }
 
+function obtener_productos_vendidos($req, $res){
+  if ($req->query("id_tienda")) {
+    if ($req->query("categoria-productos")) {
+      $productos_vendidos = new Productos_vendidos();
+      $r = $productos_vendidos->buscar_por_id_tienda_y_categoria($req->query("id_tienda"), $req->query("categoria-productos"));
+      $res->json($r);
+    }else{
+      $productos_vendidos = new Productos_vendidos();
+      $r = $productos_vendidos->buscar_por_id_tienda($req->query("id_tienda"));
+      $res->json($r);
+    }
+  }else{
+    $r = array("error"=>"faltan_paramentros", "info"=>"Debe enviar el paramentro id_tienda por la  url y utilizar el metodo GET para realizar la peticion");
+    $res->json($r);
+  }
+}
+
 function obtener_datos_admin($req, $res){
   if ($req->query("id_admin")) {
     $admins = new Admins();
@@ -323,7 +340,7 @@ function actualizar_password_admin($req, $res){
 }
 
 function actualizar_datos_tienda($req, $res){
-  if($req->body("nombre") && $req->body("direccion") && $req->body("barrio") && $req->body("telefonos") && $req->body("password") && $req->body("id_admin") && $req->body("id_tienda")){
+  if($req->body("paypal") && $req->body("nombre") && $req->body("direccion") && $req->body("barrio") && $req->body("telefonos") && $req->body("password") && $req->body("id_admin") && $req->body("id_tienda")){
     $admins = new Admins();
     $r = $admins->buscar_por_id($req->body("id_admin"));
     if($r["admin"]){
@@ -333,9 +350,10 @@ function actualizar_datos_tienda($req, $res){
           $tiendas = new Tiendas();
           $r1 = $tiendas->buscar_por_nombre($req->body("nombre"));
           if (!$r1["tienda"] || ($r1["tienda"]["id"] == $req->body("id_tienda"))) {
-          
+            $response = array();
+            
             $r2 = $tiendas->actualizar_nombre($req->body("id_tienda"), $req->body("nombre"));
-            $res->json($r2);
+            $r5 = $tiendas->actualizar_paypal($req->body("id_tienda"), $req->body("paypal"));
             
             $datos_tiendas = new Datos_tiendas();
             $r3 = $datos_tiendas->buscar_por_id_tienda($req->body("id_tienda"));
@@ -397,6 +415,18 @@ function agregar_sub_admins ($req, $res){
     }
   }else{
     $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (id_admin, id_tienda, password_admin, nombre_sub_admin, email_sub_admin, password_sub_admin) por el metodo POST");
+    $res->json($error);
+  }
+}
+
+function eliminar_sub_admins ($req, $res){
+  if($req->query("id_admin")){
+    $admins = new Admins();
+    $r = $admins->eliminar_por_id($req->query("id_admin"));
+    // $res->json($r);
+    $res->redirect_to("/dashboard/mis-configuraciones");
+  }else{
+    $error = array("error"=>"faltan_parametros", "info"=>"Debe enviar los parametros (id_admin) por el metodo GET");
     $res->json($error);
   }
 }

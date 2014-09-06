@@ -11,6 +11,7 @@ $urls_array = array(
 
   // PLANTILLAS DE VENDEDORES
   "^/dashboard/mis-productos/en-venta$" => "default@mostrar_plantilla_productos_en_venta",
+  "^/dashboard/mis-productos/vendidos$" => "default@mostrar_plantilla_productos_vendidos",
   "^/dashboard/mis-configuraciones$" => "default@mostrar_plantilla_configuraciones",
   "^/dashboard/mis-pedidos/nuevos$" => "default@mostrar_plantilla_pedidos_nuevos",
   "^/dashboard/mis-pedidos/enviados$" => "default@mostrar_plantilla_pedidos_enviados",
@@ -50,6 +51,8 @@ $urls_array = array(
   "^/api/eliminar-productos-en-venta$" => "api@eliminar_productos_en_venta",
   
   "^/api/obtener-productos-en-venta$" => "api@obtener_productos_en_venta",
+  "^/api/obtener-productos-vendidos$" => "api@obtener_productos_vendidos",
+  
   "^/api/obtener-datos-admin$" => "api@obtener_datos_admin",
   "^/api/obtener-datos-tienda$" => "api@obtener_datos_tienda",
   "^/api/agregar-producto-al-carrito$" => "api@agregar_producto_al_carrito",
@@ -64,6 +67,7 @@ $urls_array = array(
   "^/api/admin/actualizar-password$" => "api@actualizar_password_admin",
   "^/api/admin/actualizar-datos-tienda$" => "api@actualizar_datos_tienda",
   "^/api/admin/agregar-sub-admins$" => "api@agregar_sub_admins",
+  "^/api/admin/eliminar-sub-admins$" => "api@eliminar_sub_admins",
 
   "^/api/cliente/actualizar-datos-cliente$" => "api@actualizar_datos_cliente",
 

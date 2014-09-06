@@ -293,7 +293,8 @@ function mostrar_plantilla_catalogo_tienda($req, $res){
       $p = array(
         "tienda" => $r["tienda"],
         "productos" => $r2["productos"],
-        "categorias_productos" => $r3["categorias_productos"]
+        "categorias_productos" => $r3["categorias_productos"],
+        "categoria" => $req->query("categoria-productos")
       );
       if ($req->session("sesion_iniciada") && $req->session("tipo_usuario") == "cliente") {
         $p["sesion_comprador_iniciada"] = true; 

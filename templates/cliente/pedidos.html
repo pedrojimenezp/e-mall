@@ -127,8 +127,8 @@
                 <div class="panel-footer">
                   <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-6">
-                      <button class="btn btn-primary boton-confirmar-pagar btn-sm hidden-xs" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" data-precio-total="<?php echo $suma; ?>">Confirmar y pagar</button>
-                      <button class="btn btn-primary boton-confirmar-pagar btn-sm visible-xs center-block" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" data-precio-total="<?php echo $suma; ?>">Confirmar y pagar</button>
+                      <button class="btn btn-primary boton-confirmar-pagar btn-sm hidden-xs" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" data-id-tienda="<?php echo $pedido["productos"][0]["producto"]["id_tienda"]; ?>" data-precio-total="<?php echo $suma; ?>">Confirmar y pagar</button>
+                      <button class="btn btn-primary boton-confirmar-pagar btn-sm visible-xs center-block" data-id-pedido="<?php echo $pedido["id_pedido"]; ?>" data-id-tienda="<?php $pedido["productos"][0]["producto"]["id_tienda"]; ?>" data-precio-total="<?php echo $suma; ?>">Confirmar y pagar</button>
                     </div>
                     <div class="col-xs-12 col-sm-6 col-md-6" >
                       <a href="/api/pedidos/eliminar-pedido?id_pedido=<?php echo $pedido["id_pedido"]; ?>" class="btn btn-danger btn-sm hidden-xs pull-right">Eliminar pedido</a>
@@ -156,16 +156,16 @@
             
           if ($params["tipo_pedido"] == "sin confirmar") {
             echo '<h2>Actualmente no tiene ningun pedido <span class="label label-danger">SIN CONFIRMAR</span></h2>';
-            echo '<i class="fa fa-5x fa-exclamation-circle" style="margin-top:100px; color:#d9534f;"></i>';
+            echo '<i class="fa fa-5x fa-exclamation-circle" style="margin-top:60px; color:#d9534f;"></i>';
           }elseif ($params["tipo_pedido"] == "pagados") {
             echo '<h2>Actualmente no tiene pedidos <span class="label label-info">PAGADOS</span> registrados a su nombre.</h2>';
-            echo '<i class="fa fa-5x fa-money" style="margin-top:100px; color:#5bc0de;"></i>';
+            echo '<i class="fa fa-5x fa-money" style="margin-top:60px; color:#5bc0de;"></i>';
           }elseif ($params["tipo_pedido"] == "enviados") {
             echo '<h2>Hasta el momento no se le han <span class="label label-primary">ENVIADO</span> pedidos a su direccion de residencia.</h2>';
-            echo '<i class="fa fa-5x fa-truck" style="margin-top:100px; color:#428bca;"></i>';
+            echo '<i class="fa fa-5x fa-truck" style="margin-top:60px; color:#428bca;"></i>';
           }elseif ($params["tipo_pedido"] == "entregados") {
             echo '<h2>Hasta el momento no tiene se le ha <span class="label label-success">ENTREGADO</span> ningun pedido en su residencia.</h2>';
-            echo '<i class="fa fa-5x fa-thumbs-o-up" style="margin-top:100px; color:#5cb85c;"></i>';
+            echo '<i class="fa fa-5x fa-thumbs-o-up" style="margin-top:60px; color:#5cb85c;"></i>';
           }
           echo "</div>";
         } ?>
@@ -181,7 +181,7 @@
           <div class="modal-body">
             <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
               <input type="hidden" name="cmd" value="_xclick">
-              <input type="hidden" name="business" value="pagos@emall.com">
+              <input id="email_paypal" type="hidden" name="business" value="">
               <input id="item_name" type="hidden" name="item_name" value="">
               <input id="item_number" type='hidden' name='item_number' value=''>
               <input id="amount" type="hidden" name="amount" value="">
@@ -229,16 +229,26 @@
       console.log("Click");
       var id_pedido = $(this).attr("data-id-pedido");
       var precio_total = $(this).attr("data-precio-total");
+      var id_tienda = $(this).attr("data-id-tienda");
       console.log(id_pedido);
       console.log(precio_total);
-      $("#item_name").val("Pedido "+id_pedido);
-      $("#item_number").val(id_pedido);
-      $("#amount").val(Math.round(precio_total/2000)+1);
-      $("#r_p").val($("#r_p").val()+"?id="+id_pedido);
-      $("#r_c").val($("#r_c").val()+"?id="+id_pedido);
-      $('#modal-pagar-con-paypal').modal({
-        keyboard: false,
-        backdrop: false
+      $.ajax({
+        url: "/api/obtener-datos-tienda?id_tienda="+id_tienda,
+        type: "GET",
+        success: function(data2) {
+          console.log(data2);
+          data2 = JSON.parse(data2);
+          $("#email_paypal").val(data2.tienda.paypal);
+          $("#item_name").val("Pedido "+id_pedido);
+          $("#item_number").val(id_pedido);
+          $("#amount").val(Math.round(precio_total/2000)+1);
+          $("#r_p").val($("#r_p").val()+"?id="+id_pedido);
+          $("#r_c").val($("#r_c").val()+"?id="+id_pedido);
+          $('#modal-pagar-con-paypal').modal({
+            keyboard: false,
+            backdrop: false
+          });
+        }
       });
     });
 

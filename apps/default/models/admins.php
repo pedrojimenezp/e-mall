@@ -41,6 +41,16 @@ class Admins extends Models{
     }
   }
 
+  public function eliminar_por_id ($id){
+    $consulta = "DELETE FROM admins WHERE id = ".$id;
+    echo $consulta;
+    if($resultado = $this->conexion->query($consulta)){
+      return array("error"=>null, "info"=>"admin_eliminado");
+    }else{
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
+    }
+  }
+
   public function buscar_por_id_tienda ($id_tienda, $es_propietario=null){
     if ($es_propietario) {
       $consulta = "SELECT * FROM admins WHERE id_tienda = ".$id_tienda." AND es_propietario='".$es_propietario."'";

@@ -4,7 +4,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <title>e-Mal - Configuraciones</title>
 
@@ -41,7 +41,7 @@
             <!-- /.navbar-top-links -->
         </div>
     </nav>
-    <div class="container-fluid">
+    <div class="container">
         <?php //print_r($params["admin"]) ?>
         <div class="row">
             <div class="col-lg-12 col-md-12">
@@ -71,6 +71,18 @@
                                                         <label for="email-admin">Email</label>
                                                         <input type="email" class="form-control" id="email-admin" required placeholder="Ej: p@g.com">
                                                     </div>
+                                                    <div id="alert-operacion-no-necesaria" class="alert alert-warning" style="display:none;">
+                                                        <p>Los datos que desea actualizar son los mismo que ya tiene registrados, la operacion no es necesaria.</p>
+                                                    </div>
+                                                    <div id="alert-datos-actualizados" class="alert alert-success" style="display:none;">
+                                                        <p>Datos personales actualizados correctamente.</p>
+                                                    </div>
+                                                    <div id="alert-password-incorrecta" class="alert alert-danger" style="display:none;">
+                                                        <p>Contraseña incorrecta, permiso denegado.</p>
+                                                    </div>
+                                                    <div id="alert-email-ya-registrado" class="alert alert-danger" style="display:none;">
+                                                        <p>Este correo ya esta siendo usado por otra persona, por favor ingrese otro.</p>
+                                                    </div>
                                             </div>
                                             <div class="panel-footer">
                                                 <div class="row">
@@ -94,14 +106,23 @@
                                                 Cambiar la contraseña
                                             </div>
                                             <div class="panel-body">
-                                                    <div class="form-group">
-                                                        <label for="password-admin">Nueva contraseña</label>
-                                                        <input type="password" class="form-control" id="password-nueva-admin" required placeholder="********">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="password2-admin">Nueva contraseña de nuevo</label>
-                                                        <input type="password" class="form-control" id="password-nueva2-admin" required  placeholder="********">
-                                                    </div>
+                                                <div class="form-group">
+                                                    <label for="password-admin">Nueva contraseña</label>
+                                                    <input type="password" class="form-control" id="password-nueva-admin" required placeholder="********">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password2-admin">Nueva contraseña de nuevo</label>
+                                                    <input type="password" class="form-control" id="password-nueva2-admin" required  placeholder="********">
+                                                </div>
+                                                <div id="alert-operacion-no-necesaria2" class="alert alert-warning" style="display:none;">
+                                                    <p>La contraseña nueva que desea ingresar es la misma que la antigua, por favor ingrese otra.</p>
+                                                </div>
+                                                <div id="alert-datos-actualizados2" class="alert alert-success" style="display:none;">
+                                                    <p>Contraseña actualizada correctamente.</p>
+                                                </div>
+                                                <div id="alert-password-incorrecta2" class="alert alert-danger" style="display:none;">
+                                                    <p>Contraseña incorrecta, permiso denegado.</p>
+                                                </div>
                                             </div>
                                             <div class="panel-footer">
                                                 <div class="row">
@@ -127,6 +148,10 @@
                                                 </div>
                                                 <div class="panel-body">
                                                     <div class="form-group">
+                                                        <label for="paypal-tienda">Cuenta de paypal</label>
+                                                        <input type="email" class="form-control" id="paypal-tienda" placeholder="Ej: mitienda@pagos.com" required>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label for="nombre-tienda">Nombre</label>
                                                         <input type="text" class="form-control" id="nombre-tienda" placeholder="Ej: Tienda tecnologica" required>
                                                     </div>
@@ -149,6 +174,15 @@
                                                     <div class="form-group">
                                                         <label for="estado-tienda">Estado de la tienda</label>
                                                         <input type="text" class="form-control" id="estado-tienda" required disabled>
+                                                    </div>
+                                                    <div id="alert-nombre-ya-registrado" class="alert alert-danger" style="display:none;">
+                                                        <p>Este nombre ya esta siendo usado por otra tienda, por favor ingrese otro.</p>
+                                                    </div>
+                                                    <div id="alert-datos-actualizados3" class="alert alert-success" style="display:none;">
+                                                    <p>Datos de la tienda actualizados correctamente.</p>
+                                                    </div>
+                                                    <div id="alert-password-incorrecta3" class="alert alert-danger" style="display:none;">
+                                                        <p>Contraseña incorrecta, permiso denegado.</p>
                                                     </div>
                                                 </div>
                                                 <div class="panel-footer">
@@ -183,18 +217,27 @@
                                             Agregar sub-administradores
                                         </div>
                                         <div class="panel-body">
-                                                <div class="form-group">
-                                                    <label for="nombre-sub-admin">Nombre</label>
-                                                    <input type="text" class="form-control" id="nombre-sub-admin" required placeholder="Ej: Fuck yeah">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="email-sub-admin">Email</label>
-                                                    <input type="email" class="form-control" id="email-sub-admin" required placeholder="Ej: j@g.com">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="password-sub-admin">Contraseña</label>
-                                                    <input type="password" class="form-control" id="password-sub-admin" required placeholder="********">
-                                                </div>
+                                            <div class="form-group">
+                                                <label for="nombre-sub-admin">Nombre</label>
+                                                <input type="text" class="form-control" id="nombre-sub-admin" required placeholder="Ej: Fuck yeah">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email-sub-admin">Email</label>
+                                                <input type="email" class="form-control" id="email-sub-admin" required placeholder="Ej: j@g.com">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="password-sub-admin">Contraseña</label>
+                                                <input type="password" class="form-control" id="password-sub-admin" required placeholder="********">
+                                            </div>
+                                            <div id="alert-admin-agregado" class="alert alert-success" style="display:none;">
+                                                <p>Administrador agregado correctamente.</p>
+                                            </div>
+                                            <div id="alert-password-incorrecta4" class="alert alert-danger" style="display:none;">
+                                                <p>Contraseña incorrecta, permiso denegado.</p>
+                                            </div>
+                                            <div id="alert-email-ya-registrado2" class="alert alert-danger" style="display:none;">
+                                                <p>Este correo ya esta siendo usado por otra persona, por favor ingrese otro.</p>
+                                            </div>
                                         </div>
                                         <div class="panel-footer">
                                             <div class="row">
@@ -231,14 +274,14 @@
                                                             <td><?php echo $admin["nombre"]; ?></td>
                                                             <td><?php echo $admin["email"]; ?></td>
                                                             <td><?php echo $admin["fecha_registro"]; ?></td>
-                                                            <td><a href="/api/elimianr-sub-admin?id_admin=<?php echo $admin['id']; ?>" class="btn btn-danger">Eliminar</a></td>
+                                                            <td><a href="/api/admin/eliminar-sub-admins?id_admin=<?php echo $admin['id']; ?>" class="btn btn-danger">Eliminar</a></td>
                                                         </tr>
                                                 <?php 
                                                     }
                                                 } ?>
                                             </tbody>
                                         </table>
-                                        <?php print_r($params["admins"]); ?>
+                                        <?php //print_r($params["admins"]); ?>
                                     </div>
                                 </div>
                             </div>
@@ -286,6 +329,9 @@
                     console.log(data);
                     data = JSON.parse(data);
                     if(data.error ==  null && data.tienda){
+                        if(data.tienda.paypal){
+                            $("#paypal-tienda").val(data.tienda.paypal);
+                        }
                         if(data.tienda.nombre){
                             $("#nombre-tienda").val(data.tienda.nombre);
                         }
@@ -304,8 +350,6 @@
                         if(data.tienda.categoria){
                             $("#categoria-tienda").val(data.tienda.categoria);
                         }
-                    }else{
-                       
                     }
                 }
             });    
@@ -348,7 +392,29 @@
                 data: datos,
                 success: function(data) {
                     // data = JSON.parse(data);
-                    alert(data);
+                    // alert(data);
+                    data = JSON.parse(data);
+                    if (data.error == "password_incorrecta") {
+                        $("#alert-password-incorrecta").slideDown("slow");
+                        setTimeout(function(){
+                          $("#alert-password-incorrecta").slideUp("slow");
+                        }, 2000);
+                    }else if (data.error == "email_ya_registrado") {
+                        $("#alert-email-ya-registrado").slideDown("slow");
+                        setTimeout(function(){
+                          $("#alert-email-ya-registrado").slideUp("slow");
+                        }, 2000);
+                    }else if (data.error == "datos_iguales") {
+                        $("#alert-operacion-no-necesaria").slideDown("slow");
+                        setTimeout(function(){
+                          $("#alert-operacion-no-necesaria").slideUp("slow");
+                        }, 2000);
+                    }else if (data.info == "info_actualizada") {
+                        $("#alert-datos-actualizados").slideDown("slow");
+                        setTimeout(function(){
+                          $("#alert-datos-actualizados").slideUp("slow");
+                        }, 2000);
+                    }
                     // console.log(data);
                 }
             });
@@ -374,8 +440,24 @@
                     data: datos,
                     success: function(data) {
                         // data = JSON.parse(data);
-                        alert(data);
-                        // console.log(data);
+                        // alert(data);
+                        data = JSON.parse(data);
+                        if (data.error == "password_incorrecta") {
+                            $("#alert-password-incorrecta2").slideDown("slow");
+                            setTimeout(function(){
+                              $("#alert-password-incorrecta2").slideUp("slow");
+                            }, 2000);
+                        }else if (data.error == "datos_iguales") {
+                            $("#alert-operacion-no-necesaria2").slideDown("slow");
+                            setTimeout(function(){
+                              $("#alert-operacion-no-necesaria2").slideUp("slow");
+                            }, 3000);
+                        }else if (data.info == "info_actualizada") {
+                            $("#alert-datos-actualizados2").slideDown("slow");
+                            setTimeout(function(){
+                              $("#alert-datos-actualizados2").slideUp("slow");
+                            }, 2000);
+                        }
                     }
                 });
             }else{
@@ -385,6 +467,7 @@
 
         $("#form-actualizar-datos-tienda").on("submit", function(e){
             e.preventDefault();
+            var paypal = $("input#paypal-tienda").val();
             var nombre = $("input#nombre-tienda").val();
             var direccion = $("input#direccion-tienda").val();
             var barrio = $("input#barrio-tienda").val();
@@ -392,6 +475,7 @@
             var password = $("input#password-admin-datos-tienda").val();
 
             var datos = {
+                "paypal" : paypal,
                 "nombre" : nombre,
                 "direccion" : direccion,
                 "barrio" : barrio,
@@ -409,8 +493,24 @@
                 data: datos,
                 success: function(data) {
                     // data = JSON.parse(data);
-                    alert(data);
-                    // console.log(data);
+                    // alert(data);
+                    data = JSON.parse(data);
+                    if (data.error == "password_incorrecta") {
+                        $("#alert-password-incorrecta3").slideDown("slow");
+                        setTimeout(function(){
+                          $("#alert-password-incorrecta3").slideUp("slow");
+                        }, 2000);
+                    }else if (data.error == "email_ya_registrado") {
+                        $("#alert-nombre-ya-registrado").slideDown("slow");
+                        setTimeout(function(){
+                          $("#alert-nombre-ya-registrado").slideUp("slow");
+                        }, 3000);
+                    }else if (data.info == "datos_tienda_actualizados" || data.info == "info_tienda_registrados") {
+                        $("#alert-datos-actualizados3").slideDown("slow");
+                        setTimeout(function(){
+                          $("#alert-datos-actualizados3").slideUp("slow");
+                        }, 2000);
+                    }
                 }
             });
         });
@@ -438,9 +538,24 @@
                     url: "/api/admin/agregar-sub-admins",
                     data: datos,
                     success: function(data) {
-                        // data = JSON.parse(data);
-                        alert(data);
-                        // console.log(data);
+                        // alert(data);
+                        data = JSON.parse(data);
+                        if (data.error == "password_incorrecta") {
+                            $("#alert-password-incorrecta4").slideDown("slow");
+                            setTimeout(function(){
+                              $("#alert-password-incorrecta4").slideUp("slow");
+                            }, 2000);
+                        }else if (data.error == "email_ya_registrado") {
+                            $("#alert-email-ya-registrado2").slideDown("slow");
+                            setTimeout(function(){
+                              $("#alert-email-ya-registrado2").slideUp("slow");
+                            }, 3000);
+                        }else if (data.info == "admin_registrado") {
+                            $("#alert-admin-agregado").slideDown("slow");
+                            setTimeout(function(){
+                              $("#alert-admin-agregado").slideUp("slow");
+                            }, 2000);
+                        }
                     }
                 });
             }else{

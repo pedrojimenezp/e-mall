@@ -177,7 +177,8 @@ class Productos_vendidos extends Models{
   }
 
   public function buscar_por_id_tienda ($id_tienda){
-    $consulta = "SELECT t1.id, t1.nombre AS nombre_producto, t1.descripcion, t1.marca, t1.precio, t1.stock, t1.imagen, t1.categoria, t2.nombre AS guardado_por  FROM productos_en_venta as t1 INNER JOIN admins as t2 ON t1.id_tienda = ".$id_tienda." AND t1.guardado_por=t2.id";
+    $consulta = "SELECT *, COUNT(*) FROM productos_vendidos WHERE id_tienda = ".$id_tienda." GROUP BY id_producto_ev";
+    // echo $consulta;
     if($resultado = $this->conexion->query($consulta)){
       $filas = array();
       while ($fila = $resultado->fetch_assoc()) {
@@ -190,7 +191,7 @@ class Productos_vendidos extends Models{
   }
 
   public function buscar_por_id_tienda_y_categoria ($id_tienda, $categoria){
-    $consulta = "SELECT t1.id, t1.nombre AS nombre_producto, t1.descripcion, t1.marca, t1.precio, t1.stock, t1.imagen, t1.categoria, t2.nombre AS guardado_por  FROM productos_en_venta as t1 INNER JOIN admins as t2 ON t1.id_tienda = ".$id_tienda." AND t1.categoria = '".$categoria."' AND t1.guardado_por=t2.id";
+    $consulta = "SELECT *, COUNT(*) FROM productos_vendidos WHERE id_tienda = ".$id_tienda." AND categoria = '".$categoria."' GROUP BY id_producto_ev";
     if($resultado = $this->conexion->query($consulta)){
       // print_r($resultado);
       $filas = array();

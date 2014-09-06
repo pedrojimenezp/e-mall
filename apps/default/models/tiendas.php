@@ -13,9 +13,9 @@ class Tiendas extends Models{
     $this->disconnect();
   }
 
-  public function guardar ($nombre, $categoria) {
+  public function guardar ($paypal, $nombre, $categoria) {
     $fecha = date("Y")."-".date("m")."-".date("d");
-    $consulta = "INSERT INTO tiendas (nombre, categoria, estado, fecha_registro) VALUES ('".$nombre."', '".$categoria."','inhabilitada','".$fecha."')";
+    $consulta = "INSERT INTO tiendas (paypal, nombre, categoria, estado, fecha_registro) VALUES ('".$paypal."', '".$nombre."', '".$categoria."','inhabilitada','".$fecha."')";
     echo $consulta;
     if(!$this->conexion->query($consulta)){
       if($this->conexion->errno == 1062){
@@ -36,8 +36,8 @@ class Tiendas extends Models{
     $consulta = "UPDATE tiendas SET nombre='".$nombre."' WHERE id = ".$id;
     if(!$this->conexion->query($consulta)){
       if($this->conexion->errno == 1062){
-        $error = array("numero"=>1062, "descripcion"=>"Ya existe una tienda con ese nombre por lo anto no se puede guardar"); 
-        return array("error" => $error);
+        // $error = array("numero"=>1062, "descripcion"=>"Ya existe una tienda con ese nombre por lo anto no se puede guardar"); 
+        return array("error" => "nombre_ya_registrado");
       }else{
         echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
       }
@@ -46,6 +46,18 @@ class Tiendas extends Models{
       $resultado = $this->conexion->query($consulta);
       $fila = $resultado->fetch_assoc();
       return array("error"=>null, "tienda"=>$fila);
+    }
+  }
+
+  public function actualizar_paypal ($id, $paypal) {
+    $consulta = "UPDATE tiendas SET paypal='".$paypal."' WHERE id = ".$id;
+    if(!$this->conexion->query($consulta)){
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
+    }else{
+      $consulta = "SELECT * FROM tiendas WHERE id = ".$id;
+      $resultado = $this->conexion->query($consulta);
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "info"=>"paypal_actualizado", "tienda"=>$fila);
     }
   }
 
@@ -176,7 +188,7 @@ class Datos_tiendas extends Models{
       $consulta = "SELECT * FROM datos_tiendas WHERE id_tienda = ".$id_tienda;
       $resultado = $this->conexion->query($consulta);
       $fila = $resultado->fetch_assoc();
-      return array("error"=>null, "info"=>"datos_actualizados", "datos_tienda"=>$fila);
+      return array("error"=>null, "info"=>"datos_tienda_actualizados", "datos_tienda"=>$fila);
     }
   }
 

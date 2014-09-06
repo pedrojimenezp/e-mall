@@ -19,7 +19,7 @@
     </style>
 </head>
 <body>
-<?php //print_r($params) ?>
+<?php print_r($params) ?>
   <!-- Navigation -->
   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -123,7 +123,7 @@
           </div>
           <div class="btn-group btns-cart">
             <button type="button" class="btn btn-primary" onclick="window.location='/tiendas'"><i class="fa fa-arrow-circle-left"></i> Continuar comprando</button>
-            <button type="button" class="btn btn-primary boton-checkout" data-id-tienda="<?php echo $id_tienda; ?>" data-lista="<?php echo $lista_productos_cantidades; ?>" data-precio-total="<?php echo $suma ?>">Proceder a pagar <i class="fa fa-arrow-circle-right"></i></button>
+            <button type="button" class="btn btn-primary boton-checkout" data-lista="<?php echo $lista_productos_cantidades; ?>" data-precio-total="<?php echo $suma ?>" data-id-tienda="<?php echo $id_tienda ?>">Proceder a pagar <i class="fa fa-arrow-circle-right"></i></button>
           </div>
         </div>
         <?php } else {
@@ -146,7 +146,7 @@
           <div class="modal-body">
             <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
               <input type="hidden" name="cmd" value="_xclick">
-              <input type="hidden" name="business" value="pagos@emall.com">
+              <input id="email_paypal" type="hidden" name="business" value="pagos@emall.com">
               <input id="item_name" type="hidden" name="item_name" value="">
               <input id="item_number" type='hidden' name='item_number' value=''>
               <input id="amount" type="hidden" name="amount" value="">
@@ -211,14 +211,23 @@
           console.log(data);
           data = JSON.parse(data);
           if (data.info=="pedido_registrado") {
-            $("#item_name").val("Pedido "+data.pedido.id);
-            $("#item_number").val(data.pedido.id);
-            $("#amount").val(Math.round(precio_total/2000)+1);
-            $("#r_p").val($("#r_p").val()+"?id="+data.pedido.id);
-            $("#r_c").val($("#r_c").val()+"?id="+data.pedido.id);
-            $('#modal-pagar-con-paypal').modal({
-              keyboard: false,
-              backdrop: false
+            $.ajax({
+              url: "/api/obtener-datos-tienda?id_tienda="+id_tienda,
+              type: "GET",
+              success: function(data2) {
+                console.log(data2);
+                data2 = JSON.parse(data2);
+                $("#email_paypal").val(data2.tienda.paypal);
+                $("#item_name").val("Pedido "+data.pedido.id);
+                $("#item_number").val(data.pedido.id);
+                $("#amount").val(Math.round(precio_total/2000)+1);
+                $("#r_p").val($("#r_p").val()+"?id="+data.pedido.id);
+                $("#r_c").val($("#r_c").val()+"?id="+data.pedido.id);
+                $('#modal-pagar-con-paypal').modal({
+                  keyboard: false,
+                  backdrop: false
+                });
+              }
             });
           }else{
             alert(data.info);

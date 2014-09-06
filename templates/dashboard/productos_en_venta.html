@@ -339,7 +339,7 @@
                             //console.log(producto);
                             crear_select_categorias_productos(localStorage.categoria_tienda, producto.categoria, producto.id, function(select){
                                 var p = '<tr>\
-                                    <td><img class="imagen-producto" width="30px" height="30px" src="/static/usuarios/imagenes/productos/'+producto.imagen+'" alt="'+producto.nombre_producto+'"></td>\
+                                    <td><img style="cursor:pointer;" class="imagen-producto" width="30px" height="30px" src="/static/usuarios/imagenes/productos/'+producto.imagen+'" alt="'+producto.nombre_producto+'"></td>\
                                     <td><input type="text" id="input-nombre-'+producto.id+'" class="form-control" value="'+producto.nombre_producto+'" required/></td>\
                                     <td><input type="text" id="input-descripcion-'+producto.id+'" class="form-control" value="'+producto.descripcion+'" required/></td>\
                                     <td><input type="text" id="input-marca-'+producto.id+'" class="form-control" value="'+producto.marca+'" required/></td>\

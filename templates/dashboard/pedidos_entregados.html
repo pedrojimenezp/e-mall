@@ -150,6 +150,8 @@
         </div>
     </div>
 
+    <?php require_once("partes/modal-imagen-producto.html"); ?>
+
     <!-- Core Scripts - Include with every page -->
     <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
     <script src="<?php echo STATIC_DIR; ?>vendors/bootstrap/js/bootstrap.min.js"></script>
@@ -179,6 +181,13 @@
 
                 }
             })
+        });
+
+        $(".imagen-producto").on("click", function(e){
+          var url = $(this).attr("src");
+          console.log(url);
+          $("#imagen-grande").attr("src", url);
+          $('#modal-img').modal();
         });
     });
     </script>

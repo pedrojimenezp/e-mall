@@ -122,6 +122,41 @@ function mostrar_plantilla_productos_en_venta($req, $res){
   }
 }
 
+function mostrar_plantilla_productos_vendidos($req, $res){
+  if($req->session("sesion_iniciada")){
+    if ($req->session("tipo_usuario") == "admin") {
+      $admins = new Admins();
+      $r = $admins->buscar_por_id($req->session("id_admin"));
+      
+      $tiendas = new Tiendas();
+      $r2 = $tiendas->buscar_por_id($req->session("id_tienda"));
+
+      $categorias_productos = new Categorias_productos();
+      $r3 = $categorias_productos->buscar_por_categoria_tienda($r2["tienda"]["categoria"]);
+      
+
+      $nt = notificaciones_tienda($req->session("id_tienda"));
+      if ($r["admin"]) {
+        $params = array(
+          "admin"=>$r["admin"], 
+          "tienda"=>$r2["tienda"], 
+          "categorias_productos"=>$r3["categorias_productos"],
+          "notificaciones"=> $nt
+        );
+        $res->render_template("dashboard/productos_vendidos.html", $params);
+      }else{
+        print_r($r);
+      }
+    }elseif ($req->session("tipo_usuario") == "cliente") {
+      $res->redirect_to("/tiendas");
+      // $res->send("Se inicio sesion como cliente");
+    }
+  }else{
+    $res->redirect_to("/");
+  }
+}
+
+
 function mostrar_plantilla_pedidos_nuevos($req, $res){
   if($req->session("sesion_iniciada")){
     if ($req->session("tipo_usuario") == "admin") {
