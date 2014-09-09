@@ -16,7 +16,7 @@ function mostrar_plantilla_inicio($req, $res){
     $categorias_tiendas = new Categorias_tiendas();
     $r2 = $categorias_tiendas->buscar_todas();
     $params = array("categorias_tiendas"=>$r2["categorias_tiendas"]);
-    $res->render_template("inicio.html", $params);
+    $res->render_template("index.html", $params);
   }
 }
 

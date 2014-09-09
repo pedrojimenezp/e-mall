@@ -83,19 +83,5 @@ $urls_array = array(
   "^/api/paypal/ipn$" => "api@notificacion_pago_inmediato", // paypal notifica inmediatamente al servidor un pago mediante esta url
   // FIN PAYPAL
 
-
-
-
-
-
-  //"^/obtener-tienda$" => "default@obtener_tienda",
-  //"^/guardar-tiendas$" => "default@guardarTienda", 
-  //"^/guardar-admin$" => "default@guardar_admin", 
-  //"^/esta-registrado$" => "default@esta_registrado", 
-
-  //"^/api/pedidos/estado/cancelado$" => "api@cambiar_estado_pedido_cancelado",
-  //"^/api/pedidos/estado/pagado$" => "api@cambiar_estado_pedido_pagado",
-  //"^/api/pedidos/estado/enviado$" => "api@cambiar_estado_pedido_enviado",
-  //"^/api/pedidos/estado/entregado$" => "api@cambiar_estado_pedido_entregado",
 );
 ?>
