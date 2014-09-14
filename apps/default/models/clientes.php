@@ -24,6 +24,8 @@ class Clientes extends Models{
         echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
       }
     }else{
+      $consulta = "INSERT INTO datos_clientes (id_cliente) VALUES (".$this->conexion->insert_id.")";
+      $this->conexion->query($consulta);
       $consulta = "SELECT * FROM clientes WHERE id = ".$this->conexion->insert_id;
       $resultado = $this->conexion->query($consulta);
       $fila = $resultado->fetch_assoc();
