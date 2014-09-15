@@ -113,5 +113,15 @@ class Carro_de_compras extends Models{
     }
   }
 
+  public function buscar_por_id_producto_id_cliente ($id_producto, $id_cliente){
+    $consulta = "SELECT * FROM carro_de_compras WHERE id_producto = ".$id_producto." AND id_cliente = ".$id_cliente;
+    if($resultado = $this->conexion->query($consulta)){
+      $fila = $resultado->fetch_assoc();
+      return array("error"=>null, "producto"=>$fila);
+    }else{
+      echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;
+    }
+  }
+
 }
 ?>

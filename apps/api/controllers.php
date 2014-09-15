@@ -245,7 +245,7 @@ function agregar_producto_al_carrito($req, $res){
       // $res->json($r["producto"]);
       if ($r["producto"]["stock"]>=$req->body("cantidad")) {
         $carro_de_compras = new Carro_de_compras();
-        $r1 = $carro_de_compras->buscar_por_id_producto($req->body("id_producto"));
+        $r1 = $carro_de_compras->buscar_por_id_producto_id_cliente($req->body("id_producto"), $req->body("id_cliente"));
         if($r1["producto"]){
           if ($r["producto"]["stock"]>=$req->body("cantidad")+$r1["producto"]["cantidad"]) {
             // $res->json($r1["producto"]);
