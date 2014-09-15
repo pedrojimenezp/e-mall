@@ -4,22 +4,66 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>E-Mall | Iniciar Sesion</title>
-    <link rel=author href="humans.txt">
+  <title>E-Mall | Iniciar Sesion</title>
+  <link rel=author href="humans.txt">
 
-    <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <style type="text/css">
-        body { padding-top: 70px; }
+  <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    *{
+        border-radius: 0 !important;
+    }
 
-        *{
-            border-radius: 0 !important;
-        }
-    </style>
+    body {
+      padding-top: 70px;
+      background: #eee !important;  
+    }
+
+    .wrapper {  
+      margin-top: 80px;
+      margin-bottom: 40px;
+    }
+
+    .form-signin {
+      max-width: 400px;
+      padding: 15px 35px 45px;
+      margin: 0 auto;
+      background-color: #fff;
+      border: 1px solid rgba(0,0,0,0.1);  
+    }
+
+    .form-signin-heading{
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .form-control {
+      position: relative;
+      font-size: 16px;
+      height: auto;
+      padding: 10px;
+    }
+
+    .form-control:focus {
+      z-index: 2;
+    }
+
+    input[type="email"] {
+      margin-bottom: -1px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    input[type="password"] {
+      margin-bottom: 20px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  </style>
 </head>
 <body>
   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
+    <div class="container">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -28,43 +72,20 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Brand</a>
+        <a class="navbar-brand" href="#">e-Mall</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Link</a></li>
-          <li><a href="#">Link</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-              <li class="divider"></li>
-              <li><a href="#">One more separated link</a></li>
-            </ul>
-          </li>
-        </ul>
-        <form class="navbar-form navbar-left" role="search">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
-          </div>
-          <button type="submit" class="btn btn-default">Submit</button>
-        </form>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Link</a></li>
+          <li><a href="/">Pagina principal</a></li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Registrarse <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
+              <li><a href="/registrar/cliente">Como comprador</a></li>
+              <li><a href="/registrar/tienda">Como vendedor</a></li>
               <li class="divider"></li>
-              <li><a href="#">Separated link</a></li>
+              <li><a href="/ayuda/registro">No se cual elegir</a></li>
             </ul>
           </li>
         </ul>
@@ -82,43 +103,37 @@
     
     <div class="row">
       <div class="col-xs-12 col-sm-6 col-md-6">
-        <h2>Iniciar sesion como comprador</h1>
-        <form id="form-iniciar-sesion-cliente" action="/api/iniciar-sesion/cliente" method="POST">
-          <label for="email-iniciar-sesion-cliente">Email: </label>
-          <?php 
-            if(isset($params["email-cliente"])){
-              echo '<input type="email" id="email-iniciar-sesion-cliente" name="email-iniciar-sesion-cliente" placeholder="Email" required value="'.$params["email-cliente"].'">';
-            }else{
-              echo '<input type="email" id="email-iniciar-sesion-cliente" name="email-iniciar-sesion-cliente" placeholder="Email" required>';
-            }
-          ?>
-          <label for="password-iniciar-sesion-cliente">Password: </label>
-          <input type="password" id="password-iniciar-sesion-cliente" name="password-iniciar-sesion-cliente" placeholder="Password" required>
-          <input type="submit" value="Iniciar sesion">
-        </form>
+        <div class="wrapper">
+          <form id="form-iniciar-sesion-cliente" class="form-signin">       
+            <h2 class="form-signin-heading">Entrar como comprador</h2>
+            <div id="alert-error-login-cliente" class="alert alert-danger" style="display:none;">
+              <p>Email o contraseña incorrectos</p>
+            </div>
+            <input type="email" class="form-control" id="email-iniciar-sesion-cliente" name="email-iniciar-sesion-cliente" placeholder="Email" required autofocus>
+            <input type="password" class="form-control" id="password-iniciar-sesion-cliente" name="password-iniciar-sesion-cliente" placeholder="Password" required>
+            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Iniciar sesion">
+            <p style="text-align:center; margin-top:10px;"><a href="/registrar/cliente">No tengo una cuenta de comprador</a></p>
+          </form>
+        </div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-6">
-        <h2>Iniciar sesion como administrador</h1>
-        <form id="form-iniciar-sesion-admin" action="/api/iniciar-sesion/admins" method="POST">
-          <label for="email-iniciar-sesion-admin">Email: </label>
-          <?php 
-            if(isset($params["email-admin"])){
-              echo '<input type="email" name="email-iniciar-sesion-admin" id="email-iniciar-sesion-admin" placeholder="Email" required value="'.$params["email-admin"].'">';
-            }else{
-              echo '<input type="email" name="email-iniciar-sesion-admin" id="email-iniciar-sesion-admin" placeholder="Email" required>';
-            }
-          ?>
-          <label for="password-iniciar-sesion-admin">Password: </label>
-          <input type="password" name="password-iniciar-sesion-admin" id="password-iniciar-sesion-admin" placeholder="Password" required>
-          <input type="submit" value="Iniciar sesion">
-        </form>
-        
+        <div class="wrapper">
+          <form id="form-iniciar-sesion-admin" class="form-signin">       
+            <h2 class="form-signin-heading">Entrar como vendedor</h2>
+            <div id="alert-error-login-admin" class="alert alert-danger" style="display:none;">
+              <p>Email o contraseña incorrectos</p>
+            </div>
+            <input type="email" class="form-control" name="email-iniciar-sesion-admin" id="email-iniciar-sesion-admin" placeholder="Email" required autofocus>
+            <input type="password" class="form-control" name="password-iniciar-sesion-admin" id="password-iniciar-sesion-admin" placeholder="Password" required>
+            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Iniciar sesion">
+            <p style="text-align:center; margin-top:10px;"><a href="/registrar/tienda">No tengo una cuenta de vendedor</a></p>
+          </form>
+        </div>  
       </div>
     </div>
     
   </div>
 
-  <p><a href="/">Volver a la pagina inicial</a></p>
   <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
   <script src="<?php echo STATIC_DIR; ?>vendors/bootstrap/js/bootstrap.min.js"></script>
 
@@ -144,7 +159,7 @@
           data: datos,
           success: function(data) {
             data = JSON.parse(data);
-            if(data.info = "sesion_iniciada"){
+            if(data.info == "sesion_iniciada"){
               localStorage.clear();
               localStorage.id_tienda = data.ids.id_tienda;
               localStorage.id_admin = data.ids.id_admin;
@@ -152,6 +167,10 @@
               window.location.href = '/';
             }else{
               console.log(data);
+              $("#alert-error-login-admin").slideDown('slow');
+              setTimeout(function(){
+              $("#alert-error-login-admin").slideUp("slow");
+            }, 3000);
             }
           }
         });
@@ -175,7 +194,7 @@
           success: function(data) {
             console.log(data);
             data = JSON.parse(data);
-            if(data.info = "sesion_iniciada"){
+            if(data.info == "sesion_iniciada"){
               localStorage.clear();
               localStorage.id_cliente = data.ids.id_cliente;
               if (nt) {
@@ -191,6 +210,10 @@
               }
             }else{
               console.log(data);
+              $("#alert-error-login-cliente").slideDown('slow');
+              setTimeout(function(){
+              $("#alert-error-login-cliente").slideUp("slow");
+            }, 3000);
             }
           }
         });

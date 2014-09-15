@@ -3,23 +3,116 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>e-Mall - Registrar cliente</title>
-  <link rel="stylesheet" href="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>E-Mall | Iniciar Sesion</title>
+  <link rel=author href="humans.txt">
+
+  <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    *{
+        border-radius: 0 !important;
+    }
+
+    body {
+      padding-top: 70px;
+      background: #eee !important;  
+    }
+
+    .wrapper {  
+      margin-top: 80px;
+      margin-bottom: 40px;
+    }
+
+    .form-signin {
+      max-width: 400px;
+      padding: 15px 35px 45px;
+      margin: 0 auto;
+      background-color: #fff;
+      border: 1px solid rgba(0,0,0,0.1);  
+    }
+
+    .form-signin-heading{
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .form-control {
+      position: relative;
+      font-size: 16px;
+      height: auto;
+      padding: 10px;
+    }
+
+    .form-control:focus {
+      z-index: 2;
+    }
+
+    input[type="email"] {
+      margin-bottom: -1px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    input[type="password"] {
+      margin-bottom: 20px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  </style>
 </head>
 <body>
-  <h1>Registrar cliente</h1>
-  <form id="form-registrar-cliente" action="/api/registrar/clientes" method="POST">
-    <label for="email-registro-cliente">Email: </label>
-    <input type="email" name="email-registro-cliente" id="email-registro-cliente" placeholder="Eje: email@cliente.com" required>
-    <label for="password-registro-cliente">Password: </label>
-    <input type="password" name="password-registro-cliente" id="password-registro-cliente" placeholder="Minimo 8 caracteres" required>
-    <label for="password2-registro-cliente">Repita la password: </label>
-    <input type="password" name="password2-registro-cliente" id="password2-registro-cliente" placeholder="Igual que la primera" required>
-    <input type="submit" value="Registrarme como cliente">
-  </form>
-  <a href="/">Regresar a la pagina inicial</a>
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">e-Mall</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/">Pagina principal</a></li>
+          <li><a href="/">Iniciar sesion</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div class="wrapper">
+          <form id="form-registrar-cliente" action="/api/registrar/clientes" method="POST" class="form-signin">
+            <h2 class="form-signin-heading">Registrarme como comprador</h2>
+            <div id="alert-error-registrar-cliente" class="alert alert-danger" style="display:none;">
+              <p>El email que ingreso ya se encuentra registrado, por favor ingrese uno diferente.</p>
+            </div>
+            <div id="alert-registro-exitoso" class="alert alert-success" style="display:none;">
+              <p>Se ha registrado correctamente, lo redireccionaremos a la pagina de inicio de sesion en unos momentos.</p>
+            </div>
+            <input class="form-control" type="email" name="email-registro-cliente" id="email-registro-cliente" placeholder="Email" required>
+            <input  class="form-control" type="password" name="password-registro-cliente" id="password-registro-cliente" placeholder="Contraseña (Minimo 8 caracteres)" required>
+            <input class="form-control" type="password" name="password2-registro-cliente" id="password2-registro-cliente" placeholder="Ingrese la contraseña de nuevo" required>
+            <input  class="btn btn-lg btn-primary btn-block" type="submit" value="Registrarme como cliente">
+            <p style="text-align:center; margin-top:10px;"><a href="/iniciar-sesion">Ya tengo una cuenta de comprador</a></p>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
   <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
+  <script src="<?php echo STATIC_DIR; ?>vendors/bootstrap/js/bootstrap.min.js"></script>
+
   <script>
+
     $(document).on("ready", function(){
       $("#form-registrar-cliente").on("submit", function(e){
         e.preventDefault();
@@ -44,13 +137,24 @@
               url: "/api/registrar/cliente",
               data: datos,
               success: function(data) {
+                data = JSON.parse(data);
                 console.log(data);
+                if (data.error == "email_ya_registrado") {
+                  $("#alert-error-registrar-cliente").slideDown('slow');
+                  setTimeout(function(){
+                    $("#alert-error-registrar-cliente").slideUp("slow");
+                  }, 3000);
+                }else{
+                  $("#alert-registro-exitoso").slideDown('slow');
+                  setTimeout(function(){
+                    window.location.href = "/iniciar-sesion";
+                  }, 3000);
+                }
               }
             });
           }
         }
       });
-      // alert("El docuento esta listo");
     });
   </script>
 </body>

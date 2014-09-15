@@ -93,7 +93,7 @@ function iniciar_sesion_admin($req, $res){
       $ids = array("id_tienda" => $r["admin"]["id_tienda"], "id_admin" => $r["admin"]["id"]);
 
       // print_r($req->get_session());
-      $datos = array("error"=>"null", "info"=>"sesion_inicada", "descripcion"=>"Ha iniciado sesion correctamente", "ids"=>$ids, "categoria_tienda"=>$r2["tienda"]["categoria"]);
+      $datos = array("error"=>"null", "info"=>"sesion_iniciada", "descripcion"=>"Ha iniciado sesion correctamente", "ids"=>$ids, "categoria_tienda"=>$r2["tienda"]["categoria"]);
       $res->json($datos);
     }else{
       $datos = array("error"=>"admin_no_registrado", "descripcion"=>"El email o contraseña son incorrectos");
@@ -116,7 +116,7 @@ function iniciar_sesion_cliente($req, $res){
       $ids = array("id_cliente" => $r["cliente"]["id"]);
 
       // print_r($req->get_session());
-      $datos = array("error"=>"null", "info"=>"sesion_inicada", "descripcion"=>"Ha iniciado sesion correctamente", "ids"=>$ids);
+      $datos = array("error"=>"null", "info"=>"sesion_iniciada", "descripcion"=>"Ha iniciado sesion correctamente", "ids"=>$ids);
       $res->json($datos);
     }else{
       $datos = array("error"=>"cliente_no_registrado", "descripcion"=>"El email o contraseña son incorrectos");
