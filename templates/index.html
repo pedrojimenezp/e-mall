@@ -1,80 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SHIELD - Free Bootstrap 3 Theme">
-    <meta name="author" content="Carlos Alvarez - Alvarez.is - blacktie.co">
-    <link rel="shortcut icon" href="assets/ico/favicon.png">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SHIELD - Free Bootstrap 3 Theme">
+  <meta name="author" content="Carlos Alvarez - Alvarez.is - blacktie.co">
+  <link rel="shortcut icon" href="assets/ico/favicon.png">
 
-    <title> E-Mall</title>
+  <title> E-Mall</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="<?php echo STATIC_DIR; ?>vendors/shield/css/main.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?php echo STATIC_DIR; ?>vendors/shield/css/icomoon.css">
-    <link href="<?php echo STATIC_DIR; ?>vendors/shield/css/animate-custom.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="<?php echo STATIC_DIR; ?>vendors/shield/css/main.css" rel="stylesheet">
+  <link rel="stylesheet" href="<?php echo STATIC_DIR; ?>vendors/shield/css/icomoon.css">
+  <link href="<?php echo STATIC_DIR; ?>vendors/shield/css/animate-custom.css" rel="stylesheet">
 
 
-    
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
-    
-    <script src="<?php echo STATIC_DIR; ?>vendors/shield/js/jquery.min.js"></script>
+  
+  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+  
+  <script src="<?php echo STATIC_DIR; ?>vendors/shield/js/jquery.min.js"></script>
 	<script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/modernizr.custom.js"></script>
-    
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="assets/js/html5shiv.js"></script>
-      <script src="assets/js/respond.min.js"></script>
-    <![endif]-->
-  </head>
+</head>
+<body data-spy="scroll" data-offset="0" data-target="#navbar-main">
+	<div id="navbar-main">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      	<div class="container">
+	        <div class="navbar-header">
+		        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		            <span class="icon icon-shield" style="font-size:30px; color:#3498db;"></span>
+		        </button>
+		        <a class="navbar-brand hidden-xs hidden-sm" href="#home"><span class="icon icon-shield" style="font-size:18px; color:#3498db;"></span></a>
+	        </div>
+	        <div class="navbar-collapse collapse">
+	          	<ul class="nav navbar-nav">
+	            	<li class="active"><a href="#home" class="smoothScroll">Home</a></li>
+					<li> <a href="#about" class="smoothScroll"> Acerca de nonostros</a></li>
+					<li> <a href="#services" class="smoothScroll"> Servicios</a></li>
+				</ul>
 
-  <body data-spy="scroll" data-offset="0" data-target="#navbar-main">
-  
-  
-  	<div id="navbar-main">
-      	<!-- Fixed navbar -->
-	    <div class="navbar navbar-inverse navbar-fixed-top">
-	      	<div class="container">
-		        <div class="navbar-header">
-			        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-			            <span class="icon icon-shield" style="font-size:30px; color:#3498db;"></span>
-			        </button>
-			        <a class="navbar-brand hidden-xs hidden-sm" href="#home"><span class="icon icon-shield" style="font-size:18px; color:#3498db;"></span></a>
-		        </div>
-		        <div class="navbar-collapse collapse">
-		          	<ul class="nav navbar-nav">
-		            	<li class="active"><a href="#home" class="smoothScroll">Home</a></li>
-						<li> <a href="#about" class="smoothScroll"> Acerca de nonostros</a></li>
-						<li> <a href="#services" class="smoothScroll"> Servicios</a></li>
-						<li> <a href="#contact" class="smoothScroll"> Contactanos</a></li>
-					</ul>
+				<ul class="nav navbar-nav pull-right">
+	         <li><a href="/iniciar-sesion" class="smoothScroll">Iniciar sesion</a></li>
+					<li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Registrarse <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/registrar/cliente">Como comprador</a></li>
+              <li><a href="/registrar/tienda">Como vendedor</a></li>
+              <li class="divider"></li>
+              <li><a href="/ayuda/registro">No se cual elegir</a></li>
+            </ul>
+          </li>
+				</ul>
+	        </div><!--/.nav-collapse -->
+	    </div>
+  	</div>
+  </div>
 
-					<ul class="nav navbar-nav pull-right">
-		            	<li><a href="/iniciar-sesion" class="smoothScroll">Iniciar sesion</a></li>
-						<li><a href="/iniciar-sesion" class="smoothScroll"> Registrarse</a></li>
-					</ul>
-		        </div><!--/.nav-collapse -->
-		    </div>
-    	</div>
-    </div>
-
-  
-  
-	<!-- ==== HEADERWRAP ==== -->
-    <div id="headerwrap" id="home" name="home">
+  <div id="headerwrap" id="home" name="home">
 		<header class="clearfix">
-  		 		<h1><span class="icon icon-shield"></span></h1>
-  		 		<p>A Bootstrap 3 One Page Theme.</p>
-  		 		<p>Exclusive for BlackTie.co.</p>
-  		</header>	    
-    </div><!-- /headerwrap -->
+	 		<h1><span class="icon icon-shield"></span></h1>
+	 		<p>A Bootstrap 3 One Page Theme.</p>
+	 		<p>Exclusive for BlackTie.co.</p>
+		</header>	    
+  </div>
 
-	<!-- ==== GREYWRAP ==== -->
 	<div id="greywrap">
 		<div class="row">
 			<div class="col-lg-4 callout">
@@ -96,11 +89,11 @@
 			</div><!-- col-lg-4 -->	
 		</div><!-- row -->
 	</div><!-- greywrap -->
-	
-	<!-- ==== ABOUT ==== -->
+
+
 	<div class="container" id="about" name="about">
 		<div class="row white">
-		<br>
+			<br>
 			<h1 class="centered">A LITTLE ABOUT OUR AGENCY</h1>
 			<hr>
 			
@@ -113,8 +106,7 @@
 			</div><!-- col-lg-6 -->
 		</div><!-- row -->
 	</div><!-- container -->
-	
-	<!-- ==== SECTION DIVIDER1 -->
+
 	<section class="section-divider textdivider divider1">
 		<div class="container">
 			<h1>DESIGN EXPAND BOUNDARIES</h1>
@@ -122,9 +114,8 @@
 			<p>To achieve real change, we have to expand boundaries. Because the Wild West of what-could-be is unexplored but rife with opportunity.</p>
 		</div><!-- container -->
 	</section><!-- section -->
-	
-	
-	<!-- ==== SERVICES ==== -->
+
+
 	<div class="container" id="services" name="services">
 		<br>
 		<br>
@@ -149,7 +140,7 @@
 			</div><!-- col -->
 		</div><!-- row -->
 	</div><!-- container -->
-		
+	
 
 	<!-- ==== SECTION DIVIDER2 -->
 	<section class="section-divider textdivider divider2">
@@ -160,76 +151,21 @@
 		</div><!-- container -->
 	</section><!-- section -->
 
-		
-	
-	<div class="container" id="contact" name="contact">
-		<div class="row">
-			<br>
-			<h1 class="centered">THANKS FOR VISITING US</h1>
-			<hr>
-			<br>
-			<br>
-			<div class="col-lg-4">
-				<h3>Contact Information</h3>
-				<p><span class="icon icon-home"></span> Some Address 987, NY<br/>
-					<span class="icon icon-phone"></span> +34 9884 4893 <br/>
-					<span class="icon icon-mobile"></span> +34 59855 9853 <br/>
-					<span class="icon icon-envelop"></span> <a href="#"> agency@blacktie.co</a> <br/>
-					<span class="icon icon-twitter"></span> <a href="#"> @blacktie_co </a> <br/>
-					<span class="icon icon-facebook"></span> <a href="#"> BlackTie Agency </a> <br/>
-				</p>
-			</div><!-- col -->
-			
-			<div class="col-lg-4">
-				<h3>Newsletter</h3>
-				<p>Register to our newsletter and be updated with the latests information regarding our services, offers and much more.</p>
-				<p>
-					<form class="form-horizontal" role="form">
-					  <div class="form-group">
-					    <label for="inputEmail1" class="col-lg-4 control-label"></label>
-					    <div class="col-lg-10">
-					      <input type="email" class="form-control" id="inputEmail1" placeholder="Email">
-					    </div>
-					  </div>
-					  <div class="form-group">
-					    <label for="text1" class="col-lg-4 control-label"></label>
-					    <div class="col-lg-10">
-					      <input type="text" class="form-control" id="text1" placeholder="Your Name">
-					    </div>
-					  </div>
-					  <div class="form-group">
-					    <div class="col-lg-10">
-					      <button type="submit" class="btn btn-success">Sign in</button>
-					    </div>
-					  </div>
-				   </form><!-- form -->
-				</p>
-			</div><!-- col -->
-			
-			<div class="col-lg-4">
-				<h3>Support Us</h3>
-				<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-			</div><!-- col -->
-
-		</div><!-- row -->
-	
-	</div><!-- container -->
-
 	<div id="footerwrap">
 		<div class="container">
-			<h4>Created by <a href="http://blacktie.co">BlackTie.co</a> - Copyright 2014</h4>
+			<h4>e-Mall - Copyright 2014</h4>
 		</div>
 	</div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-		
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+	
 
 	<script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/retina.js"></script>
 	<script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/jquery.easing.1.3.js"></script>
     <script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/smoothscroll.js"></script>
 	<script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/jquery-func.js"></script>
-  </body>
+</body>
 </html>

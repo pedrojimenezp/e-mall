@@ -6,7 +6,7 @@ function registrar_tienda($req, $res){
   // print_r($req->body());
   // echo "<br>";
   $tiendas =  new Tiendas();
-  if ($req->body("nombre_tienda") && $req->body("categoria_tienda") && $req->body("nombre_propietario") && $req->body("email") && $req->body("password")) {
+  if ($req->body("nombre_tienda") && $req->body("paypal") &&$req->body("categoria_tienda") && $req->body("nombre_propietario") && $req->body("email") && $req->body("password")) {
     // echo "Se pasaron los parametros necesarios";
     // echo "<br>";
     $resultado = $tiendas->buscar_por_nombre($req->body("nombre_tienda"));
@@ -17,7 +17,7 @@ function registrar_tienda($req, $res){
       $resultado = $admins->buscar_por_email($req->body("email"));
       if (!$resultado["admin"]) {
         // echo "POr aqui";
-        $r = $tiendas->guardar($req->body("nombre_tienda"), $req->body("categoria_tienda"));
+        $r = $tiendas->guardar($req->body("nombre_tienda"), $req->body("paypal"), $req->body("categoria_tienda"));
         if(!$r["error"]){
           $r2 = $admins->guardar($r["tienda"]["id"], $req->body("nombre_propietario"), $req->body("email"), $req->body("password"), "si");
           if(!$r2["error"]){
@@ -40,7 +40,7 @@ function registrar_tienda($req, $res){
       // echo "Este nombre ya esta registrado en la base de datos";
     }
   }else{
-    $datos = array("error"=>"datos_incompletos", "descripcion"=>"No envio todos los datos necesarios para guardar una tienda, los datos son (nombre_tienda, nombre_propietario, email, password");
+    $datos = array("error"=>"datos_incompletos", "descripcion"=>"No envio todos los datos necesarios para guardar una tienda, los datos son (nombre_tienda, paypal, nombre_propietario, email, password");
     $res->json($datos);
     // $res->send("No se enviaron todos los parametros necesarions");
   }

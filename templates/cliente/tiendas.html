@@ -9,7 +9,7 @@
 <body>
   <h1>Lista de tiendas</h1>
   <?php 
-    // print_r($params);
+    print_r($params);
     echo "<ul>";
     foreach ($params["tiendas"] as $tienda) {
       echo "<li><a href='/tiendas/catalogo?nombre-tienda=".$tienda["nombre"]."'>".$tienda["nombre"]." - ".$tienda["categoria"]."</a></li>";

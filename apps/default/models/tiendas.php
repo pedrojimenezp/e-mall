@@ -13,10 +13,10 @@ class Tiendas extends Models{
     $this->disconnect();
   }
 
-  public function guardar ($paypal, $nombre, $categoria) {
+  public function guardar ($nombre, $paypal, $categoria) {
     $fecha = date("Y")."-".date("m")."-".date("d");
     $consulta = "INSERT INTO tiendas (paypal, nombre, categoria, estado, fecha_registro) VALUES ('".$paypal."', '".$nombre."', '".$categoria."','inhabilitada','".$fecha."')";
-    echo $consulta;
+    // echo $consulta;
     if(!$this->conexion->query($consulta)){
       if($this->conexion->errno == 1062){
         $error = array("numero"=>1062, "descripcion"=>"Ya existe una tienda con ese nombre por lo anto no se puede guardar"); 
@@ -25,7 +25,10 @@ class Tiendas extends Models{
         echo "Error: (" . $this->conexion->errno . ") " . $this->conexion->error;  
       }
     }else{
-      $consulta = "SELECT * FROM tiendas WHERE id = ".$this->conexion->insert_id;
+      $id = $this->conexion->insert_id;
+      $consulta = "INSERT INTO datos_tiendas (id_tienda) VALUES (".$id.")";
+      $this->conexion->query($consulta);
+      $consulta = "SELECT * FROM tiendas WHERE id = ".$id;
       $resultado = $this->conexion->query($consulta);
       $fila = $resultado->fetch_assoc();
       return array("error"=>null, "info"=>"tienda_registrada", "tienda"=>$fila);

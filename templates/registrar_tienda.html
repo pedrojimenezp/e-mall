@@ -3,43 +3,131 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Registrar tienda</title>
-  <link rel="stylesheet" href="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>E-Mall | Registrar comprador </title>
+  <link rel=author href="humans.txt">
+
+  <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+  
+  <!-- Custom styles for this template -->
+  <link href="<?php echo STATIC_DIR; ?>vendors/shield/css/main.css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/modernizr.custom.js"></script>
+
+  <style type="text/css">
+    *{
+        border-radius: 0 !important;
+    }
+
+    body {
+      padding-top: 70px;
+      background: #eee !important;  
+    }
+
+    .wrapper {  
+      margin-top: 80px;
+      margin-bottom: 40px;
+    }
+
+    .form-signin {
+      max-width: 400px;
+      padding: 15px 35px 45px;
+      margin: 0 auto;
+      background-color: #fff;
+      border: 1px solid rgba(0,0,0,0.1);  
+    }
+
+    .form-signin-heading{
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .form-control {
+      position: relative;
+      font-size: 16px;
+      height: auto;
+      padding: 10px;
+    }
+
+    .form-control:focus {
+      z-index: 2;
+    }
+    input{
+      margin: 10px 0;
+    }
+  </style>
 </head>
 <body>
-  <h1>Registrar una tienda</h1>
-  <form id="form-registrar-tienda" action="/api/registrar/tiendas" method="POST">
-    <label for="nombre-registro-tienda">Nombre de la tienda</label>
-    <input type="text" name="nombre-registro-tienda" id="nombre-registro-tienda" placeholder="Eje: Mi tiendita" required>
-    <label for="categoria-registro-tienda">Categoria de la tienda</label>
-    <select name="categoria-registro-tienda" id="categoria-registro-tienda">
-    <?php
-        // print_r($params["categorias_tiendas"]);
-        foreach ($params["categorias_tiendas"] as $v) {
-          print_r("<option value=".$v["categoria"].">".$v["categoria"]."</option>");
-          
-        }
-      ?>
-    </select>
-    <label for="nombre-registro-propietario">Nombre del propietario: </label>
-    <input type="text" name="nombre-registro-propietario" id="nombre-registro-propietario" placeholder="Eje: Juan Perez" required>
-    <label for="email-registro-propietario">Email del propietario: </label>
-    <input type="email" name="email-registro-propietario" id="email-registro-propietario" placeholder="Eje: email@tienda.com" required>
-    <?php 
-      // if(isset($params["email-cliente"])){
-      //   echo '<input type="email" name="email-iniciar-sesion-cliente" placeholder="Email" required value="'.$params["email-cliente"].'">';
-      // }else{
-      //   echo '<input type="email" name="email-iniciar-sesion-cliente" placeholder="Email" required>';
-      // }
-    ?>
-    <label for="password-registro-propietario">Password del propietario: </label>
-    <input type="password" name="password-registro-propietario" id="password-registro-propietario" placeholder="Minimo 8 caracteres" required>
-    <label for="password2-registro-propietario">Repita el password del propietario: </label>
-    <input type="password" name="password2-registro-propietario" id="password2-registro-propietario" placeholder="Igual que la primera" required>
-    <input type="submit" value="Registrar la tienda">
-  </form>
-  <a href="/">Regresar a la pagina inicial</a>
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">e-Mall</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/">Pagina principal</a></li>
+          <li><a href="/">Iniciar sesion</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div class="wrapper">
+          <form id="form-registrar-tienda" action="/api/registrar/tiendas" method="POST" class="form-signin">
+            <h2 class="form-signin-heading">Registrarme como vendedor</h2>
+            <div id="alert-error-email-ya-registrado" class="alert alert-danger" style="display:none;">
+              <p>El email que ingreso ya se encuentra registrado, por favor ingrese un email diferente.</p>
+            </div>
+            <div id="alert-error-tienda-ya-registrada" class="alert alert-danger" style="display:none;">
+              <p>El nombre de la tienda que ingreso ya se encuentra registrado, por favor ingrese un nombre diferente.</p>
+            </div>
+            <div id="alert-registro-exitoso" class="alert alert-success" style="display:none;">
+              <p>Se ha registrado correctamente como vendedor, lo redireccionaremos a la pagina de inicio de sesion en unos momentos.</p>
+            </div>
+            
+            <input class="form-control" type="text" name="nombre-registro-tienda" id="nombre-registro-tienda" placeholder="Nombre de la tienda" required>
+            <input class="form-control" type="email" name="paypal-registro-tienda" id="paypal-registro-tienda" placeholder="Cuenta de paypal" required>
+            <select class="form-control" name="categoria-registro-tienda" id="categoria-registro-tienda">
+              <option value="-1">Categoria</option>
+            <?php
+                // print_r($params["categorias_tiendas"]);
+                foreach ($params["categorias_tiendas"] as $v) {
+                  print_r("<option value='".$v["categoria"]."'>".$v["categoria"]."</option>");
+                  
+                }
+              ?>
+            </select>
+            <input class="form-control" type="text" name="nombre-registro-propietario" id="nombre-registro-propietario" placeholder="Nombre del propietario" required>
+            <input class="form-control" type="email" name="email-registro-propietario" id="email-registro-propietario" placeholder="Email del propietario" required>
+            <input class="form-control" type="password" name="password-registro-propietario" id="password-registro-propietario" placeholder="Contraseña (Minimo 8 caracteres)" required>
+            <input class="form-control" type="password" name="password2-registro-propietario" id="password2-registro-propietario" placeholder="Repita la contraseña" required>
+            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Registrar la tienda">
+            <p style="text-align:center; margin-top:10px;"><a href="/iniciar-sesion">Ya tengo una cuenta de vendedor</a></p>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
   <script src="<?php echo STATIC_DIR; ?>vendors/jquery/jquery.min.js"></script>
+  <script src="<?php echo STATIC_DIR; ?>vendors/bootstrap/js/bootstrap.min.js"></script>
+
   <script>
     $(document).on("ready", function(){
       $("#form-registrar-tienda").on("submit", function(e){
@@ -52,30 +140,56 @@
           if(pass1 != pass2){
             alert("Las constraseñas no coinciden");
           }else{
-            var nombre_tienda = $("#nombre-registro-tienda").val();
             var categoria_tienda = $("#categoria-registro-tienda").val();
-            var nombre_propietario = $("#nombre-registro-propietario").val();
-            var email = $("#email-registro-propietario").val();
-            console.log("NT: " + nombre_tienda);
-            console.log("CT: " + categoria_tienda);
-            console.log("NP: " + nombre_propietario);
-            console.log("E: " + email);
-            console.log("P: " + pass1);
-            var datos = {
-              "nombre_tienda" : nombre_tienda,
-              "categoria_tienda" : categoria_tienda,
-              "nombre_propietario" : nombre_propietario,
-              "email" : email,
-              "password" : pass1
-            };
-            $.ajax({
-              type: "POST",
-              url: "/api/registrar/tienda",
-              data: datos,
-              success: function(data) {
-                console.log(data);
-              }
-            });
+            if (categoria_tienda == "-1") {
+              alert("Debe seleccionar una categoria para la tienda");
+            }else{
+              var nombre_tienda = $("#nombre-registro-tienda").val();
+              var paypal = $("#paypal-registro-tienda").val();
+              var nombre_propietario = $("#nombre-registro-propietario").val();
+              var email = $("#email-registro-propietario").val();
+              console.log("NT: " + nombre_tienda);
+              console.log("Paypal: " + paypal);
+              console.log("CT: " + categoria_tienda);
+              console.log("NP: " + nombre_propietario);
+              console.log("E: " + email);
+              console.log("P: " + pass1);
+              var datos = {
+                "nombre_tienda" : nombre_tienda,
+                "paypal" : paypal,
+                "categoria_tienda" : categoria_tienda,
+                "nombre_propietario" : nombre_propietario,
+                "email" : email,
+                "password" : pass1
+              };
+              $.ajax({
+                type: "POST",
+                url: "/api/registrar/tienda",
+                data: datos,
+                success: function(data) {
+                  console.log(data);
+                  data = JSON.parse(data);
+                  if (data.error == "email_ya_registrado") {
+                    $("#alert-error-email-ya-registrado").slideDown('slow');
+                    setTimeout(function(){
+                      $("#alert-error-email-ya-registrado").slideUp("slow");
+                    }, 3000);
+                  }else{
+                    if (data.error == "tienda_ya_registrada") {
+                      $("#alert-error-tienda-ya-registrada").slideDown('slow');
+                      setTimeout(function(){
+                        $("#alert-error-tienda-ya-registrada").slideUp("slow");
+                      }, 3000);
+                    }else{
+                      $("#alert-registro-exitoso").slideDown('slow');
+                      setTimeout(function(){
+                        window.location.href = "/iniciar-sesion";
+                      }, 3000);
+                    }
+                  }
+                }
+              });
+            }
           }
         }
       });
