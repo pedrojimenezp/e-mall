@@ -1,6 +1,11 @@
 <?php
 
-// This constant is converted in '/' when is working in linux|mac or '\' when is working in windows 
+// This constant is converted in '/' when is working in linux|mac or '\' when is working in windows
+
+//models.DS.mimodelo
+//Linux => models/mimodel
+//Windows => models\mimodelo
+
 if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
 }

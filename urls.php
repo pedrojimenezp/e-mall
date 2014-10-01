@@ -1,5 +1,8 @@
 <?php
 $urls_array = array(
+  // ^/$ es la url que se ingresa en el navegador
+  //default es el nombre de la aplicacion
+  //mostrar_plantilla_inicio es el nombre del controlador dentro del archivo controllers.php 
   "^/$" => "default@mostrar_plantilla_inicio",
   
   // PLANTILLAS LOGIN Y SIGN UP

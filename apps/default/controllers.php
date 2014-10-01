@@ -13,6 +13,7 @@ function mostrar_plantilla_inicio($req, $res){
       $res->send("Se inicio sesion como superadmin");
     }
   }else{
+    // $res->send("Hola esta es la pagina de inicio");
     $categorias_tiendas = new Categorias_tiendas();
     $r2 = $categorias_tiendas->buscar_todas();
     $params = array("categorias_tiendas"=>$r2["categorias_tiendas"]);
