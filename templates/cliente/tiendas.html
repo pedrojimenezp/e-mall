@@ -1,20 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>e-Mall - Tiendas</title>
-  <link rel="stylesheet" href="">
-</head>
-<body>
-  <h1>Lista de tiendas</h1>
-  <?php 
-    print_r($params);
-    echo "<ul>";
-    foreach ($params["tiendas"] as $tienda) {
-      echo "<li><a href='/tiendas/catalogo?nombre-tienda=".$tienda["nombre"]."'>".$tienda["nombre"]." - ".$tienda["categoria"]."</a></li>";
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SHIELD - Free Bootstrap 3 Theme">
+  <meta name="author" content="Carlos Alvarez - Alvarez.is - blacktie.co">
+  <link rel="shortcut icon" href="assets/ico/favicon.png">
+
+  <title> E-Mall | Tiendas</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="<?php echo STATIC_DIR; ?>vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?php echo STATIC_DIR; ?>vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="<?php echo STATIC_DIR; ?>vendors/shield/css/main.css" rel="stylesheet">
+  <link rel="stylesheet" href="<?php echo STATIC_DIR; ?>vendors/shield/css/icomoon.css">
+  <link href="<?php echo STATIC_DIR; ?>vendors/shield/css/animate-custom.css" rel="stylesheet">
+
+
+  
+  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+  
+  <script src="<?php echo STATIC_DIR; ?>vendors/shield/js/jquery.min.js"></script>
+  <script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/modernizr.custom.js"></script>
+
+  <style type="text/css">
+    body { padding-top: 70px; }
+
+    *{
+        border-radius: 0 !important;
     }
-    echo "</ul>";
-  ?>
+  </style>
+</head>
+<body data-spy="scroll" data-offset="0" data-target="#navbar-main">
+  <div id="navbar-main">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon icon-shield" style="font-size:30px; color:#3498db;"></span>
+            </button>
+            <a class="navbar-brand hidden-xs hidden-sm" href="/"><span class="icon icon-shield" style="font-size:18px; color:#3498db;"></span></a>
+          </div
+        </ul>
+
+        <ul class="nav navbar-nav pull-right">
+           <li><a href="/">Pagina principal</a></li>
+           <li><a href="/tiendas">Tiendas</a></li>
+           <li><a href="/iniciar-sesion">Iniciar sesion</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Registrarse <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/registrar/cliente">Como comprador</a></li>
+              <li><a href="/registrar/tienda">Como vendedor</a></li>
+              <li class="divider"></li>
+              <li><a href="/ayuda/registro">No se cual elegir</a></li>
+            </ul>
+          </li>
+        </ul>
+          </div><!--/.nav-collapse -->
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <?php //print_r($params["categorias"]); ?>
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-12">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+              <a href="/tiendas">CATEGORIAS</a>
+          </div>
+          <div class="panel-body">
+            <div class="list-group list-categ">
+              <?php 
+                foreach ($params["categorias"] as $categoria) {
+                  if ($categoria["categoria"] == $params["categoria"]) {
+                    echo '<a href="/tiendas?categoria='.$categoria["categoria"].'" class="list-group-item active">'.$categoria["categoria"].'</a>';
+                  }else{
+                    echo '<a href="/tiendas?categoria='.$categoria["categoria"].'" class="list-group-item">'.$categoria["categoria"].'</a>';
+                  }
+                } 
+              ?>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-9 col-sm-12">
+          <?php 
+            if (count($params["tiendas"])!=0) {
+              if ($params["categoria"]) {
+                echo "<h1 style='width:100%; text-align:center;'>Tiendas de la categoria <span class='label label-primary'>".$params["categoria"]."</span></h1>";
+              }else{
+                echo "<h1 style='width:100%; text-align:center;'>Lista de tiendas</h1>";
+              }
+              foreach ($params["tiendas"] as $tienda) {
+                echo "<div class='col-lg-4 col-md-6 col-sm-12'> <a style='width:100%; margin:5px 0;' class='btn btn-info btn-lg' href='/tiendas/catalogo?nombre-tienda=".$tienda["nombre"]."'><strong>".$tienda["nombre"]."</strong> - ".$tienda["categoria"]."</a></div>";
+                echo "<div class='col-lg-4 col-md-6 col-sm-12'> <a style='width:100%; margin:5px 0;' class='btn btn-info btn-lg' href='/tiendas/catalogo?nombre-tienda=".$tienda["nombre"]."'><strong>".$tienda["nombre"]."</strong> - ".$tienda["categoria"]."</a></div>";
+                echo "<div class='col-lg-4 col-md-6 col-sm-12'> <a style='width:100%; margin:5px 0;' class='btn btn-info btn-lg' href='/tiendas/catalogo?nombre-tienda=".$tienda["nombre"]."'><strong>".$tienda["nombre"]."</strong> - ".$tienda["categoria"]."</a></div>";
+              }
+            }else{
+              if ($params["categoria"]) {
+                echo "<h1 style='width:100%; text-align:center; margin-top:100px;'>No hay tiendas de la categoria <span class='label label-primary'>".$params["categoria"]."</span> registradas hasta el momento</h1>";
+              }else{
+                echo "<h1 style='width:100%; text-align:center; margin-top:100px;' >No tiendas registradas hasta el momento</h1>";
+              }
+            }
+          ?>
+      </div>  
+  </div>
+
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  
+
+  <script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/retina.js"></script>
+  <script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/smoothscroll.js"></script>
+  <script type="text/javascript" src="<?php echo STATIC_DIR; ?>vendors/shield/js/jquery-func.js"></script>
 </body>
 </html>

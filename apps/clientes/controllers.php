@@ -265,6 +265,8 @@ function mostrar_plantilla_pedido_pagado($req, $res){
 
 function mostrar_plantilla_tiendas($req, $res) {
   $tiendas = new Tiendas();
+  $categorias_tiendas = new Categorias_tiendas();
+  $r1 = $categorias_tiendas->buscar_todas();
   if($req->query("categoria")){
     $r = $tiendas->buscar_todas($req->query("categoria"), "habilitada");
   }else{
@@ -272,6 +274,8 @@ function mostrar_plantilla_tiendas($req, $res) {
   }
   $p = array();
   $p['tiendas'] = $r["tiendas"];
+  $p["categoria"] = $req->query("categoria");
+  $p['categorias'] = $r1["categorias_tiendas"];
   $res->render_template("/cliente/tiendas.html", $p);
 }
 
